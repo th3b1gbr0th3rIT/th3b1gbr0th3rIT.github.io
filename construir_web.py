@@ -235,7 +235,8 @@ CASO = CASO_TEXTOS["A" if CASO_CON_NOMBRE else "B"]
 CASO_NOTA = "Si vemos un riesgo antes de publicar, paramos y lo consultamos con el cliente."
 # Ejemplo en una sola cita (WEB-023). Calles públicas: sin datos de clientes ni de propietarios.
 CASO_EJEMPLO = ("Pidieron que el CRM encontrara una calle se escriba como se escriba. "
-                "Hoy, «C/&nbsp;Sepúlveda», «Carrer de&nbsp;Sepúlveda» y «calle&nbsp;sepulveda» dan el mismo resultado.")
+                'Ahora, <span class="nw">«C/ Sepúlveda»</span>, <span class="nw">«Carrer de Sepúlveda»</span> '
+                'y <span class="nw">«calle sepulveda»</span> devuelven el mismo resultado.')
 ICONO_SERVICIO = {"inmobiliarias": "casa", "webs": "nube", "gestion": "contenedor", "reservas": "calendario",
                   "automatizacion": "pipeline", "cuidado": "pulso"}  # icono de cada tarjeta de servicio
 
@@ -515,7 +516,7 @@ INDEX = f"""<section class="hero oscuro" aria-labelledby="titulo-hero">
     <p class="caso-nota">{icono("persona")}<span>{CASO_NOTA}</span></p>
    </div>
    <div class="caso-lado">
-    <figure class="caso-ejemplo revela"><span class="etiqueta">Un caso real</span>
+    <figure class="caso-ejemplo revela">
      <blockquote><p>{CASO_EJEMPLO}</p></blockquote></figure>
    </div>
   </div>
