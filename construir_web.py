@@ -110,6 +110,17 @@ def _ilus(cuerpo, alt):
 
 
 ILUS = {
+    "inmobiliarias": _ilus(
+        f'<path d="M58 172V96l46-36 46 36v76z" fill="{B}" stroke="{N}" stroke-width="2" stroke-linejoin="round"/>'
+        f'<path d="M50 102 104 60l54 42" fill="none" stroke="{N}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>'
+        f'<rect x="92" y="132" width="24" height="40" rx="2" fill="{N}"/><rect x="72" y="108" width="18" height="16" rx="2" fill="{G1}"/>'
+        f'<rect x="118" y="108" width="18" height="16" rx="2" fill="{A}"/>'
+        f'<rect x="168" y="52" width="104" height="120" rx="8" fill="{B}" stroke="{N}" stroke-width="2"/>'
+        + "".join(f'<rect x="180" y="{y}" width="16" height="16" rx="3" fill="{G1}"/><rect x="204" y="{y + 2}" width="{w}" height="5" rx="2.5" fill="{N}"/>'
+                  f'<rect x="204" y="{y + 10}" width="{w - 20}" height="4" rx="2" fill="{G2}"/>' for y, w in ((66, 52), (96, 44), (126, 56)))
+        + f'<circle cx="252" cy="158" r="17" fill="{N}"/><circle cx="249" cy="155" r="7" fill="none" stroke="{C}" stroke-width="2.5"/>'
+        f'<path d="m254 160 6 6" stroke="{C}" stroke-width="2.5" stroke-linecap="round"/>',
+        "Ilustración: una vivienda junto a una ficha de inmuebles con un buscador"),
     "webs": _ilus(
         f'<rect x="62" y="34" width="196" height="138" rx="8" fill="{B}" stroke="{N}" stroke-width="2"/><path d="M62 56h196" stroke="{N}" stroke-width="2"/>'
         f'<circle cx="76" cy="45" r="3.5" fill="{N}"/><circle cx="88" cy="45" r="3.5" fill="{N}"/><circle cx="100" cy="45" r="3.5" fill="{G2}"/>'
@@ -156,13 +167,15 @@ ILUS = {
 # ── Contenido ────────────────────────────────────────────────────────────────
 # Cada línea de servicio con sus tres viñetas dentro de la tarjeta (la antigua sección «En detalle» ya no existe).
 SERVICIOS = [
+    ("inmobiliarias", "Plataforma para inmobiliarias", "Web con buscador y CRM para gestionar clientes, inmuebles y visitas, listos para empezar y adaptados a tu forma de trabajar. Es la base que ya funciona en DBM Real Invest.",
+     ["Buscador en lenguaje natural, en varios idiomas", "Fichas, visitas y permisos por perfil", "Páginas por ciudad e inmueble para aparecer en Google"]),
     ("webs", "Webs", "Webs rápidas, accesibles y en varios idiomas, orientadas a convertir visitas en contactos y reservas.",
      ["Diseño a la medida de tu marca", "Versiones en varios idiomas", "Contenido fácil de actualizar"]),
     ("gestion", "Herramientas de gestión", "Clientes, pedidos, visitas o expedientes en una aplicación hecha a tu medida, con acceso según el perfil de cada usuario.",
      ["Diseñada sobre tus procesos reales", "Permisos por persona y por equipo", "Los datos son siempre de tu empresa"]),
     ("reservas", "Reservas y citas", "Reserva en línea para tus clientes y una agenda centralizada, accesible desde cualquier dispositivo.",
      ["Reservas en línea para tus clientes", "Recordatorios automáticos", "Agenda compartida para todo el equipo"]),
-    ("automatizacion", "Automatización", "Automatizamos avisos, correos, informes y recordatorios para que tu equipo dedique su tiempo a lo que aporta valor.",
+    ("automatizacion", "Automatización con agentes de IA", "Agentes de IA que hacen el trabajo repetitivo (avisos, correos, informes, seguimiento) bajo la supervisión de una persona, para que tu equipo se dedique a lo que aporta valor.",
      ["Correos y avisos automáticos", "Informes periódicos automáticos", "Integración con las herramientas que ya utilizas"]),
     ("cuidado", "Mantenimiento y soporte", "Copias de seguridad, actualizaciones y supervisión continua para que tus sistemas sigan funcionando con seguridad.",
      ["Copia de seguridad antes de cada cambio", "Actualizaciones y supervisión continua", "Informe de cada cambio realizado"]),
@@ -185,7 +198,20 @@ FAQ = [
     ("¿Quién hace el trabajo: personas o inteligencia artificial?",
      "Ambos. Los agentes de IA coordinan, desarrollan, prueban, publican y supervisan, y cuidan también el cumplimiento y el diseño; Jordi revisa, decide y es tu interlocutor."),
     ("¿Cuál es el coste?",
-     "Depende del alcance del proyecto. Tras una primera conversación, sin compromiso, te enviamos una propuesta detallada."),
+     "Depende del alcance. Tras una primera conversación, sin compromiso, te enviamos una propuesta detallada antes de empezar nada."),
+    ("¿Y si algo falla después de un cambio?",
+     "Antes de cada cambio hacemos una copia completa y, si algo no responde como esperas, volvemos al estado anterior. Después te enviamos un correo con lo que ha cambiado y cómo comprobarlo."),
+    # WEB-018: solo se promete la entrega de los datos y la documentación, no la del código (decisión del pmo, 2026-11-08).
+    ("¿Me quedo atado a vosotros?",
+     "No. Tu proyecto vive en su propio repositorio y con su propia copia de seguridad, y los datos son siempre de tu empresa. Si decides cambiar de proveedor, te entregamos tus datos y la documentación en un formato estándar."),
+    ("¿Cuánto se tarda en ver algo?",
+     "Empezamos por un primer entregable pequeño y acotado, para que veas resultados pronto. El plazo concreto lo fijamos en la propuesta, según el alcance."),
+]
+# WEB-018: «Cómo empezar», tres pasos antes del contacto (icono, título, texto).
+EMPEZAR = [
+    ("correo", "Nos escribes", "Cuéntanos en pocas líneas qué necesitas o qué te hace perder tiempo."),
+    ("charla", "Hablamos", "Una primera conversación, sin compromiso, para entender tu negocio."),
+    ("hoja", "Recibes una propuesta", "Con el alcance, el primer entregable y cómo lo comprobarás."),
 ]
 
 # WEB-012: caso de éxito real. CASO_CON_NOMBRE=True (variante A) nombra a DBM Real Invest, con permiso del cliente
@@ -301,6 +327,7 @@ MINI_ESTADOS = [
 ]
 MINI_ACTUAL = 2  # índice del estado en curso (En revisión)
 ETIQUETAS_SERVICIO = {  # icono y etiqueta técnica de cada tarjeta de servicio
+    "inmobiliarias": ("contenedor", "Inmobiliarias"),
     "webs": ("nube", "web · accesible · multiidioma"),
     "gestion": ("contenedor", "app · permisos · datos propios"),
     "reservas": ("nube", "en línea · agenda · avisos"),
@@ -319,7 +346,7 @@ FLUJO_PASOS = [
 CARRIL = [("repo", "Su repositorio"), ("pruebas", "Pruebas automáticas"), ("copia", "Copia de seguridad"),
           ("publicar", "Publicación"), ("servidor", "Su servidor")]
 
-NAV = [("servicios", "Servicios"), ("por-dentro", "Método"), ("caso", "Caso de éxito"), ("equipo", "Equipo"), ("preguntas", "Preguntas")]
+NAV = [("servicios", "Servicios"), ("caso", "Caso de éxito"), ("por-dentro", "Método"), ("equipo", "Equipo"), ("preguntas", "Preguntas")]
 LEGALES = [("aviso-legal.html", "Aviso legal"), ("privacidad.html", "Privacidad"), ("cookies.html", "Cookies")]
 
 # ── CSS ──────────────────────────────────────────────────────────────────────
@@ -551,6 +578,8 @@ FLUJO = f"""<figure class="flujo revela" aria-labelledby="titulo-dentro">
 
 compromisos = "".join(f'<li class="revela">{icono(i)}<h3>{t}</h3><p>{d}</p></li>' for i, t, d in COMPROMISOS)
 equipo = "".join(f'<li class="revela">{retrato(c)}<h3>{c["nombre"]}</h3><span class="rol">{c["rol"]}</span><p>{c["frase"]}</p></li>' for c in EQUIPO)
+empezar = "".join(f'<li class="revela"><span class="num" aria-hidden="true">{n}</span>{icono(i)}<h3>{t}</h3><p>{d}</p></li>'
+                  for n, (i, t, d) in enumerate(EMPEZAR, 1))
 faq = "".join(f'<details><summary>{q}</summary><p>{a}</p></details>' for q, a in FAQ)
 caso_flujo = "".join(
     f'<li class="revela">{icono(i)}<div><h3>{t}</h3><p>{(ta or tb) if CASO_CON_NOMBRE else tb}</p></div></li>' for i, t, tb, ta in CASO_FLUJO)
@@ -563,10 +592,11 @@ ESTADO_ACTUAL = MINI_ESTADOS[MINI_ACTUAL][0]
 INDEX = f"""<section class="hero oscuro" aria-labelledby="titulo-hero">
  <div class="contenedor reticula">
   <div class="hero-texto">
-   <span class="sobre">La automatización ya ha llegado a la pequeña&nbsp;empresa</span>
+   <span class="sobre">Automatización para la pequeña&nbsp;empresa</span>
    <h1 id="titulo-hero">Software a la medida de tu&nbsp;negocio.</h1>
-   <p class="apoyo">Somos especialistas en llevarla a tu negocio: desarrollamos y mantenemos webs y herramientas de gestión a medida, con un responsable único, un proceso trazable y casos de éxito como el de DBM Real Invest.</p>
+   <p class="apoyo">Desarrollamos y mantenemos webs y herramientas de gestión a medida, con un responsable único y un proceso trazable.</p>
    <div class="acciones"><a class="btn claro" href="#contacto">Cuéntanos tu proyecto <span aria-hidden="true">→</span></a>
+    <a class="enlace-sec" href="#caso">Ver un caso real</a>
     <p class="pipeline"><span class="led" aria-hidden="true"></span><span class="mono">pruebas ✓ · copia ✓ · despliegue ✓<span class="largo"> · validación ✓</span></span><span class="sr">: así termina cada cambio</span></p></div>
   </div>
   <div class="hero-visual">
@@ -584,47 +614,11 @@ INDEX = f"""<section class="hero oscuro" aria-labelledby="titulo-hero">
  </div>
 </section>
 
-<section class="bloque alterno" id="ahora" aria-labelledby="titulo-ahora">
- <div class="contenedor">
-  <div class="titular"><span class="sobre">Por qué ahora</span>
-   <h2 id="titulo-ahora">Lo que antes solo podían permitirse las grandes, hoy está al alcance de tu&nbsp;negocio.</h2>
-   <p>La nube y la inteligencia artificial han abaratado y acelerado el desarrollo: una pequeña empresa ya puede trabajar con procesos automáticos y herramientas hechas a su medida.</p></div>
-  <div class="tarjetas">
-   <article class="tarjeta"><div class="cuerpo"><h3>Herramientas a tu medida</h3>
-    <p>CRM, gestión interna, reservas y despliegues con pruebas, antes reservados a grandes organizaciones, adaptados a cómo trabajas.</p></div></article>
-   <article class="tarjeta"><div class="cuerpo"><h3>Lo repetitivo, automático</h3>
-    <p>Avisos, informes, altas y seguimiento dejan de hacerse a mano, y tu equipo dedica el tiempo a lo que aporta valor.</p></div></article>
-   <article class="tarjeta"><div class="cuerpo"><h3>Con un responsable humano</h3>
-    <p>La IA trabaja bajo la supervisión de una persona y con un proceso trazable: pruebas, copia de seguridad y validación en cada cambio.</p></div></article>
-  </div>
-  <div class="cierre"><p>Somos especialistas en llevar la automatización a la pequeña empresa, con casos de éxito como el de DBM Real Invest.</p>
-   <a class="btn" href="#caso">Ver caso de éxito <span aria-hidden="true">→</span></a></div>
- </div>
-</section>
-
 <section class="bloque" id="servicios" aria-labelledby="titulo-servicios">
  <div class="contenedor">
   <div class="titular"><span class="sobre">Servicios</span><h2 id="titulo-servicios">Tecnología adaptada a tu forma de trabajar.</h2>
    <p>Desde la web hasta las herramientas internas de gestión: soluciones diseñadas a partir de tus procesos, no de una plantilla.</p></div>
   <div class="tarjetas">{tarjetas}</div>
- </div>
-</section>
-
-<section class="bloque alterno mision" id="mision" aria-labelledby="titulo-mision">
- <div class="contenedor">
-  <span class="sobre">Enfoque</span>
-  <div class="reticula">
-   <h2 class="frase revela" id="titulo-mision">Tecnología al servicio de tu negocio, <em>no al revés.</em></h2>
-   <p class="lado revela">Analizamos cómo trabaja tu empresa y desarrollamos solo lo que aporta valor, sin funciones innecesarias.</p>
-  </div>
- </div>
-</section>
-
-<section class="bloque" id="por-dentro" aria-labelledby="titulo-dentro">
- <div class="contenedor">
-  <div class="titular"><span class="sobre">Método de trabajo</span><h2 id="titulo-dentro">Un proceso trazable y un entorno aislado para cada cliente.</h2>
-   <p>Así avanza cada petición de cambio, desde que la recibimos hasta que está en funcionamiento. Cada cliente dispone de su propio repositorio, pruebas, copias de seguridad y servidor: nada se comparte entre clientes.</p></div>
-  {FLUJO}
  </div>
 </section>
 
@@ -657,6 +651,30 @@ INDEX = f"""<section class="hero oscuro" aria-labelledby="titulo-hero">
  </div>
 </section>
 
+<section class="bloque" id="por-dentro" aria-labelledby="titulo-dentro">
+ <div class="contenedor">
+  <div class="titular"><span class="sobre">Método de trabajo</span><h2 id="titulo-dentro">Un proceso trazable y un entorno aislado para cada cliente.</h2>
+   <p>Así avanza cada petición de cambio, desde que la recibimos hasta que está en funcionamiento. Cada cliente dispone de su propio repositorio, pruebas, copias de seguridad y servidor: nada se comparte entre clientes.</p></div>
+  {FLUJO}
+ </div>
+</section>
+
+<section class="bloque alterno" id="ahora" aria-labelledby="titulo-ahora">
+ <div class="contenedor">
+  <div class="titular"><span class="sobre">Por qué ahora</span>
+   <h2 id="titulo-ahora">Lo que antes solo podían permitirse las grandes, hoy está al alcance de tu&nbsp;negocio.</h2>
+</div>
+  <div class="tarjetas">
+   <article class="tarjeta"><div class="cuerpo"><h3>Herramientas a tu medida</h3>
+    <p>CRM, gestión interna, reservas y despliegues con pruebas, antes reservados a grandes organizaciones, adaptados a cómo trabajas.</p></div></article>
+   <article class="tarjeta"><div class="cuerpo"><h3>Lo repetitivo, automático</h3>
+    <p>Avisos, informes, altas y seguimiento dejan de hacerse a mano, y tu equipo dedica el tiempo a lo que aporta valor.</p></div></article>
+   <article class="tarjeta"><div class="cuerpo"><h3>Con un responsable humano</h3>
+    <p>La IA trabaja bajo la supervisión de una persona y con un proceso trazable: pruebas, copia de seguridad y validación en cada cambio.</p></div></article>
+  </div>
+ </div>
+</section>
+
 <section class="bloque" id="compromisos" aria-labelledby="titulo-compromisos">
  <div class="contenedor">
   <div class="titular"><span class="sobre">Compromisos</span><h2 id="titulo-compromisos">Lo que puedes esperar de nosotros.</h2>
@@ -681,10 +699,17 @@ INDEX = f"""<section class="hero oscuro" aria-labelledby="titulo-hero">
  </div>
 </section>
 
+<section class="bloque alterno" id="empezar" aria-labelledby="titulo-empezar">
+ <div class="contenedor">
+  <div class="titular"><span class="sobre">Cómo empezar</span><h2 id="titulo-empezar">Tres pasos, sin compromiso.</h2></div>
+  <ol class="empezar">{empezar}</ol>
+ </div>
+</section>
+
 <section class="bloque contacto oscuro" id="contacto" aria-labelledby="titulo-contacto">
  <div class="contenedor reticula">
   <div class="titular"><span class="sobre">Contacto</span><h2 id="titulo-contacto">Hablemos de tu proyecto.</h2>
-   <p>Cuéntanos qué necesitas y te propondremos la mejor forma de abordarlo. La primera conversación no implica ningún compromiso.</p></div>
+   <p>Cuéntanos qué necesitas y te proponemos la mejor forma de abordarlo. La primera conversación no implica ningún compromiso.</p></div>
   <div class="accion">
    <a class="btn claro" href="{MAILTO}">Escríbenos <span aria-hidden="true">→</span></a>
    <p class="correo-fila"><a class="correo" href="{MAILTO}">{MAIL}</a><button class="copiar" type="button" data-copiar="{MAIL}" hidden>Copiar dirección</button></p>
