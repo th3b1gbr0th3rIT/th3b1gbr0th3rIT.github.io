@@ -399,6 +399,11 @@ def comprobar_caso(sitio: Path) -> list:
     secciones = re.findall(r'<section[^>]*\bid="([^"]+)"', crudo)
     if secciones != ["servicios", "caso", "por-dentro", "equipo", "preguntas", "contacto"]:
         errores.append(f"index.html: secciones inesperadas: {secciones}")
+    # Fundador con su nombre completo en Equipo y en el JSON-LD (WEB-020d)
+    if '<span class="rol">Fundador</span>' not in crudo or "<h3>Jordi Gonzalez Roig</h3>" not in crudo:
+        errores.append("index.html: la tarjeta de Jordi debe decir «Jordi Gonzalez Roig» y «Fundador»")
+    if '"founder": {"@type": "Person", "name": "Jordi Gonzalez Roig"' not in crudo:
+        errores.append("index.html: el JSON-LD de la organización debe llevar founder «Jordi Gonzalez Roig»")
     # Ningún enlace ni id a las secciones retiradas, en ninguna página ni en el sitemap
     for f in sorted(sitio.iterdir()):
         if f.suffix in (".html", ".xml", ".webmanifest", ".txt", ".json"):

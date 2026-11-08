@@ -45,7 +45,7 @@ FUENTE_CURSIVA = "source-serif-4-latin-400-italic.woff2"
 
 # ── El equipo: Jordi y los agentes (iconos lineales) ─────────────────────────
 EQUIPO = [
-    dict(nombre="Jordi", corto="Jordi", rol="Fundador y CTO", icono="persona",
+    dict(nombre="Jordi Gonzalez Roig", corto="Jordi", rol="Fundador", icono="persona",
          frase="Escucha tu negocio, decide y responde de cada entrega."),
     dict(nombre="Coordinación", corto="Coordinación", rol="agente de IA", icono="lista",
          frase="Gestiona las prioridades y te informa de cada avance con claridad."),
@@ -98,7 +98,7 @@ def icono(nombre):
 
 
 def retrato(c):
-    return f'<span class="retrato{" jefe" if c["nombre"] == "Jordi" else ""}">{icono(c["icono"])}</span>'
+    return f'<span class="retrato{" jefe" if c["corto"] == "Jordi" else ""}">{icono(c["icono"])}</span>'
 
 
 # ── Ilustraciones propias (SVG geométrico, misma paleta en todas) ───────────
@@ -393,6 +393,7 @@ JSON_LD = json.dumps({"@context": "https://schema.org", "@graph": [
      "publisher": {"@id": URL_BASE + "#empresa"}},
     {"@type": "Organization", "@id": URL_BASE + "#empresa", "name": "th3b1gbr0th3r IT", "url": URL_BASE,
      "logo": URL_BASE + "apple-touch-icon.png",
+     "founder": {"@type": "Person", "name": "Jordi Gonzalez Roig", "jobTitle": "Fundador"},
      "contactPoint": {"@type": "ContactPoint", "contactType": "ventas", "email": MAIL, "availableLanguage": "es"}},
     {"@type": "ProfessionalService", "@id": URL_BASE + "#servicio", "name": "th3b1gbr0th3r IT", "url": URL_BASE,
      "image": URL_BASE + "og.png", "logo": URL_BASE + "apple-touch-icon.png", "parentOrganization": {"@id": URL_BASE + "#empresa"},
@@ -576,7 +577,7 @@ INDEX = f"""<section class="hero oscuro" aria-labelledby="titulo-hero">
 <section class="bloque alterno" id="equipo" aria-labelledby="titulo-equipo">
  <div class="contenedor">
   <div class="titular"><span class="sobre">Equipo</span><h2 id="titulo-equipo">Un responsable humano, apoyado por agentes de IA.</h2>
-   <p>Jordi dirige cada proyecto y decide. Cinco agentes de IA hacen el trabajo. Siempre se presentan como lo que son.</p></div>
+   <p>Jordi Gonzalez Roig, el fundador, dirige cada proyecto y decide. Cinco agentes de IA hacen el trabajo. Siempre se presentan como lo que son.</p></div>
   <ul class="equipo">{equipo}</ul>
  </div>
 </section>
