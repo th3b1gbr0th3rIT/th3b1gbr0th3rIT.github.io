@@ -10,7 +10,9 @@ Uso: python3 construir_web.py [--capturas] [--imagenes]
   --imagenes  regenera recursos/og.png y recursos/apple-touch-icon.png (necesita google-chrome y Pillow)
 La construcción solo usa la biblioteca estándar de Python 3 (funciona tal cual en un runner de GitHub).
 """
+import base64
 import datetime
+import hashlib
 import functools
 import http.server
 import json
@@ -334,6 +336,7 @@ unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+
 --t-h1:clamp(2.6rem,5.4vw,4.5rem);--t-h2:clamp(2rem,4.2vw,3.25rem);--t-h3:1.35rem;
 --s-h1:-.028em;--s-h2:-.022em;--s-h3:-.012em;--s-sobre:.14em}
 *{box-sizing:border-box}
+[id]{scroll-margin-top:calc(var(--cab) + 16px)}
 html{scroll-behavior:smooth;scroll-padding-top:calc(var(--cab) + 16px);background:var(--gris1)}
 body{margin:0;background:var(--blanco);color:var(--negro);font:17px/1.6 var(--sans);font-kerning:normal;font-synthesis:none;-webkit-font-smoothing:antialiased;overflow-x:hidden}
 img,svg{max-width:100%}
@@ -378,7 +381,7 @@ font-weight:700;text-decoration:none;border:2px solid var(--negro);transition:ba
 .cab.scroll{border-color:var(--linea);box-shadow:0 8px 24px -20px rgba(17,17,17,.4)}
 .cab .contenedor{display:flex;align-items:center;justify-content:space-between;gap:24px;height:var(--cab)}
 .menu ul{display:flex;align-items:center;gap:32px;list-style:none;margin:0;padding:0}
-.menu a{text-decoration:none;font-weight:500;font-size:.95rem;letter-spacing:-.005em;color:var(--texto)}
+.menu a{display:inline-block;min-height:24px;padding-block:2px;text-decoration:none;font-weight:500;font-size:.95rem;letter-spacing:-.005em;color:var(--texto)}
 .menu a:hover{color:var(--negro);text-decoration:underline;text-decoration-color:var(--ambar);text-underline-offset:6px;text-decoration-thickness:2px}
 .menu .solo-movil{display:none}
 .cab .btn{padding:10px 20px;font-size:.92rem}
@@ -638,7 +641,7 @@ details p{padding:0 0 22px;color:var(--apoyo);max-width:42em}
 .pie .col-contacto{grid-column:span 4}
 .pie h2{font:700 .78rem/1.2 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--negro);margin-bottom:16px}
 .pie ul{list-style:none;margin:0;padding:0;display:grid;gap:10px}
-.pie a{text-decoration:none;color:var(--texto)}
+.pie a{text-decoration:none;color:var(--texto);display:inline-block;min-height:24px;padding-block:2px}
 .pie a:hover{color:var(--negro);text-decoration:underline;text-decoration-color:var(--ambar);text-underline-offset:4px}
 .pie .correo{word-break:break-all}
 .pie .base{margin-top:calc(var(--ritmo)*7);padding-top:24px;border-top:1px solid #ddd5c8;color:var(--apoyo);font-size:.88rem}
@@ -836,9 +839,9 @@ def cabecera(base, inicio):
 </header>"""
 
 
-def pie(base, inicio, raiz):
+def pie(base, inicio, raiz, actual=""):
     nav = "".join(f'<li><a href="{base}#{i}">{t}</a></li>' for i, t in NAV)
-    legales = "".join(f'<li><a href="{raiz}{h}">{t}</a></li>' for h, t in LEGALES)
+    legales = "".join(f'<li><a href="{raiz}{h}"{" aria-current=\"page\"" if h == actual else ""}>{t}</a></li>' for h, t in LEGALES)
     return f"""<footer class="pie">
  <div class="contenedor">
   <div class="reticula">
@@ -868,12 +871,17 @@ def sin_viudas(fragmento):
     return re.sub(r"(<h[12][^>]*>)(.*?)(</h[12]>)", unir, fragmento, flags=re.S)
 
 
-JSON_LD = json.dumps({
-    "@context": "https://schema.org", "@type": "ProfessionalService", "name": "th3b1gbr0th3r IT", "url": URL_BASE,
-    "image": URL_BASE + "og.png", "logo": URL_BASE + "apple-touch-icon.png",
-    "description": "Automatización y software a medida para pequeñas empresas: herramientas de gestión, reservas y citas, webs, mantenimiento y soporte.",
-    "areaServed": {"@type": "Country", "name": "España"}, "knowsLanguage": "es",
-}, ensure_ascii=False)
+JSON_LD = json.dumps({"@context": "https://schema.org", "@graph": [
+    {"@type": "WebSite", "@id": URL_BASE + "#sitio", "url": URL_BASE, "name": "th3b1gbr0th3r IT", "inLanguage": "es",
+     "publisher": {"@id": URL_BASE + "#empresa"}},
+    {"@type": "Organization", "@id": URL_BASE + "#empresa", "name": "th3b1gbr0th3r IT", "url": URL_BASE,
+     "logo": URL_BASE + "apple-touch-icon.png",
+     "contactPoint": {"@type": "ContactPoint", "contactType": "ventas", "email": MAIL, "availableLanguage": "es"}},
+    {"@type": "ProfessionalService", "@id": URL_BASE + "#servicio", "name": "th3b1gbr0th3r IT", "url": URL_BASE,
+     "image": URL_BASE + "og.png", "logo": URL_BASE + "apple-touch-icon.png", "parentOrganization": {"@id": URL_BASE + "#empresa"},
+     "description": "Automatización y software a medida para pequeñas empresas: herramientas de gestión, reservas y citas, webs, mantenimiento y soporte.",
+     "areaServed": {"@type": "Country", "name": "España"}, "knowsLanguage": "es"},
+]}, ensure_ascii=False)
 
 
 def pagina(titulo, descripcion, cuerpo, ruta, base="index.html", raiz="", indexar=True, extra_head=""):
@@ -882,12 +890,18 @@ def pagina(titulo, descripcion, cuerpo, ruta, base="index.html", raiz="", indexa
     inicio = raiz or "index.html"
     css = CSS.replace("@RAIZ@", raiz).replace("@NORMAL@", FUENTE_NORMAL).replace("@CURSIVA@", FUENTE_CURSIVA)
     url = URL_BASE + ("" if ruta == "index.html" else ruta)
-    robots = "" if indexar else '<meta name="robots" content="noindex">\n'
+    robots = ('<meta name="robots" content="index,follow,max-image-preview:large">\n' if indexar
+              else '<meta name="robots" content="noindex">\n')
+    hash_js = "sha256-" + base64.b64encode(hashlib.sha256(JS.encode("utf-8")).digest()).decode()
+    csp = (f"default-src 'none'; script-src '{hash_js}'; style-src 'unsafe-inline'; img-src 'self' data:; "
+           "font-src 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'")
     return f"""<!doctype html>
 <html lang="es">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="{csp}">
+<meta name="referrer" content="strict-origin-when-cross-origin">
 <title>{titulo}</title>
 <meta name="description" content="{descripcion}">
 {robots}<meta name="theme-color" content="#111111">
@@ -908,6 +922,7 @@ def pagina(titulo, descripcion, cuerpo, ruta, base="index.html", raiz="", indexa
 <meta name="twitter:image" content="{URL_BASE}og.png">
 <link rel="icon" href="{raiz}favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="{raiz}apple-touch-icon.png">
+<link rel="manifest" href="{raiz}site.webmanifest">
 <link rel="preload" href="{raiz}fuentes/{FUENTE_NORMAL}" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="{raiz}fuentes/{FUENTE_CURSIVA}" as="font" type="font/woff2" crossorigin>
 {extra_head}<style>{css}</style>
@@ -919,7 +934,7 @@ def pagina(titulo, descripcion, cuerpo, ruta, base="index.html", raiz="", indexa
 <main id="principal">
 {cuerpo}
 </main>
-{pie(base, inicio, raiz)}
+{pie(base, inicio, raiz, ruta)}
 </body>
 </html>
 """
@@ -1246,11 +1261,16 @@ def construir():
     (SITIO / "fuentes").mkdir()
     for f in (FUENTE_NORMAL, FUENTE_CURSIVA, "OFL.txt"):
         shutil.copy2(FUENTES / f, SITIO / "fuentes" / f)
-    for f in ("og.png", "apple-touch-icon.png"):
+    for f in ("og.png", "apple-touch-icon.png", "icono-192.png", "icono-512.png"):
         shutil.copy2(RECURSOS / f, SITIO / f)
+    (SITIO / "site.webmanifest").write_text(json.dumps({
+        "name": "th3b1gbr0th3r IT", "short_name": "th3b1gbr0th3r", "lang": "es", "start_url": "./", "display": "browser",
+        "background_color": "#111111", "theme_color": "#111111",
+        "icons": [{"src": "icono-192.png", "sizes": "192x192", "type": "image/png"},
+                  {"src": "icono-512.png", "sizes": "512x512", "type": "image/png"}]}, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
     (SITIO / ".nojekyll").write_text("", encoding="utf-8")
     (SITIO / "robots.txt").write_text(f"User-agent: *\nAllow: /\nSitemap: {URL_BASE}sitemap.xml\n", encoding="utf-8")
-    urls = "".join(f"<url><loc>{URL_BASE}{'' if n == 'index.html' else n}</loc></url>" for n in ["index.html", *PAGINAS_LEGALES])
+    urls = "".join(f"<url><loc>{URL_BASE}{'' if n == 'index.html' else n}</loc><lastmod>{datetime.date.today().isoformat()}</lastmod></url>" for n in ["index.html", *PAGINAS_LEGALES])
     (SITIO / "sitemap.xml").write_text('<?xml version="1.0" encoding="UTF-8"?>\n'
                                        f'<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">{urls}</urlset>\n', encoding="utf-8")
     print(f"OK: {SITIO}")
@@ -1386,6 +1406,13 @@ p{{font:600 28px system-ui,sans-serif;color:#d6d3d1;margin:0;position:relative;z
                   f'svg{{width:720px;height:720px}}</style><body>{cuadrado}</body>')
     with tempfile.TemporaryDirectory(dir=base_temporal()) as tmp:
         for nombre, contenido, tam, final in (("og", og, "1200,630", (1200, 630)), ("icono", icono_html, "720,720", (180, 180))):
+            if nombre == "icono":
+                png0 = Path(tmp) / "icono0.png"
+                p0 = Path(tmp) / "icono0.html"
+                p0.write_text(contenido, encoding="utf-8")
+                _chrome(png0, tam, p0.as_uri(), Path(tmp) / "perfil-icono0")
+                for lado in (192, 512):
+                    Image.open(png0).convert("RGB").resize((lado, lado), Image.LANCZOS).save(RECURSOS / f"icono-{lado}.png", optimize=True)
             pagina_tmp = Path(tmp) / f"{nombre}.html"
             pagina_tmp.write_text(contenido, encoding="utf-8")
             png = Path(tmp) / f"{nombre}.png"

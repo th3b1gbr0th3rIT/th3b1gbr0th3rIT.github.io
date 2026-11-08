@@ -17,9 +17,33 @@ HERE = Path(__file__).resolve().parent
 PAGINAS_LEGALES = ["aviso-legal.html", "privacidad.html", "cookies.html"]
 FUENTES = ["fuentes/source-serif-4-latin-400-normal.woff2", "fuentes/source-serif-4-latin-400-italic.woff2"]
 ESPERADOS = ["index.html", "404.html", *PAGINAS_LEGALES, "favicon.svg", "apple-touch-icon.png", "og.png", *FUENTES, "fuentes/OFL.txt",
-             ".nojekyll", "robots.txt", "sitemap.xml"]
+             ".nojekyll", "robots.txt", "sitemap.xml", "site.webmanifest", "icono-192.png", "icono-512.png"]
 NO_PUBLICAR = ["flujo.svg", "flujo-vertical.svg"]  # el diagrama es HTML+CSS desde la ronda 2 de WEB-006
 TAMANO_MAX = 1024 * 1024  # 1 MB en total
+# Pares texto/fondo que deben cumplir WCAG AA (nombres de variables de :root o colores literales): (texto, fondo, mínimo)
+PARES_CONTRASTE = [
+    ("texto", "blanco", 4.5), ("apoyo", "blanco", 4.5), ("texto", "gris1", 4.5), ("apoyo", "gris1", 4.5),
+    ("tostado", "blanco", 4.5), ("#92400e", "gris1", 4.5), ("negro", "blanco", 4.5),
+    ("crema", "negro", 4.5), ("ambar2", "negro", 4.5), ("#d6d3d1", "negro", 4.5), ("#e7e5e4", "negro", 4.5),
+    ("blanco", "negro", 4.5), ("negro", "ambar2", 4.5), ("ambar", "negro", 3.0),
+]
+CSP_REQUERIDA = ("default-src 'none'", "base-uri 'none'", "form-action 'none'")
+
+
+def _luz(h):
+    h = h.lstrip("#")
+    if len(h) == 3:
+        h = "".join(c * 2 for c in h)
+    c = [int(h[i:i + 2], 16) / 255 for i in (0, 2, 4)]
+    c = [v / 12.92 if v <= 0.03928 else ((v + 0.055) / 1.055) ** 2.4 for v in c]
+    return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2]
+
+
+def contraste(a, b):
+    la, lb = sorted((_luz(a), _luz(b)), reverse=True)
+    return (la + 0.05) / (lb + 0.05)
+
+
 PRESUPUESTO = {  # bytes por fichero o grupo
     "index.html": 120 * 1024,
     "fuentes (woff2)": 60 * 1024,
@@ -82,6 +106,12 @@ class Lector(HTMLParser):
         self.titulo = ""
         self.description = None
         self._en_title = False
+        self.meta_http = {}
+        self.meta_name = {}
+        self.landmarks = {}
+        self.navs_sin_etiqueta = 0
+        self.aria_current = 0
+        self.manifest = False
 
     def handle_starttag(self, tag, attrs):
         for nombre, valor in attrs:
@@ -107,6 +137,19 @@ class Lector(HTMLParser):
             self.lang = a.get("lang")
         if tag == "title":
             self._en_title = True
+        if tag == "meta":
+            if a.get("http-equiv"):
+                self.meta_http[a["http-equiv"].lower()] = a.get("content") or ""
+            if a.get("name"):
+                self.meta_name[a["name"].lower()] = a.get("content") or ""
+        if tag == "link" and a.get("rel") == "manifest":
+            self.manifest = True
+        if tag in ("header", "nav", "main", "footer"):
+            self.landmarks[tag] = self.landmarks.get(tag, 0) + 1
+            if tag == "nav" and not a.get("aria-label") and not a.get("aria-labelledby"):
+                self.navs_sin_etiqueta += 1
+        if a.get("aria-current"):
+            self.aria_current += 1
         if tag == "meta" and (a.get("name") or "").lower() == "description":
             self.description = a.get("content") or ""
 
@@ -188,6 +231,29 @@ def verificar(sitio: Path) -> list:
                     errores.append(f"{rel}: falta <title> o está vacío")
                 if not (lector.description or "").strip():
                     errores.append(f"{rel}: falta <meta name=\"description\"> o está vacía")
+                csp = lector.meta_http.get("content-security-policy", "")
+                if not csp or not all(x in csp for x in CSP_REQUERIDA) or "unsafe-eval" in csp or re.search(r"script-src[^;]*unsafe-inline", csp):
+                    errores.append(f"{rel}: falta la CSP por meta o es demasiado laxa")
+                if not lector.meta_http.get("content-security-policy", "").strip() or not lector.meta_name.get("referrer"):
+                    errores.append(f"{rel}: falta <meta name=\"referrer\"> o la CSP")
+                if not lector.manifest:
+                    errores.append(f"{rel}: falta <link rel=\"manifest\">")
+                for lm in ("header", "main", "footer"):
+                    if lector.landmarks.get(lm) != 1:
+                        errores.append(f"{rel}: debe tener exactamente un <{lm}> (tiene {lector.landmarks.get(lm, 0)})")
+                if not lector.landmarks.get("nav") or lector.navs_sin_etiqueta:
+                    errores.append(f"{rel}: los <nav> deben existir y llevar aria-label")
+                if rel.name in PAGINAS_LEGALES and lector.aria_current != 1:
+                    errores.append(f"{rel}: debe marcar su enlace del pie con aria-current=\"page\" (tiene {lector.aria_current})")
+                if rel.name == "index.html":
+                    css = "".join(re.findall(r"<style>(.*?)</style>", crudo, re.S))
+                    var = dict(re.findall(r"--([a-z0-9]+):(#[0-9a-fA-F]{3,6})\b", css))
+                    for t, f, minimo in PARES_CONTRASTE:
+                        ct, cf = var.get(t, t), var.get(f, f)
+                        if not (ct.startswith("#") and cf.startswith("#")):
+                            errores.append(f"contraste: no se resuelve {t} / {f}")
+                        elif contraste(ct, cf) < minimo:
+                            errores.append(f"contraste {t} {ct} sobre {f} {cf}: {contraste(ct, cf):.2f}:1 (mínimo {minimo}:1)")
                 if lector.h1 != 1:
                     errores.append(f"{rel}: tiene {lector.h1} <h1>, debe tener exactamente uno")
                 for m in re.finditer(r"\[PENDIENTE:[^\]]*\]", texto):
