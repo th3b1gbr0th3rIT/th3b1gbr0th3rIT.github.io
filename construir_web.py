@@ -869,7 +869,7 @@ def sin_viudas(fragmento):
 JSON_LD = json.dumps({
     "@context": "https://schema.org", "@type": "ProfessionalService", "name": "th3b1gbr0th3r IT", "url": URL_BASE,
     "image": URL_BASE + "og.png", "logo": URL_BASE + "apple-touch-icon.png",
-    "description": "Software a medida para pequeñas empresas: webs, herramientas de gestión, reservas y citas, automatización, mantenimiento y soporte.",
+    "description": "Automatización y software a medida para pequeñas empresas: herramientas de gestión, reservas y citas, webs, mantenimiento y soporte.",
     "areaServed": {"@type": "Country", "name": "España"}, "knowsLanguage": "es",
 }, ensure_ascii=False)
 
@@ -973,9 +973,9 @@ ESTADO_ACTUAL = MINI_ESTADOS[MINI_ACTUAL][0]
 INDEX = f"""<section class="hero oscuro" aria-labelledby="titulo-hero">
  <div class="contenedor reticula">
   <div class="hero-texto">
-   <span class="sobre">Desarrollo y mantenimiento para pequeñas empresas</span>
+   <span class="sobre">La automatización ya ha llegado a la pequeña&nbsp;empresa</span>
    <h1 id="titulo-hero">Software a la medida de tu&nbsp;negocio.</h1>
-   <p class="apoyo">Desarrollamos y mantenemos webs y herramientas de gestión a medida, con un responsable único y un proceso trazable de principio a fin.</p>
+   <p class="apoyo">Somos especialistas en llevarla a tu negocio: desarrollamos y mantenemos webs y herramientas de gestión a medida, con un responsable único, un proceso trazable y casos de éxito como el de DBM Real Invest.</p>
    <div class="acciones"><a class="btn claro" href="#contacto">Cuéntanos tu proyecto <span aria-hidden="true">→</span></a>
     <p class="pipeline"><span class="led" aria-hidden="true"></span><span class="mono">pruebas ✓ · copia ✓ · despliegue ✓<span class="largo"> · validación ✓</span></span><span class="sr">: así termina cada cambio</span></p></div>
   </div>
@@ -987,10 +987,28 @@ INDEX = f"""<section class="hero oscuro" aria-labelledby="titulo-hero">
      <div class="mini-cab"><span>Hoja de cambios</span><span class="etiqueta">Ejemplo</span></div>
      <p class="mini-titulo">{MINI_TITULO_HTML}</p>
      <ol class="mini-pasos">{mini_pasos}</ol>
-     <p class="mini-pie">Estado: <b>{ESTADO_ACTUAL}</b> · <a href="#caso">Ver un caso real</a></p>
+     <p class="mini-pie">Estado: <b>{ESTADO_ACTUAL}</b> · <a href="#caso">Ver caso de éxito</a></p>
     </figure>
    </div>
   </div>
+ </div>
+</section>
+
+<section class="bloque alterno" id="ahora" aria-labelledby="titulo-ahora">
+ <div class="contenedor">
+  <div class="titular"><span class="sobre">Por qué ahora</span>
+   <h2 id="titulo-ahora">Lo que antes solo podían permitirse las grandes, hoy está al alcance de tu&nbsp;negocio.</h2>
+   <p>La nube y la inteligencia artificial han abaratado y acelerado el desarrollo: una pequeña empresa ya puede trabajar con procesos automáticos y herramientas hechas a su medida.</p></div>
+  <div class="tarjetas">
+   <article class="tarjeta"><div class="cuerpo"><h3>Herramientas a tu medida</h3>
+    <p>CRM, gestión interna, reservas y despliegues con pruebas, antes reservados a grandes organizaciones, adaptados a cómo trabajas.</p></div></article>
+   <article class="tarjeta"><div class="cuerpo"><h3>Lo repetitivo, automático</h3>
+    <p>Avisos, informes, altas y seguimiento dejan de hacerse a mano, y tu equipo dedica el tiempo a lo que aporta valor.</p></div></article>
+   <article class="tarjeta"><div class="cuerpo"><h3>Con un responsable humano</h3>
+    <p>La IA trabaja bajo la supervisión de una persona y con un proceso trazable: pruebas, copia de seguridad y validación en cada cambio.</p></div></article>
+  </div>
+  <div class="cierre"><p>Somos especialistas en llevar la automatización a la pequeña empresa, con casos de éxito como el de DBM Real Invest.</p>
+   <a class="btn" href="#caso">Ver caso de éxito <span aria-hidden="true">→</span></a></div>
  </div>
 </section>
 
@@ -1088,9 +1106,9 @@ INDEX = f"""<section class="hero oscuro" aria-labelledby="titulo-hero">
 </section>
 <a class="cta-movil btn claro" href="#contacto" aria-hidden="true" tabindex="-1">Cuéntanos tu proyecto <span aria-hidden="true">→</span></a>"""
 
-TITULO_INDEX = "Software a medida para pequeñas empresas · th3b1gbr0th3r IT"
-DESC_INDEX = ("Software a medida para pequeñas empresas en España: webs, herramientas de gestión, reservas y citas, "
-              "automatización, mantenimiento y soporte. Un responsable único y un proceso trazable, con el apoyo de agentes de IA.")
+TITULO_INDEX = "Automatización y software a medida para pequeñas empresas · th3b1gbr0th3r IT"
+DESC_INDEX = ("La automatización ya ha llegado a la pequeña empresa. Software a medida en España: herramientas de gestión, "
+              "reservas y citas, webs y mantenimiento, con un responsable único, proceso trazable y casos de éxito.")
 html = pagina(TITULO_INDEX, DESC_INDEX, INDEX, "index.html", base="",
               extra_head=f'<script type="application/ld+json">{JSON_LD}</script>\n')
 
