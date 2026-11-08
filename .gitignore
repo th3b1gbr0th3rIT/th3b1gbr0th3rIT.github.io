@@ -2,3 +2,6 @@ sitio/
 capturas/
 __pycache__/
 docker/test/.web-test.pid
+
+# Memoria y config de los agentes: nunca en el repo público
+.claude/
