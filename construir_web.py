@@ -41,55 +41,22 @@ ACTUALIZADO = f"{HOY.day} de {MESES[HOY.month - 1]} de {HOY.year}"
 FUENTE_NORMAL = "source-serif-4-latin-400-normal.woff2"
 FUENTE_CURSIVA = "source-serif-4-latin-400-italic.woff2"
 
-# ── El equipo (mismos gatos que docs/marca/generar_marca.py) ─────────────────
+# ── El equipo: Jordi y los agentes (iconos lineales) ─────────────────────────
 EQUIPO = [
-    dict(nombre="Jordi", rol="Fundador y CTO · el responsable", cuerpo="#111111", interior="#3b2f2f", ojos="#f59e0b", pecho=None, extra="corona",
-         frase="Escucha tu negocio, decide lo importante y responde de todo lo que hacemos."),
-    dict(nombre="Coordinación", rol="agente de IA", cuerpo="#e07b24", interior="#f2b07a", ojos="#2f855a", pecho="#fde7cf", extra="rayas",
-         frase="Ordena las prioridades y te cuenta cada avance con palabras claras."),
-    dict(nombre="Desarrollo", rol="agente de IA", cuerpo="#7b8794", interior="#b8c1cc", ojos="#38bdf8", pecho="#d9dee4", extra="gafas",
-         frase="Construye cada mejora y la prueba a fondo antes de entregarla."),
-    dict(nombre="Operación", rol="agente de IA", cuerpo="#f4f1ea", interior="#f3c1c1", ojos="#3b82f6", pecho=None, extra="manchas",
-         frase="Hace las copias de seguridad, publica los cambios y vigila que todo funcione."),
+    dict(nombre="Jordi", rol="Fundador y CTO", icono="persona",
+         frase="Analiza las necesidades de tu empresa, toma las decisiones y responde de cada entrega."),
+    dict(nombre="Coordinación", rol="agente de IA", icono="lista",
+         frase="Gestiona las prioridades y te informa de cada avance con claridad."),
+    dict(nombre="Desarrollo", rol="agente de IA", icono="codigo",
+         frase="Implementa cada mejora y la prueba a fondo antes de entregarla."),
+    dict(nombre="Operación", rol="agente de IA", icono="escudo",
+         frase="Realiza las copias de seguridad, publica los cambios y supervisa el funcionamiento."),
 ]
 
-
-def gato(c, cls="", etiqueta=True):
-    t = ' stroke="#cbd5e1" stroke-width="6"' if c["cuerpo"] == "#f4f1ea" else ""
-    p = [
-        f'<path class="cola" d="M330 420 C 420 410, 440 330, 400 290 C 380 270, 360 285, 372 300 C 395 330, 380 385, 320 392 Z" fill="{c["cuerpo"]}"{t}/>',
-        f'<path d="M170 430 C 150 360, 165 290, 215 255 L 300 255 C 350 290, 365 360, 345 430 Z" fill="{c["cuerpo"]}"{t}/>',
-        f'<path d="M182 168 L 176 88 L 236 140 Z" fill="{c["cuerpo"]}"{t}/>',
-        f'<path d="M330 168 L 336 88 L 276 140 Z" fill="{c["cuerpo"]}"{t}/>',
-        f'<ellipse cx="256" cy="205" rx="88" ry="78" fill="{c["cuerpo"]}"{t}/>',
-        f'<path d="M190 150 L 187 108 L 220 137 Z" fill="{c["interior"]}"/>',
-        f'<path d="M322 150 L 325 108 L 292 137 Z" fill="{c["interior"]}"/>',
-    ]
-    if c["pecho"]:
-        p.append(f'<path d="M225 300 C 235 360, 278 360, 288 300 C 270 320, 243 320, 225 300 Z" fill="{c["pecho"]}"/>')
-    if c["extra"] == "rayas":
-        p += [f'<path d="M{a} 140 q 6 22 0 40" stroke="#a24f10" stroke-width="9" fill="none" stroke-linecap="round"/>' for a in (240, 256, 272)]
-        p += [f'<path d="M{a} 330 q 18 6 34 0" stroke="#a24f10" stroke-width="9" fill="none" stroke-linecap="round"/>' for a in (180, 300)]
-    if c["extra"] == "manchas":
-        p += ['<ellipse cx="300" cy="170" rx="34" ry="26" fill="#111111"/>', '<ellipse cx="200" cy="360" rx="30" ry="40" fill="#111111"/>',
-              '<ellipse cx="380" cy="300" rx="16" ry="20" fill="#111111"/>']
-    p.append(f'<g class="ojos"><ellipse cx="224" cy="205" rx="20" ry="16" fill="{c["ojos"]}"/><ellipse cx="288" cy="205" rx="20" ry="16" fill="{c["ojos"]}"/>'
-             '<ellipse cx="224" cy="205" rx="5" ry="13" fill="#111"/><ellipse cx="288" cy="205" rx="5" ry="13" fill="#111"/></g>')
-    p += ['<path d="M248 232 L 264 232 L 256 242 Z" fill="#e8a0a0"/>',
-          f'<ellipse cx="225" cy="430" rx="26" ry="12" fill="{c["cuerpo"]}"{t}/>', f'<ellipse cx="290" cy="430" rx="26" ry="12" fill="{c["cuerpo"]}"{t}/>']
-    if c["extra"] == "gafas":
-        p += ['<circle cx="224" cy="205" r="30" fill="none" stroke="#0f172a" stroke-width="8"/>',
-              '<circle cx="288" cy="205" r="30" fill="none" stroke="#0f172a" stroke-width="8"/>',
-              '<line x1="254" y1="205" x2="258" y2="205" stroke="#0f172a" stroke-width="8"/>']
-    if c["extra"] == "corona":
-        p.append('<path d="M206 118 L 216 78 L 236 104 L 256 70 L 276 104 L 296 78 L 306 118 Z" fill="#f59e0b" stroke="#b45309" stroke-width="4"/>')
-    acc = f'role="img" aria-label="Gato {c["nombre"]}"' if etiqueta else 'aria-hidden="true"'
-    return f'<svg class="gato {cls}" viewBox="120 60 320 390" {acc} focusable="false">' + "".join(p) + "</svg>"
-
-
-JEFE = EQUIPO[0]
-ICONO_MARCA = ('<svg class="icono-marca" viewBox="0 0 110 110" aria-hidden="true" focusable="false"><circle cx="55" cy="55" r="55" fill="#fdf6ec"/>'
-               '<g transform="scale(0.215)">' + gato(JEFE)[gato(JEFE).index('>') + 1:-6] + '</g></svg>')
+# Monograma «IT» (favicon y apple-touch-icon): sustituye al antiguo icono de marca.
+MONOGRAMA = ('<svg class="icono-marca" viewBox="0 0 110 110" aria-hidden="true" focusable="false">'
+             '<rect width="110" height="110" rx="24" fill="#111111"/>'
+             f'<path transform="translate(-415.40 31.12) scale(0.06)" d="{logotipo.ACENTO_TRAZOS}" fill="#f59e0b"/></svg>')
 LOGOTIPO = logotipo.svg()
 
 
@@ -109,8 +76,15 @@ def icono(nombre):
         "pruebas": '<path d="M9 3h6M10 3v6l-5 9a2 2 0 0 0 1.8 3h10.4a2 2 0 0 0 1.8-3l-5-9V3"/><path d="M8 15h8"/>',
         "publicar": '<path d="M12 15V4M7.5 8.5 12 4l4.5 4.5"/><path d="M4 15v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/>',
         "servidor": '<rect x="3" y="4" width="18" height="7" rx="2"/><rect x="3" y="13" width="18" height="7" rx="2"/><path d="M7 7.5h.01M7 16.5h.01"/>',
+        "lista": '<path d="M10 6h10M10 12h10M10 18h10"/><path d="m3.5 6 1.5 1.5L7.5 5M3.5 12l1.5 1.5L7.5 11M3.5 18l1.5 1.5L7.5 17"/>',
+        "codigo": '<path d="m8 7-5 5 5 5M16 7l5 5-5 5M13.5 4l-3 16"/>',
+        "escudo": '<path d="M12 3 5 6v5c0 4.5 3 8 7 10 4-2 7-5.5 7-10V6z"/><path d="m9 12 2 2 4-4"/>',
     }[nombre]
     return f'<svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false">{d}</svg>'
+
+
+def retrato(c):
+    return f'<span class="retrato{" jefe" if c["nombre"] == "Jordi" else ""}">{icono(c["icono"])}</span>'
 
 
 # ── Ilustraciones propias (SVG geométrico, misma paleta en todas) ───────────
@@ -170,67 +144,68 @@ ILUS = {
 # ── Contenido ────────────────────────────────────────────────────────────────
 # Cada línea de servicio con sus tres viñetas dentro de la tarjeta (la antigua sección «En detalle» ya no existe).
 SERVICIOS = [
-    ("webs", "Webs", "Rápidas, claras y en los idiomas de tus clientes. Pensadas para que te escriban, te llamen y te reserven.",
-     ["Diseño a la medida de tu marca", "Varios idiomas, si tus clientes los hablan", "Fácil de mantener al día"]),
-    ("gestion", "Herramientas de gestión", "Clientes, pedidos, visitas o expedientes, organizados a tu manera. Cada persona ve lo suyo.",
-     ["Hecha según cómo trabajas tú", "Permisos por persona y por equipo", "Tus datos, siempre tuyos"]),
-    ("reservas", "Reservas y citas", "Tus clientes reservan solos y tú lo ves todo en un único sitio, desde cualquier dispositivo.",
-     ["Reservas en línea para tus clientes", "Recordatorios automáticos", "Agenda única para todo el equipo"]),
-    ("automatizacion", "Automatización", "Avisos, correos, informes y recordatorios. Lo repetitivo lo hace la máquina.",
-     ["Correos y avisos automáticos", "Informes que llegan sin pedirlos", "Conexión entre las herramientas que ya usas"]),
-    ("cuidado", "Cuidado continuo", "Copias de seguridad, actualizaciones y vigilancia. Tú te ocupas de tu negocio; nosotros, del resto.",
-     ["Copia de seguridad antes de cada cambio", "Actualizaciones y vigilancia continua", "Un aviso cada vez que hay algo nuevo"]),
+    ("webs", "Webs", "Webs rápidas, accesibles y en varios idiomas, orientadas a convertir visitas en contactos y reservas.",
+     ["Diseño a la medida de tu marca", "Versiones en varios idiomas", "Contenido fácil de actualizar"]),
+    ("gestion", "Herramientas de gestión", "Clientes, pedidos, visitas o expedientes en una aplicación hecha a tu medida, con acceso según el perfil de cada usuario.",
+     ["Diseñada sobre tus procesos reales", "Permisos por persona y por equipo", "Los datos son siempre de tu empresa"]),
+    ("reservas", "Reservas y citas", "Reserva en línea para tus clientes y una agenda centralizada, accesible desde cualquier dispositivo.",
+     ["Reservas en línea para tus clientes", "Recordatorios automáticos", "Agenda compartida para todo el equipo"]),
+    ("automatizacion", "Automatización", "Automatizamos avisos, correos, informes y recordatorios para que tu equipo dedique su tiempo a lo que aporta valor.",
+     ["Correos y avisos automáticos", "Informes periódicos automáticos", "Integración con las herramientas que ya utilizas"]),
+    ("cuidado", "Mantenimiento y soporte", "Copias de seguridad, actualizaciones y supervisión continua para que tus sistemas sigan funcionando con seguridad.",
+     ["Copia de seguridad antes de cada cambio", "Actualizaciones y supervisión continua", "Informe de cada cambio realizado"]),
 ]
 
 COMPROMISOS = [
-    ("persona", "Hablas con el responsable", "Siempre sabes quién está detrás de tu proyecto y a quién escribir."),
-    ("candado", "Tus datos son tuyos", "No los usamos para nada más ni los mezclamos con los de nadie."),
-    ("copia", "Primero, la copia de seguridad", "Antes de tocar nada, lo guardamos todo. Si algo sale mal, volvemos atrás."),
-    ("charla", "Te lo contamos todo", "Qué hemos hecho, qué puedes comprobar y qué falta. También cuando no es buena noticia."),
+    ("persona", "Interlocutor único", "Un responsable identificado para tu proyecto, de principio a fin."),
+    ("candado", "Tus datos, bajo tu control", "Solo los utilizamos para prestarte el servicio y nunca se mezclan con los de otros clientes."),
+    ("copia", "Copia de seguridad previa", "Antes de cada cambio hacemos una copia completa, de modo que siempre es posible volver al estado anterior."),
+    ("charla", "Transparencia", "Te informamos de lo realizado, de cómo comprobarlo y de lo pendiente, también cuando surge un problema."),
 ]
 
 FAQ = [
-    ("No sé nada de tecnología. ¿Es un problema?",
-     "Al contrario. Tú sabes de tu negocio y nosotros traducimos. Te hablamos claro, sin jerga, y te enseñamos a usar todo lo que hagamos."),
-    ("¿Esto no es solo para empresas grandes?",
-     "Trabajamos para pequeñas empresas. Empezamos por lo que más te urge y crecemos contigo, paso a paso."),
-    ("Ya tengo una web o un programa. ¿Hay que tirarlo?",
-     "No necesariamente. Primero miramos lo que tienes; si sirve, lo mejoramos. Solo proponemos empezar de cero cuando de verdad compensa."),
+    ("¿Necesito conocimientos técnicos?",
+     "No. Tú conoces tu negocio y nosotros nos encargamos de la parte técnica. Te lo explicamos todo sin tecnicismos y te formamos en el uso de cada herramienta."),
+    ("¿Trabajáis con empresas pequeñas?",
+     "Sí, es nuestro foco. Empezamos por lo más prioritario y ampliamos la solución a medida que crece tu empresa."),
+    ("Ya tengo una web o un programa. ¿Hay que sustituirlo?",
+     "No necesariamente. Primero analizamos lo que tienes; si es aprovechable, lo mejoramos. Solo proponemos empezar de cero cuando está justificado."),
     ("¿Quién hace el trabajo: personas o inteligencia artificial?",
-     "Los dos. Los agentes de IA desarrollan, prueban y vigilan; Jordi revisa, decide y responde ante ti."),
-    ("¿Cuánto cuesta?",
-     "Depende de lo que necesites, y por eso preferimos escucharte antes de dar una cifra. Tras la primera conversación tendrás una propuesta clara y sin compromiso."),
+     "Ambos. Los agentes de IA desarrollan, prueban y supervisan; Jordi revisa, decide y es tu interlocutor."),
+    ("¿Cuál es el coste?",
+     "Depende del alcance del proyecto. Tras una primera conversación, sin compromiso, te enviamos una propuesta detallada."),
 ]
 
 # WEB-005: un cambio de esta web, estado a estado. Se rotula «Ejemplo» mientras no esté publicado y validado.
 CASO_PUNTOS = [
-    ("hoja", "Cada cambio queda registrado", "Todo empieza en la hoja de cambios: qué se pide, quién lo hace y en qué estado está."),
-    ("lupa", "Lo privado nunca sale a la luz", "Una verificación automática revisa cada versión antes de publicarla."),
-    ("mano", "Ningún cambio sin pasar por pruebas", "Desarrollo construye y prueba; Operación publica con su propio circuito automático."),
-    ("ojo", "Una persona da el visto bueno", "Jordi revisa el resultado publicado y lo da por bueno."),
+    ("hoja", "Cada cambio queda registrado", "Todo empieza en la hoja de cambios: qué se solicita, quién se encarga y en qué estado se encuentra."),
+    ("lupa", "La información interna no se publica", "Una verificación automática revisa cada versión antes de publicarla."),
+    ("mano", "Ningún cambio sin pasar por pruebas", "Desarrollo implementa y prueba; Operación publica mediante un proceso automatizado."),
+    ("ojo", "Validación final humana", "Jordi revisa el resultado publicado y lo valida."),
 ]
-CASO_TITULO = "Añadir el diagrama del flujo a la web"
+CASO_TITULO = "Añadir a la web el diagrama del proceso"  # texto plano
+CASO_TITULO_HTML = "Añadir a la web el diagrama del&nbsp;proceso"  # mini tarjeta y ticket: sin viuda
 CASO_ESTADOS = [
     ("Pedido", "Pedido", "Jordi lo pide y Coordinación lo registra en la hoja de cambios."),
-    ("En desarrollo", "Desarrollo", "Desarrollo lo construye y lo prueba en un entorno aislado."),
+    ("En desarrollo", "Desarrollo", "Desarrollo lo implementa y lo prueba en un entorno aislado."),
     ("En revisión", "Revisión", "Pasa la verificación automática y una revisión independiente."),
-    ("Publicado", "Publicado", "Operación lo publica con el circuito propio de la web."),
-    ("Validado", "Validado", "Jordi da el visto bueno al resultado."),
+    ("Publicado", "Publicado", "Operación lo publica con el proceso automatizado de la web."),
+    ("Validado", "Validado", "Jordi valida el resultado."),
 ]
 CASO_ACTUAL = 2  # índice del estado en curso (En revisión)
 
 # Diagrama del flujo (HTML+CSS): pasos y carril propio de cada empresa.
 FLUJO_PASOS = [
-    ("correo", "Nos escribes", "Al buzón de tu empresa, con tus palabras, sin formularios"),
-    (1, "Coordinación", "Registra, prioriza y te confirma"),
-    (2, "Desarrollo", "Construye y prueba en un entorno aislado"),
-    (3, "Operación", "Copia de seguridad y publicación"),
-    ("charla-ok", "Te lo contamos", "Qué hay nuevo y qué puedes comprobar"),
+    ("correo", "Solicitud", "Por correo, al buzón dedicado de tu empresa"),
+    ("lista", "Coordinación", "Registra la petición, la prioriza y confirma su recepción"),
+    ("codigo", "Desarrollo", "Desarrolla y prueba en un entorno aislado"),
+    ("escudo", "Operación", "Hace la copia de seguridad y publica el cambio"),
+    ("charla-ok", "Informe", "Qué ha cambiado y cómo comprobarlo"),
 ]
 CARRIL = [("repo", "Su repositorio"), ("pruebas", "Pruebas automáticas"), ("copia", "Copia de seguridad"),
           ("publicar", "Publicación"), ("servidor", "Su servidor")]
 
-NAV = [("servicios", "Servicios"), ("por-dentro", "Por dentro"), ("caso", "Caso de éxito"), ("equipo", "Equipo"), ("preguntas", "Preguntas")]
+NAV = [("servicios", "Servicios"), ("por-dentro", "Método"), ("caso", "Caso de éxito"), ("equipo", "Equipo"), ("preguntas", "Preguntas")]
 LEGALES = [("aviso-legal.html", "Aviso legal"), ("privacidad.html", "Privacidad"), ("cookies.html", "Cookies")]
 
 # ── CSS ──────────────────────────────────────────────────────────────────────
@@ -281,8 +256,7 @@ font-weight:700;text-decoration:none;border:2px solid var(--negro);transition:ba
 
 /* Logotipo (trazos SVG) */
 .marca{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--negro)}
-.marca .icono-marca{width:40px;height:40px;flex:none;border-radius:50%;box-shadow:0 0 0 1px var(--linea)}
-.logotipo{display:block;height:24px;width:auto}
+.logotipo{display:block;height:26px;width:auto}
 
 /* Cabecera fija */
 .cab{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.97);border-bottom:1px solid transparent;transition:border-color .3s,box-shadow .3s}
@@ -302,7 +276,7 @@ font:600 .92rem var(--sans);color:var(--negro);cursor:pointer}
 .menu-boton[aria-expanded="true"] .barras i:nth-child(2){opacity:0}
 .menu-boton[aria-expanded="true"] .barras i:nth-child(3){transform:translateY(-6px) rotate(-45deg)}
 
-/* Hero: texto + los cuatro gatos del equipo con la mini tarjeta del cambio */
+/* Hero: texto + iconos de rol y la mini tarjeta del cambio */
 .hero{background:var(--negro);color:var(--blanco);position:relative;overflow:hidden}
 .hero .reticula{align-items:center;min-height:min(80vh,700px);padding-block:calc(var(--ritmo)*10);row-gap:48px}
 .hero-texto{grid-column:1/span 6}
@@ -313,14 +287,15 @@ font:600 .92rem var(--sans);color:var(--negro);cursor:pointer}
 .acciones{display:flex;flex-wrap:wrap;align-items:center;gap:16px 28px;margin-top:calc(var(--ritmo)*5)}
 .hero-visual{grid-column:7/span 6}
 .escena{background:var(--crema);color:var(--negro);border-radius:20px;padding:28px 26px 26px;box-shadow:0 40px 80px -40px rgba(0,0,0,.7)}
-.hero-gatos{list-style:none;margin:0 0 20px;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;text-align:center}
-.hero-gatos .foto{width:100%;max-width:92px;height:auto;aspect-ratio:1;margin:0 auto 8px}
-.hero-gatos .nombre{display:block;font:600 .82rem/1.3 var(--sans);color:var(--apoyo)}
-.hero-gatos-pie{display:none;margin:-8px 0 16px;font-size:.85rem;color:var(--apoyo);text-align:center}
+.hero-equipo{list-style:none;margin:0 0 20px;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;text-align:center}
+.hero-equipo .retrato{width:72px;height:72px;margin:0 auto 8px}
+.hero-equipo .nombre{display:block;font:600 .82rem/1.3 var(--sans);color:var(--apoyo)}
+.hero-equipo-pie{display:none;margin:-8px 0 16px;font-size:.85rem;color:var(--apoyo);text-align:center}
 .mini{margin:0;background:var(--blanco);border:1px solid var(--borde-calido);border-radius:12px;padding:16px 18px 14px}
 .mini-cab{display:flex;justify-content:space-between;align-items:center;gap:12px;font:700 .8rem/1 var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--apoyo)}
 .etiqueta{display:inline-block;padding:4px 8px;border-radius:99px;background:#fef3c7;color:#7c2d12;border:1px solid #f5d08a;letter-spacing:.08em}
 .mini-titulo{margin:12px 0 12px;font:400 1.2rem/1.25 var(--serif)}
+.mini-titulo,.ticket h3{text-wrap:balance}
 .mini-pasos{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:6px}
 .mini-pasos li{font:600 .82rem/1 var(--sans);padding:6px 10px;border-radius:99px;border:1px solid var(--gris2);color:var(--apoyo)}
 .mini-pasos li.hecho{background:var(--negro);border-color:var(--negro);color:var(--blanco)}
@@ -355,12 +330,11 @@ transition:transform .3s ease,box-shadow .3s ease,border-color .3s}
 .flujo{margin:0;background:var(--blanco);border:1px solid var(--linea);padding:28px 20px 24px;font-size:15px}
 .flujo-aprueba{display:flex;align-items:center;gap:12px;margin:0 0 24px;padding:10px 16px;background:var(--crema);border:1px solid var(--borde-calido);
 border-radius:14px;font:italic 1.05rem/1.3 var(--serif);color:#92400e;position:relative}
-.flujo-aprueba .gato{flex:none;width:40px;height:48px}
+.flujo-aprueba .ico{width:40px;height:40px;padding:9px;background:var(--negro);border-color:var(--negro);stroke:var(--ambar2)}
 .pasos{list-style:none;margin:0;padding:0;display:grid;gap:0}
 .pasos li{position:relative;display:grid;align-content:start;grid-template-columns:76px minmax(0,1fr);column-gap:16px;align-items:center;padding-bottom:22px}
 .pasos li:not(:last-child)::after{content:"";position:absolute;left:37px;top:80px;bottom:4px;border-left:2.5px dashed var(--ambar)}
 .nodo{width:76px;height:76px;border-radius:50%;background:var(--crema);border:3px solid #f1e4cf;display:grid;place-items:center;overflow:hidden}
-.nodo .gato{width:62%;height:auto;margin-top:12%}
 .nodo .ico{width:34px;height:34px;padding:0;border:0;background:none;border-radius:0}
 .paso-t{display:block;font:400 1.25rem/1.2 var(--serif);color:var(--negro)}
 .paso-d{display:block;color:var(--apoyo);font-size:.95rem;line-height:1.4;margin-top:2px}
@@ -376,7 +350,7 @@ border-radius:14px;font:italic 1.05rem/1.3 var(--serif);color:#92400e;position:r
 .chip{display:flex;align-items:center;gap:10px;flex:1;background:var(--crema);border-radius:99px;padding:8px 14px;font-weight:600;font-size:.95rem}
 .carril-pasos .ico{width:22px;height:22px;padding:0;border:0;background:none;border-radius:0}
 .capa{position:relative;margin:-16px 14px 0;padding:24px 18px 8px;background:var(--blanco);border:2px solid #f1e4cf;border-top:0;border-radius:0 0 18px 18px;color:var(--apoyo);z-index:1}
-.capa+.capa{margin:-16px 28px 0;z-index:0;color:#78716c}
+.capa+.capa{margin:-16px 28px 0;z-index:0;color:var(--apoyo)}
 .flujo-nota{display:flex;align-items:center;gap:10px;margin-top:20px;color:var(--apoyo);font-size:.95rem}
 .flujo-nota .ico{width:24px;height:24px;padding:0;border:0;background:none;border-radius:0;stroke:var(--apoyo)}
 @media (min-width:1100px){
@@ -440,15 +414,16 @@ justify-content:space-between;align-items:center;gap:24px}
 
 /* Equipo: dos por dos */
 .equipo{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:40px var(--gutter)}
-.equipo li{display:grid;grid-template-columns:120px minmax(0,1fr);grid-template-areas:"foto nombre" "foto rol" "foto frase";column-gap:24px;align-content:start;align-items:start}
-.equipo .foto{grid-area:foto;width:120px;height:120px}
+.equipo li{display:grid;grid-template-columns:96px minmax(0,1fr);grid-template-areas:"foto nombre" "foto rol" "foto frase";column-gap:24px;align-content:start;align-items:start}
+.equipo .retrato{grid-area:foto;width:96px;height:96px}
 .equipo h3{grid-area:nombre;font-size:1.35rem;align-self:end}
 .equipo .rol{grid-area:rol}
 .equipo p{grid-area:frase;color:var(--apoyo);max-width:36ch}
-.foto{flex:none;border-radius:50%;background:var(--blanco);border:1px solid var(--borde-calido);display:grid;place-items:center;overflow:hidden}
-.foto .gato{width:82%;height:82%;margin-top:16%}
+.retrato{display:grid;place-items:center;flex:none;border-radius:50%;background:var(--blanco);border:1px solid var(--borde-calido)}
+.retrato .ico{width:44%;height:44%;padding:0;border:0;background:none;border-radius:0;stroke-width:1.6}
+.retrato.jefe{background:var(--negro);border-color:var(--negro)}
+.retrato.jefe .ico{stroke:var(--ambar2)}
 .rol{display:block;font-size:.78rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--tostado);margin:4px 0 8px}
-.gato .ojos{transform-box:fill-box;transform-origin:center;animation:parpadeo 6s infinite}
 
 /* Preguntas */
 .faq .reticula{row-gap:32px}
@@ -472,11 +447,11 @@ details p{padding:0 0 22px;color:var(--apoyo);max-width:42em}
 .contacto .accion{grid-column:8/span 5;display:flex;flex-direction:column;align-items:flex-start;gap:14px}
 .correo-fila{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;color:#e7e5e4;font-size:1rem}
 .correo-fila .correo{word-break:break-all;color:#e7e5e4;text-decoration-color:var(--ambar2);text-underline-offset:3px}
-.copiar{background:none;border:1px solid #78716c;border-radius:4px;color:var(--blanco);font:600 .88rem var(--sans);padding:7px 12px;cursor:pointer}
+.copiar{background:none;border:1px solid #78716c;border-radius:4px;color:var(--blanco);font:600 .88rem var(--sans);padding:10px 14px;cursor:pointer}
 .copiar:hover{border-color:var(--ambar2)}
 .aviso-copia{min-height:1.3em;font-size:.9rem;color:var(--ambar2)}
 .firma{display:flex;align-items:center;gap:14px;color:#d6d3d1;font-size:.95rem}
-.firma .icono-marca{flex:none;width:48px;height:48px}
+.firma .ico{width:44px;height:44px;background:transparent;border-color:#57534e;stroke:var(--ambar2)}
 .privacidad-linea{margin-top:4px;padding-top:16px;border-top:1px solid #3a3530;color:#d6d3d1;font-size:.92rem;max-width:40ch}
 .privacidad-linea a{color:var(--blanco);text-decoration-color:var(--ambar2);text-underline-offset:3px}
 
@@ -520,14 +495,12 @@ details p{padding:0 0 22px;color:var(--apoyo);max-width:42em}
 .legal th{background:var(--crema);font-weight:700}.legal tbody tr:last-child td{border-bottom:0}
 .pendiente{background:#fef3c7;color:#7c2d12;padding:1px 6px;border:1px dashed #b45309;font-weight:600}
 .no-encontrada .contenedor{text-align:center}
-.no-encontrada .gato-404{width:150px;margin:0 auto 24px}
+.simbolo-404 .ico{width:88px;height:88px;padding:22px;margin:0 auto 24px;background:var(--crema);stroke-width:1.5}
 .no-encontrada .subtitulo{margin:16px auto 32px;color:var(--apoyo);font-size:1.15rem;max-width:32em}
 
 /* Aparición al hacer scroll: solo desplazamiento (nada queda invisible si falla el JS) */
 .js .revela{transform:translateY(28px);transition:transform .7s cubic-bezier(.2,.7,.2,1)}
 .js .revela.visto{transform:none}
-
-@keyframes parpadeo{0%,94%,100%{transform:scaleY(1)}97%{transform:scaleY(.1)}}
 
 @media (max-width:1000px){
  .hero .reticula{min-height:0}
@@ -580,18 +553,19 @@ details p{padding:0 0 22px;color:var(--apoyo);max-width:42em}
  .flujo{padding:20px 14px 18px;margin:0 calc(var(--gutter)*-1);border-left:0;border-right:0}
  .compromisos{grid-template-columns:1fr;row-gap:28px}
  .equipo{grid-template-columns:1fr;row-gap:28px}
- .equipo li{grid-template-columns:88px minmax(0,1fr);grid-template-areas:"foto nombre" "foto rol" "frase frase";column-gap:16px}
- .equipo .foto{width:88px;height:88px}
+ .equipo li{grid-template-columns:72px minmax(0,1fr);grid-template-areas:"foto nombre" "foto rol" "frase frase";column-gap:16px}
+ .equipo .retrato{width:72px;height:72px}
  .equipo p{margin-top:8px;max-width:none}
  .cierre{margin-top:calc(var(--ritmo)*6)}
  .pie nav,.pie .col,.pie .col-contacto{grid-column:span 6}.pie .col-contacto{grid-column:1/-1}
  .legal dl{grid-template-columns:1fr;gap:4px}.legal dd{margin-bottom:12px}
- .marca{gap:10px}.marca .icono-marca{width:36px;height:36px}.logotipo{height:21px}
+ .logotipo{height:22px}
 }
 @media (max-width:480px){
- .hero-gatos{gap:8px;margin-bottom:16px}
- .hero-gatos .nombre{display:none}
- .hero-gatos-pie{display:block}
+ .hero-equipo{gap:8px;margin-bottom:16px}
+ .hero-equipo .retrato{width:56px;height:56px}
+ .hero-equipo .nombre{display:none}
+ .hero-equipo-pie{display:block}
  .tarjeta .imagen{display:none}
  .tarjeta .cuerpo{padding-top:22px;border-top:3px solid var(--ambar)}
  .pasos li{grid-template-columns:60px minmax(0,1fr);padding-bottom:16px}
@@ -599,7 +573,7 @@ details p{padding:0 0 22px;color:var(--apoyo);max-width:42em}
  .pasos li:not(:last-child)::after{left:29px;top:64px}
  .conector::before{margin-left:28px}
  .flujo-aprueba{margin-bottom:18px}
- .logotipo{height:19px}
+ .logotipo{height:20px}
 }
 @media (prefers-reduced-motion:reduce){
  html{scroll-behavior:auto}
@@ -668,7 +642,7 @@ JS = r"""
 
 # ── Piezas comunes ───────────────────────────────────────────────────────────
 def marca_html(inicio):
-    return f'<a class="marca" href="{inicio}" aria-label="th3b1gbr0th3r IT, inicio">{ICONO_MARCA}{logotipo.uso()}</a>'
+    return f'<a class="marca" href="{inicio}" aria-label="th3b1gbr0th3r IT, inicio">{logotipo.uso()}</a>'
 
 
 def cabecera(base, inicio):
@@ -693,7 +667,7 @@ def pie(base, inicio, raiz):
   <div class="reticula">
    <div class="col-marca">
     {marca_html(inicio)}
-    <p>Hecho en casa, por Jordi y sus gatos.</p>
+    <p>Desarrollo, mantenimiento y soporte de software para pequeñas empresas.</p>
    </div>
    <nav aria-label="Navegación del pie"><h2>Navegación</h2><ul>{nav}</ul></nav>
    <div class="col"><h2>Legal</h2><ul>{legales}</ul></div>
@@ -720,7 +694,7 @@ def sin_viudas(fragmento):
 JSON_LD = json.dumps({
     "@context": "https://schema.org", "@type": "ProfessionalService", "name": "th3b1gbr0th3r IT", "url": URL_BASE,
     "image": URL_BASE + "og.png", "logo": URL_BASE + "apple-touch-icon.png",
-    "description": "Software a medida para pequeñas empresas: webs, herramientas de gestión, reservas y citas, automatización y cuidado continuo.",
+    "description": "Software a medida para pequeñas empresas: webs, herramientas de gestión, reservas y citas, automatización, mantenimiento y soporte.",
     "areaServed": {"@type": "Country", "name": "España"}, "knowsLanguage": "es",
 }, ensure_ascii=False)
 
@@ -750,7 +724,7 @@ def pagina(titulo, descripcion, cuerpo, ruta, base="index.html", raiz="", indexa
 <meta property="og:image" content="{URL_BASE}og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="El gato negro de th3b1gbr0th3r IT junto al lema «Software a la medida de tu negocio».">
+<meta property="og:image:alt" content="Logotipo de th3b1gbr0th3r IT junto al lema «Software a la medida de tu negocio».">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="{titulo}">
 <meta name="twitter:description" content="{descripcion}">
@@ -775,11 +749,7 @@ def pagina(titulo, descripcion, cuerpo, ruta, base="index.html", raiz="", indexa
 
 
 # ── Página principal ─────────────────────────────────────────────────────────
-def foto(c, etiqueta=True):
-    return f'<div class="foto">{gato(c, etiqueta=etiqueta)}</div>'
-
-
-hero_gatos = "".join(f'<li>{foto(c)}<span class="nombre" aria-hidden="true">{c["nombre"]}</span></li>' for c in EQUIPO)
+hero_equipo = "".join(f'<li>{retrato(c)}<span class="nombre" aria-hidden="true">{c["nombre"]}</span></li>' for c in EQUIPO)
 mini_pasos = "".join(
     f'<li class="{"hecho" if i < CASO_ACTUAL else "actual" if i == CASO_ACTUAL else ""}"'
     f'{" aria-current=\"step\"" if i == CASO_ACTUAL else ""}>{corto}'
@@ -790,31 +760,31 @@ tarjetas = "".join(
     f'<article class="tarjeta revela"><div class="imagen">{ILUS[i]}</div><div class="cuerpo"><h3>{t}</h3><p>{d}</p>'
     f'<ul class="vinetas">{"".join(f"<li>{x}</li>" for x in v)}</ul></div></article>'
     for i, t, d, v in SERVICIOS) + (
-    '<article class="tarjeta cta oscuro revela"><div class="cuerpo"><h3>¿Algo distinto?</h3>'
-    '<p>Si nos lo puedes explicar, lo podemos construir. Lo vemos juntos.</p>'
-    '<a class="mas" href="#contacto">Escríbenos <span aria-hidden="true">→</span></a></div></article>')
+    '<article class="tarjeta cta oscuro revela"><div class="cuerpo"><h3>¿Necesitas otra solución?</h3>'
+    '<p>Analizamos tu caso y te proponemos la solución más adecuada.</p>'
+    '<a class="mas" href="#contacto">Consúltanos <span aria-hidden="true">→</span></a></div></article>')
 
 
 def _nodo(x):
-    return f'<span class="nodo">{gato(EQUIPO[x], etiqueta=False) if isinstance(x, int) else icono(x)}</span>'
+    return f'<span class="nodo">{icono(x)}</span>'
 
 
 pasos = "".join(f'<li>{_nodo(x)}<span><b class="paso-t">{t}</b><span class="paso-d">{d}</span></span></li>' for x, t, d in FLUJO_PASOS)
 carril = "".join(f'<li><span class="chip">{icono(i)}<span>{t}</span></span></li>' for i, t in CARRIL)
 FLUJO = f"""<figure class="flujo revela" aria-labelledby="titulo-dentro">
-   <div class="flujo-fila"><p class="flujo-aprueba">{gato(JEFE, etiqueta=False)}<span>Jordi revisa y aprueba lo importante</span></p></div>
+   <div class="flujo-fila"><p class="flujo-aprueba">{icono("persona")}<span>Jordi revisa y aprueba las decisiones importantes</span></p></div>
    <ol class="pasos">{pasos}</ol>
-   <div class="flujo-fila"><p class="conector">Con el ciclo de cada empresa</p></div>
+   <div class="flujo-fila"><p class="conector">Sobre la infraestructura de cada cliente</p></div>
    <div class="carriles">
-    <div class="carril"><p class="carril-cab"><b>Tu empresa</b><span>Su propio ciclo</span></p><ol class="carril-pasos">{carril}</ol></div>
-    <p class="capa">Empresa B · su propio ciclo</p>
-    <p class="capa">Empresa C · su propio ciclo</p>
+    <div class="carril"><p class="carril-cab"><b>Tu empresa</b><span>Entorno propio</span></p><ol class="carril-pasos">{carril}</ol></div>
+    <p class="capa">Empresa B · entorno propio</p>
+    <p class="capa">Empresa C · entorno propio</p>
    </div>
-   <p class="flujo-nota">{icono("candado")}<span>Código, datos y credenciales de cada empresa nunca se mezclan.</span></p>
+   <p class="flujo-nota">{icono("candado")}<span>El código, los datos y las credenciales de cada cliente están siempre separados.</span></p>
   </figure>"""
 
 compromisos = "".join(f'<li class="revela">{icono(i)}<h3>{t}</h3><p>{d}</p></li>' for i, t, d in COMPROMISOS)
-equipo = "".join(f'<li class="revela">{foto(c)}<h3>{c["nombre"]}</h3><span class="rol">{c["rol"]}</span><p>{c["frase"]}</p></li>' for c in EQUIPO)
+equipo = "".join(f'<li class="revela">{retrato(c)}<h3>{c["nombre"]}</h3><span class="rol">{c["rol"]}</span><p>{c["frase"]}</p></li>' for c in EQUIPO)
 faq = "".join(f'<details><summary>{q}</summary><p>{a}</p></details>' for q, a in FAQ)
 puntos = "".join(f'<li class="revela">{icono(i)}<div><h3>{t}</h3><p>{d}</p></div></li>' for i, t, d in CASO_PUNTOS)
 estados = "".join(
@@ -827,18 +797,18 @@ ESTADO_ACTUAL = CASO_ESTADOS[CASO_ACTUAL][0]
 INDEX = f"""<section class="hero oscuro" aria-labelledby="titulo-hero">
  <div class="contenedor reticula">
   <div class="hero-texto">
-   <span class="sobre">Para pequeñas empresas</span>
+   <span class="sobre">Desarrollo y mantenimiento para pequeñas empresas</span>
    <h1 id="titulo-hero">Software a la medida <em>de tu negocio.</em></h1>
-   <p class="apoyo">Una persona al mando, agentes de IA a su servicio y una web que no te rastrea.</p>
+   <p class="apoyo">Desarrollamos y mantenemos webs y herramientas de gestión a medida, con un responsable único y un proceso trazable de principio a fin.</p>
    <div class="acciones"><a class="btn claro" href="#contacto">Cuéntanos tu proyecto <span aria-hidden="true">→</span></a></div>
   </div>
   <div class="hero-visual">
    <div class="escena">
-    <ul class="hero-gatos" aria-label="El equipo: Jordi y los agentes de Coordinación, Desarrollo y Operación">{hero_gatos}</ul>
-    <p class="hero-gatos-pie" aria-hidden="true">Jordi y sus agentes: Coordinación, Desarrollo y Operación</p>
+    <ul class="hero-equipo" aria-label="El equipo: Jordi, responsable, y los agentes de IA de Coordinación, Desarrollo y Operación">{hero_equipo}</ul>
+    <p class="hero-equipo-pie" aria-hidden="true">Jordi y los agentes de Coordinación, Desarrollo y Operación</p>
     <figure class="mini" aria-label="Ejemplo de un cambio en nuestra hoja de cambios">
      <div class="mini-cab"><span>Hoja de cambios</span><span class="etiqueta">Ejemplo</span></div>
-     <p class="mini-titulo">{CASO_TITULO}</p>
+     <p class="mini-titulo">{CASO_TITULO_HTML}</p>
      <ol class="mini-pasos">{mini_pasos}</ol>
      <p class="mini-pie">Estado: <b>{ESTADO_ACTUAL}</b> · <a href="#caso">Ver el caso completo</a></p>
     </figure>
@@ -849,26 +819,26 @@ INDEX = f"""<section class="hero oscuro" aria-labelledby="titulo-hero">
 
 <section class="bloque" id="servicios" aria-labelledby="titulo-servicios">
  <div class="contenedor">
-  <div class="titular"><span class="sobre">Qué hacemos</span><h2 id="titulo-servicios">Tecnología que se adapta a ti.</h2>
-   <p>Desde tu web hasta la herramienta con la que organizas el día a día, todo pensado para tu forma de trabajar.</p></div>
+  <div class="titular"><span class="sobre">Servicios</span><h2 id="titulo-servicios">Tecnología adaptada a tu forma de trabajar.</h2>
+   <p>Desde la web hasta las herramientas internas de gestión: soluciones diseñadas a partir de tus procesos, no de una plantilla.</p></div>
   <div class="tarjetas">{tarjetas}</div>
  </div>
 </section>
 
 <section class="bloque alterno mision" id="mision" aria-labelledby="titulo-mision">
  <div class="contenedor">
-  <span class="sobre">Nuestra misión</span>
+  <span class="sobre">Enfoque</span>
   <div class="reticula">
-   <h2 class="frase revela" id="titulo-mision">Que la tecnología trabaje para tu negocio, <em>y no al revés.</em></h2>
-   <p class="lado revela">Escuchamos cómo trabajas y construimos exactamente lo que necesitas. Ni más, ni menos.</p>
+   <h2 class="frase revela" id="titulo-mision">Tecnología al servicio de tu negocio, <em>no al revés.</em></h2>
+   <p class="lado revela">Analizamos cómo trabaja tu empresa y desarrollamos solo lo que aporta valor, sin funciones innecesarias.</p>
   </div>
  </div>
 </section>
 
 <section class="bloque" id="por-dentro" aria-labelledby="titulo-dentro">
  <div class="contenedor">
-  <div class="titular"><span class="sobre">Por dentro</span><h2 id="titulo-dentro">Cada empresa, en su propio carril.</h2>
-   <p>Cuando ya eres cliente, así viaja una mejora desde que nos la pides hasta que la tienes funcionando. Cada empresa tiene su repositorio, sus pruebas, sus copias y su servidor: nada se comparte ni se mezcla.</p></div>
+  <div class="titular"><span class="sobre">Método de trabajo</span><h2 id="titulo-dentro">Un proceso trazable y un entorno aislado para cada cliente.</h2>
+   <p>Así avanza cada petición de cambio, desde que la recibimos hasta que está en funcionamiento. Cada cliente dispone de su propio repositorio, pruebas, copias de seguridad y servidor: nada se comparte entre clientes.</p></div>
   {FLUJO}
  </div>
 </section>
@@ -876,20 +846,20 @@ INDEX = f"""<section class="hero oscuro" aria-labelledby="titulo-hero">
 <section class="bloque alterno caso" id="caso" aria-labelledby="titulo-caso">
  <div class="contenedor">
   <div class="reticula">
-   <div class="titular"><span class="sobre">Caso de éxito</span><h2 id="titulo-caso">Esta misma web.</h2>
-    <p>Tratamos esta web como a un cliente más: la gestiona nuestro equipo, con el mismo método que aplicamos a cada empresa.</p></div>
+   <div class="titular"><span class="sobre">Caso de éxito</span><h2 id="titulo-caso">Esta web, gestionada con nuestro método.</h2>
+    <p>Gestionamos nuestra propia web como un cliente más, con el mismo proceso que aplicamos a cada proyecto.</p></div>
    <ul class="puntos">{puntos}</ul>
    <article class="ticket revela" aria-labelledby="titulo-ticket">
     <div class="ticket-cab"><span>Hoja de cambios · Web corporativa</span><span class="etiqueta">Ejemplo</span></div>
     <div class="ticket-cuerpo">
-     <h3 id="titulo-ticket">{CASO_TITULO}</h3>
-     <p class="que">Mostrar cómo viaja una mejora, con el ciclo propio de cada empresa.</p>
+     <h3 id="titulo-ticket">{CASO_TITULO_HTML}</h3>
+     <p class="que">Explicar cómo avanza una petición de cambio en el entorno propio de cada cliente.</p>
      <ol class="estados">{estados}</ol>
     </div>
-    <div class="ticket-pie"><span>Estado: <b>{ESTADO_ACTUAL}</b></span><span>Con pruebas antes de publicar</span></div>
+    <div class="ticket-pie"><span>Estado: <b>{ESTADO_ACTUAL}</b></span><span>Probado antes de publicar</span></div>
    </article>
   </div>
-  <div class="cierre revela"><p>Lo que hacemos aquí es lo que hacemos con tu negocio.</p>
+  <div class="cierre revela"><p>Aplicamos este mismo método a cada proyecto.</p>
    <a class="btn" href="#contacto">Cuéntanos tu proyecto <span aria-hidden="true">→</span></a></div>
  </div>
 </section>
@@ -897,15 +867,15 @@ INDEX = f"""<section class="hero oscuro" aria-labelledby="titulo-hero">
 <section class="bloque" id="compromisos" aria-labelledby="titulo-compromisos">
  <div class="contenedor">
   <div class="titular"><span class="sobre">Compromisos</span><h2 id="titulo-compromisos">Lo que puedes esperar de nosotros.</h2>
-   <p>No son promesas de folleto. Es cómo trabajamos cada día, con cada cliente.</p></div>
+   <p>Principios que aplicamos en cada proyecto, sin excepciones.</p></div>
   <ul class="compromisos">{compromisos}</ul>
  </div>
 </section>
 
 <section class="bloque alterno" id="equipo" aria-labelledby="titulo-equipo">
  <div class="contenedor">
-  <div class="titular"><span class="sobre">Equipo</span><h2 id="titulo-equipo">Una persona al mando. Agentes de IA que hacen el trabajo pesado.</h2>
-   <p>Las decisiones importantes las toma el gato negro. Los agentes siempre se presentan como lo que son.</p></div>
+  <div class="titular"><span class="sobre">Equipo</span><h2 id="titulo-equipo">Un responsable humano, apoyado por agentes de IA.</h2>
+   <p>Jordi dirige cada proyecto y toma las decisiones. Los agentes de IA se encargan de la coordinación, el desarrollo y la operación, y se identifican siempre como tales.</p></div>
   <ul class="equipo">{equipo}</ul>
  </div>
 </section>
@@ -913,21 +883,21 @@ INDEX = f"""<section class="hero oscuro" aria-labelledby="titulo-hero">
 <section class="bloque faq" id="preguntas" aria-labelledby="titulo-preguntas">
  <div class="contenedor reticula">
   <div class="titular"><span class="sobre">Preguntas</span><h2 id="titulo-preguntas">Preguntas frecuentes</h2>
-   <p>Si la tuya no está aquí, escríbenos.</p></div>
+   <p>Si tienes otra duda, escríbenos.</p></div>
   <div class="lista">{faq}</div>
  </div>
 </section>
 
 <section class="bloque contacto oscuro" id="contacto" aria-labelledby="titulo-contacto">
  <div class="contenedor reticula">
-  <div class="titular"><span class="sobre">Contacto</span><h2 id="titulo-contacto">Cuéntanos cómo funciona tu negocio.</h2>
-   <p>Te diremos cómo hacerlo más fácil. La primera conversación es sin compromiso.</p></div>
+  <div class="titular"><span class="sobre">Contacto</span><h2 id="titulo-contacto">Hablemos de tu proyecto.</h2>
+   <p>Cuéntanos qué necesitas y te propondremos la mejor forma de abordarlo. La primera conversación no implica ningún compromiso.</p></div>
   <div class="accion">
    <a class="btn claro" href="{MAILTO}">Escríbenos <span aria-hidden="true">→</span></a>
    <p class="correo-fila"><a class="correo" href="{MAILTO}">{MAIL}</a><button class="copiar" type="button" data-copiar="{MAIL}" hidden>Copiar dirección</button></p>
    <p class="aviso-copia" id="aviso-copia" aria-live="polite"></p>
-   <p class="firma">{ICONO_MARCA}<span>Este correo lo lee y lo responde Jordi, en persona.</span></p>
-   <p class="privacidad-linea">Esta web no te rastrea: <a href="cookies.html">ni cookies ni analítica</a>. Así tratamos también tus datos.</p>
+   <p class="firma">{icono("persona")}<span>Jordi atiende personalmente cada mensaje.</span></p>
+   <p class="privacidad-linea">Esta web no utiliza <a href="cookies.html">cookies ni analítica</a>. Con tus datos aplicamos el mismo criterio.</p>
   </div>
  </div>
 </section>
@@ -935,7 +905,7 @@ INDEX = f"""<section class="hero oscuro" aria-labelledby="titulo-hero">
 
 TITULO_INDEX = "Software a medida para pequeñas empresas · th3b1gbr0th3r IT"
 DESC_INDEX = ("Software a medida para pequeñas empresas en España: webs, herramientas de gestión, reservas y citas, "
-              "automatización y cuidado continuo. Una persona al mando y agentes de IA a su servicio.")
+              "automatización, mantenimiento y soporte. Un responsable único y un proceso trazable, con el apoyo de agentes de IA.")
 html = pagina(TITULO_INDEX, DESC_INDEX, INDEX, "index.html", base="",
               extra_head=f'<script type="application/ld+json">{JSON_LD}</script>\n')
 
@@ -1050,10 +1020,10 @@ PAGINAS_LEGALES = {
 # 404: GitHub Pages la sirve en cualquier ruta inexistente, así que todo va desde la raíz del dominio.
 NO_ENCONTRADA = pagina("Página no encontrada · th3b1gbr0th3r IT", "La página que buscas no existe.", f"""<section class="legal no-encontrada">
  <div class="contenedor">
-  <div class="gato-404">{gato(JEFE)}</div>
+  <div class="simbolo-404">{icono("lupa")}</div>
   <span class="sobre">Error 404</span>
-  <h1>Esta página se ha escondido</h1>
-  <p class="subtitulo">Los gatos somos así. Vuelve al inicio y te lo enseñamos todo.</p>
+  <h1>Página no encontrada</h1>
+  <p class="subtitulo">La dirección que has abierto no existe o ha cambiado. Desde la página de inicio encontrarás nuestros servicios y la forma de contactar con nosotros.</p>
   <a class="btn" href="/">Volver al inicio</a>
  </div>
 </section>""", "404.html", base="/", raiz="/", indexar=False)
@@ -1067,7 +1037,7 @@ def construir():
     (SITIO / "404.html").write_text(NO_ENCONTRADA, encoding="utf-8")
     for nombre, (titulo, desc, cuerpo) in PAGINAS_LEGALES.items():
         (SITIO / nombre).write_text(pagina(titulo, desc, cuerpo, nombre), encoding="utf-8")
-    (SITIO / "favicon.svg").write_text(ICONO_MARCA.replace('aria-hidden="true"', 'xmlns="http://www.w3.org/2000/svg"'), encoding="utf-8")
+    (SITIO / "favicon.svg").write_text(MONOGRAMA.replace('aria-hidden="true"', 'xmlns="http://www.w3.org/2000/svg"'), encoding="utf-8")
     (SITIO / "fuentes").mkdir()
     for f in (FUENTE_NORMAL, FUENTE_CURSIVA, "OFL.txt"):
         shutil.copy2(FUENTES / f, SITIO / "fuentes" / f)
@@ -1177,7 +1147,8 @@ def capturas():
                     _recortar(destino)
     finally:
         srv.shutdown()
-    shutil.copy2(RECURSOS / "og.png", CAPTURAS / "og.png")
+    for f in ("og.png", "apple-touch-icon.png"):
+        shutil.copy2(RECURSOS / f, CAPTURAS / f)
     print(f"Capturas: {CAPTURAS}")
 
 
@@ -1189,16 +1160,22 @@ def imagenes():
     caras = (f'@font-face{{font-family:S;src:url({fuente})}}@font-face{{font-family:S;font-style:italic;src:url({cursiva})}}'
              'html,body{margin:0}')
     og = f"""<!doctype html><meta charset="utf-8"><style>{caras}
-body{{width:1200px;height:630px;background:#111;color:#fdf6ec;font-family:S,serif;display:flex;align-items:center;gap:56px;padding:0 80px;box-sizing:border-box;overflow:hidden}}
-.circulo{{flex:none;width:360px;height:360px;border-radius:50%;background:#fdf6ec;display:grid;place-items:center;box-shadow:0 0 0 14px #1c1917,0 0 0 16px #d97706}}
-.circulo svg{{width:74%;height:auto;margin-top:12%}}
-.logotipo{{height:44px;width:auto;color:#fdf6ec;display:block}}.logo-it{{fill:#f59e0b}}
-h1{{font-weight:400;font-size:74px;line-height:1.02;margin:34px 0 26px;letter-spacing:-.02em}}h1 em{{color:#f59e0b}}
-p{{font:600 26px system-ui,sans-serif;color:#d6d3d1;margin:0}}</style>
-<body><div class="circulo">{gato(JEFE)}</div><div>{LOGOTIPO}<h1>Software a la medida <em>de tu negocio.</em></h1>
-<p>Software a medida para pequeñas empresas</p></div></body>"""
-    icono_html = (f'<!doctype html><meta charset="utf-8"><style>{caras}body{{width:720px;height:720px;background:#fdf6ec;display:grid;place-items:center;overflow:hidden}}'
-                  f'svg{{width:600px;height:600px}}</style><body>{ICONO_MARCA.replace("<circle", "<circle fill-opacity=\"0\"", 1)}</body>')
+body{{width:1200px;height:630px;background:#111;color:#fdf6ec;font-family:S,serif;box-sizing:border-box;padding:88px 96px;overflow:hidden;position:relative}}
+.logotipo{{height:46px;width:auto;color:#fdf6ec;display:block}}.logo-it{{fill:#f59e0b}}
+.raya{{width:120px;height:4px;background:#d97706;margin:44px 0 36px}}
+h1{{font-weight:400;font-size:84px;line-height:1.02;margin:0 0 28px;letter-spacing:-.02em}}h1 em{{color:#f59e0b}}
+p{{font:600 28px system-ui,sans-serif;color:#d6d3d1;margin:0}}
+.pasos{{position:absolute;right:96px;bottom:88px;display:flex;align-items:center}}
+.pasos i{{width:22px;height:22px;border-radius:50%;border:3px solid #d97706;box-sizing:border-box}}
+.pasos i.ok{{background:#f59e0b;border-color:#f59e0b}}
+.pasos b{{width:56px;border-top:3px dashed #d97706}}
+</style>
+<body>{LOGOTIPO}<div class="raya"></div><h1>Software a la medida<br><em>de tu negocio.</em></h1>
+<p>Desarrollo y mantenimiento para pequeñas empresas</p>
+<div class="pasos"><i class="ok"></i><b></b><i class="ok"></i><b></b><i class="ok"></i><b></b><i class="ok"></i><b></b><i></i></div></body>"""
+    cuadrado = MONOGRAMA.replace('rx="24"', 'rx="0"')  # iOS ya redondea las esquinas
+    icono_html = (f'<!doctype html><meta charset="utf-8"><style>{caras}body{{width:720px;height:720px;background:#111;display:grid;place-items:center;overflow:hidden}}'
+                  f'svg{{width:720px;height:720px}}</style><body>{cuadrado}</body>')
     with tempfile.TemporaryDirectory(dir=base_temporal()) as tmp:
         for nombre, contenido, tam, final in (("og", og, "1200,630", (1200, 630)), ("icono", icono_html, "720,720", (180, 180))):
             pagina_tmp = Path(tmp) / f"{nombre}.html"

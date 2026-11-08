@@ -43,6 +43,9 @@ PROHIBIDO = {
     "GHCR": re.compile(r"\bghcr\b", re.I),
     "ssh": re.compile(r"\bssh\b", re.I),
     "manada": re.compile(r"\bmanada\b", re.I),  # retirada de toda la marca (cto, 2026-11-08)
+    # Web sin gatos (Jordi, 2026-11-08, WEB-011): «gato», «gata», «gatos», «gatito»… también dentro de nombres
+    # como «gato-404» o «hero-gatos». Palabra completa para no saltar con «navigator» del JS.
+    "gato": re.compile(r"\bgat(?:[oa]s?|it[oa]s?)\b", re.I),
 }
 # Excepciones por página: el aviso legal cita la licencia libre de la tipografía (texto de cto, 2026-11-08).
 PERMITIDO_EN = {"aviso-legal.html": {"licencia"}}

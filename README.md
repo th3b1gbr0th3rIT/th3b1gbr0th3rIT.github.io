@@ -16,7 +16,7 @@ Web pública estática (GitHub Pages) de th3b1gbr0th3r IT: página principal y p
 ```bash
 python3 construir_web.py             # genera sitio/
 python3 verificar.py                 # comprueba sitio/
-python3 construir_web.py --capturas  # además, capturas en capturas/ (escritorio 1440, tableta 1024 y 820, móvil 390 y 360, menú, CTA, flujo, legales, 404, og); necesita google-chrome, Pillow opcional
+python3 construir_web.py --capturas  # además, capturas en capturas/ (escritorio 1440, tableta 1024 y 820, móvil 390 y 360, menú, CTA, flujo, legales, 404, og y apple-touch-icon); necesita google-chrome, Pillow opcional
 python3 construir_web.py --imagenes  # regenera recursos/og.png y recursos/apple-touch-icon.png (google-chrome y Pillow)
 ```
 

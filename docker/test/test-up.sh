@@ -104,8 +104,8 @@ comprobar() {
   else echo "  FALLA $ruta -> $estado $ctype (esperado $codigo ${tipo:-} ${texto:+con «$texto»})"; FALLOS=$((FALLOS+1)); fi
 }
 comprobar /               200 'lang="es"'                     text/html
-comprobar /404.html       200 'Los gatos somos así'           text/html
-comprobar /no-existe      404 'Los gatos somos así'           text/html
+comprobar /404.html       200 'no existe o ha cambiado'       text/html
+comprobar /no-existe      404 'no existe o ha cambiado'       text/html
 comprobar /favicon.svg    200 '<svg'                          image/svg+xml
 comprobar /fuentes/source-serif-4-latin-400-normal.woff2 200 '' font/woff2
 comprobar /og.png         200 ''                              image/png
