@@ -112,7 +112,7 @@ font:600 .92rem var(--sans);color:var(--tinta);cursor:pointer;transition:border-
 .menu-boton[aria-expanded="true"] .barras i:nth-child(2){opacity:0}
 .menu-boton[aria-expanded="true"] .barras i:nth-child(3){transform:translateY(-6px) rotate(-45deg)}
 
-/* Hero: texto + iconos de rol y la mini tarjeta del cambio */
+/* Hero: texto + iconos de rol */
 .hero{background:var(--oscuro-fondo);color:var(--blanco);position:relative;overflow:hidden}
 .hero .reticula{align-items:center;min-height:min(80vh,700px);padding-block:calc(var(--ritmo)*10);row-gap:48px}
 .hero-texto{grid-column:1/span 6}
@@ -126,22 +126,11 @@ font:600 .92rem var(--sans);color:var(--tinta);cursor:pointer;transition:border-
 .hero-visual{grid-column:7/span 6}
 .escena{background:var(--fondo-alt);color:var(--tinta);border-radius:20px;padding:28px 26px 26px;border:1px solid rgb(245 158 11 / .35);
 box-shadow:0 0 0 6px rgb(245 158 11 / .06),0 40px 80px -40px rgb(0 0 0 / .7),0 0 80px -30px rgb(245 158 11 / .35)}
-.hero-equipo{list-style:none;margin:0 0 20px;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px 8px;text-align:center}
-.hero-equipo .retrato{width:56px;height:56px;margin:0 auto 8px}
-.hero-equipo .nombre{display:block;font:600 .74rem/1.25 var(--sans);color:var(--apoyo)}
-.hero-equipo-pie{display:none;margin:-8px 0 16px;font-size:.85rem;color:var(--apoyo);text-align:center}
-.mini{margin:0;background:var(--superficie);border:1px solid var(--borde-calido);border-radius:12px;padding:16px 14px 14px}
-.mini-cab{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px 12px;font:700 .8rem/1 var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--apoyo)}
+.hero-equipo{list-style:none;margin:0 0 24px;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px 8px;text-align:center}
+.hero-equipo .retrato{width:76px;height:76px;margin:0 auto 10px}
+.hero-equipo .nombre{display:block;font:600 .85rem/1.25 var(--sans);color:var(--apoyo)}
+.hero-equipo-pie{display:block;margin:0;padding-top:16px;border-top:1px solid var(--borde-calido);font-size:.9rem;color:var(--apoyo);text-align:center}
 .etiqueta{display:inline-block;padding:4px 8px;border-radius:99px;background:var(--etq-fondo);color:var(--etq-texto);border:1px solid var(--etq-borde);letter-spacing:.08em}
-.mini-titulo{margin:12px 0 12px;font:400 1.2rem/1.25 var(--serif)}
-.mini-titulo,.ticket h3{text-wrap:balance}
-.mini-pasos{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:3px}
-.mini-pasos li{font:600 .74rem/1 var(--sans);padding:6px 7px;white-space:nowrap;border-radius:99px;border:1px solid var(--linea);color:var(--apoyo)}
-.mini-pasos li.hecho{background:var(--hecho-fondo);border-color:var(--hecho-borde);color:var(--hecho-texto)}
-.mini-pasos li.hecho::before{content:"✓ ";color:var(--hecho-marca)}
-.mini-pasos li.actual{background:var(--etq-fondo);border-color:var(--acento);color:var(--etq-texto)}
-.mini-pie{margin-top:12px;font-size:.88rem;color:var(--apoyo)}
-.mini-pie a{color:var(--tinta);text-decoration-color:var(--ambar);text-underline-offset:3px}
 
 /* Servicios en tarjetas, con las viñetas dentro */
 .tarjetas{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:var(--gutter)}
@@ -448,10 +437,9 @@ details p{padding:0 0 22px;color:var(--apoyo);max-width:42em}
  .logotipo{height:22px}
 }
 @media (max-width:480px){
- .hero-equipo{gap:8px;margin-bottom:16px}
- .hero-equipo .retrato{width:52px;height:52px;margin-bottom:0}
+ .hero-equipo{gap:10px 8px;margin-bottom:16px}
+ .hero-equipo .retrato{width:56px;height:56px;margin-bottom:0}
  .hero-equipo .nombre{display:none}
- .hero-equipo-pie{display:block}
  .tarjeta .imagen{display:none}
  .tarjeta .cuerpo{padding-top:22px;border-top:3px solid var(--ambar)}
  .pasos li{grid-template-columns:60px minmax(0,1fr);padding-bottom:16px}

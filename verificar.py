@@ -381,18 +381,9 @@ def comprobar_caso(sitio: Path) -> list:
     for resto in ('class="caso-flujo"', 'class="caso-dibujo"', "Otras mejoras entregadas", "deploy ✓", "backup ✓"):
         if resto in crudo:
             errores.append(f"index.html: queda un resto del caso antiguo: {resto}")
-    # Tarjeta del hero (WEB-020c): resumen del mismo caso real, con todos los estados «hecho» y enlace al caso
-    mini = re.search(r'<figure class="mini".*?</figure>', crudo, re.S)
-    if not mini:
-        errores.append("index.html: falta la tarjeta del hero")
-    else:
-        t = mini.group(0)
-        if len(re.findall(r'<li class="hecho"', t)) != 5 or '<li class="actual"' in t or 'aria-current="step"' in t:
-            errores.append("index.html: la tarjeta del hero debe tener cinco estados y todos «hecho»")
-        if "Caso real" not in t or "<b>Validado</b>" not in t or 'href="#caso"' not in t:
-            errores.append("index.html: la tarjeta del hero debe ser «Caso real», «Validado» y enlazar a #caso")
-        if "Ejemplo" in t:
-            errores.append("index.html: la tarjeta del hero ya no es un ejemplo inventado (WEB-020)")
+    # La mini tarjeta del caso se quitó del hero (WEB-022): el caso vive solo en su sección
+    if 'class="mini' in crudo or "Hoja de cambios · DBM" in crudo.split('id="caso"')[0]:
+        errores.append("index.html: el hero no debe llevar la mini tarjeta del caso (WEB-022)")
     if 'class="pipeline"' in crudo:
         errores.append("index.html: el chip del proceso del hero se quitó (DW-020-J3)")
     # Estructura de ocho bloques: sin «Por qué ahora», «Compromisos» ni «Cómo empezar» como secciones (DW-020-J1, P31, P32)
@@ -400,9 +391,9 @@ def comprobar_caso(sitio: Path) -> list:
     if secciones != ["servicios", "caso", "por-dentro", "equipo", "preguntas", "contacto"]:
         errores.append(f"index.html: secciones inesperadas: {secciones}")
     # Fundador con su nombre completo en Equipo y en el JSON-LD (WEB-020d)
-    if '<span class="rol">Fundador</span>' not in crudo or "<h3>Jordi Gonzalez Roig</h3>" not in crudo:
-        errores.append("index.html: la tarjeta de Jordi debe decir «Jordi Gonzalez Roig» y «Fundador»")
-    if '"founder": {"@type": "Person", "name": "Jordi Gonzalez Roig"' not in crudo:
+    if '<span class="rol">CTO</span>' not in crudo or "<h3>Jordi Gonzalez Roig</h3>" not in crudo:
+        errores.append("index.html: la tarjeta de Jordi debe decir «Jordi Gonzalez Roig» y «CTO»")
+    if '"founder": {"@type": "Person", "name": "Jordi Gonzalez Roig", "jobTitle": "CTO"' not in crudo:
         errores.append("index.html: el JSON-LD de la organización debe llevar founder «Jordi Gonzalez Roig»")
     # Ningún enlace ni id a las secciones retiradas, en ninguna página ni en el sitemap
     for f in sorted(sitio.iterdir()):
