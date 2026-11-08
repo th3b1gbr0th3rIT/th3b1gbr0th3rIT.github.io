@@ -185,7 +185,7 @@ SERVICIOS = [
 
 # P31: cuatro líneas al final de «Método», sin título propio (antes, la sección «Compromisos»).
 COMPROMISOS = [
-    ("persona", "Un CTO responsable"),
+    ("persona", "Un CTO que responde"),
     ("candado", "Tus datos, solo tuyos"),
     ("copia", "Copia antes de cada cambio"),
     ("charla", "Te contamos todo, también lo que falla"),
@@ -197,7 +197,7 @@ FAQ = [
     ("Ya tengo una web o un programa. ¿Hay que sustituirlo?",
      "No necesariamente. Primero analizamos lo que tienes; si es aprovechable, lo mejoramos. Solo proponemos empezar de cero cuando está justificado."),
     ("¿Quién hace el trabajo: personas o inteligencia artificial?",
-     "Las dos. Los agentes de IA desarrollan, prueban y publican. Coordinación decide y aprueba cada cambio, y el CTO responde de ellos ante ti."),
+     "Las dos. Los agentes de IA desarrollan, prueban y publican. El agente de Coordinación decide y aprueba cada cambio, y el CTO responde de ellos ante ti."),
     ("¿Cuál es el coste?",
      "Depende de lo que necesites. Después de hablar, te enviamos una propuesta detallada antes de empezar."),
     ("¿Y si algo falla después de un cambio?",
@@ -222,13 +222,13 @@ CASO_TEXTOS = {
     "A": dict(
         titulo="Un pedido. Un cambio en&nbsp;producción.",
         entrada=('<a href="https://dbmrealinvest.com/" rel="noopener noreferrer">DBM Real Invest</a> es una inmobiliaria. '
-                 'Creamos y mantenemos su web y su CRM. Cuando su CTO necesita algo, nos lo pide. Nosotros nos ocupamos del resto.'),
+                 'Creamos y mantenemos su web y su CRM. Cuando necesitan algo, nos lo piden. Nosotros nos ocupamos del resto.'),
         informa="Informamos al CTO de DBM Real Invest.",
         ticket_cab="Hoja de cambios · DBM Real Invest",
         cierre="El mismo método para cada cliente. También para esta web."),
     "B": dict(
         titulo="Un pedido. Un cambio en&nbsp;producción.",
-        entrada=('Una inmobiliaria. Creamos y mantenemos su web y su CRM. Cuando su responsable técnico necesita algo, nos lo pide. '
+        entrada=('Una inmobiliaria. Creamos y mantenemos su web y su CRM. Cuando necesitan algo, nos lo piden. '
                  'Nosotros nos ocupamos del resto.'),
         informa="Informamos al cliente.",
         ticket_cab="Hoja de cambios · Inmobiliaria",
@@ -566,7 +566,7 @@ INDEX = f"""<section class="hero oscuro" aria-labelledby="titulo-hero">
 <section class="bloque alterno" id="equipo" aria-labelledby="titulo-equipo">
  <div class="contenedor">
   <div class="titular"><span class="sobre">Equipo</span><h2 id="titulo-equipo">Un responsable humano, apoyado por agentes de IA.</h2>
-   <p>Jordi Gonzalez Roig, CTO, responde de cada proyecto. Cinco agentes de IA hacen el trabajo; Coordinación decide y aprueba cada cambio. Siempre se presentan como lo que son.</p></div>
+   <p>Jordi Gonzalez Roig, CTO, responde de cada proyecto. Cinco agentes de IA hacen el trabajo; el de Coordinación decide y aprueba cada cambio. Siempre se presentan como lo que son.</p></div>
   <ul class="equipo">{equipo}</ul>
  </div>
 </section>
