@@ -1,0 +1,4 @@
+sitio/
+capturas/
+__pycache__/
+docker/test/.web-test.pid
