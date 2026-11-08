@@ -2,8 +2,8 @@
 """Genera la web pública estática de th3b1gbr0th3r IT en sitio/ (GitHub Pages).
 
 Estilo corporativo sobrio (WEB-006): un mensaje por bloque, servicios en tarjetas, diagrama del flujo en
-HTML+CSS, caso de éxito «esta misma web» (WEB-005) y pie legal completo con sus páginas.
-Sin cifras, sin precios, sin clientes nombrados. Sin recursos externos ni cookies: la única tipografía
+HTML+CSS, caso de éxito real de DBM Real Invest (WEB-012, con permiso de JuanJo) y pie legal completo con sus páginas.
+Sin cifras ni precios; el único cliente nombrado es DBM (CASO_CON_NOMBRE). Sin recursos externos ni cookies: la única tipografía
 (Source Serif 4, OFL) se sirve desde la propia web, en fuentes/.
 Uso: python3 construir_web.py [--capturas] [--imagenes]
   --capturas  capturas de revisión en capturas/ (necesita google-chrome; Pillow opcional para recortar)
@@ -43,14 +43,18 @@ FUENTE_CURSIVA = "source-serif-4-latin-400-italic.woff2"
 
 # ── El equipo: Jordi y los agentes (iconos lineales) ─────────────────────────
 EQUIPO = [
-    dict(nombre="Jordi", rol="Fundador y CTO", icono="persona",
+    dict(nombre="Jordi", corto="Jordi", rol="Fundador y CTO", icono="persona",
          frase="Analiza las necesidades de tu empresa, toma las decisiones y responde de cada entrega."),
-    dict(nombre="Coordinación", rol="agente de IA", icono="lista",
+    dict(nombre="Coordinación", corto="Coordinación", rol="agente de IA", icono="lista",
          frase="Gestiona las prioridades y te informa de cada avance con claridad."),
-    dict(nombre="Desarrollo", rol="agente de IA", icono="codigo",
+    dict(nombre="Desarrollo", corto="Desarrollo", rol="agente de IA", icono="codigo",
          frase="Implementa cada mejora y la prueba a fondo antes de entregarla."),
-    dict(nombre="Operación", rol="agente de IA", icono="escudo",
+    dict(nombre="Operación", corto="Operación", rol="agente de IA", icono="escudo",
          frase="Realiza las copias de seguridad, publica los cambios y supervisa el funcionamiento."),
+    dict(nombre="Gestión y cumplimiento", corto="Gestión", rol="agente de IA", icono="balanza",
+         frase="Mantiene al día la documentación, la protección de datos y las condiciones de cada servicio."),
+    dict(nombre="Marketing y diseño", corto="Diseño", rol="agente de IA", icono="paleta",
+         frase="Cuida la imagen, los textos y la experiencia de uso de cada web."),
 ]
 
 # Monograma «IT» (favicon y apple-touch-icon): sustituye al antiguo icono de marca.
@@ -79,6 +83,12 @@ def icono(nombre):
         "lista": '<path d="M10 6h10M10 12h10M10 18h10"/><path d="m3.5 6 1.5 1.5L7.5 5M3.5 12l1.5 1.5L7.5 11M3.5 18l1.5 1.5L7.5 17"/>',
         "codigo": '<path d="m8 7-5 5 5 5M16 7l5 5-5 5M13.5 4l-3 16"/>',
         "escudo": '<path d="M12 3 5 6v5c0 4.5 3 8 7 10 4-2 7-5.5 7-10V6z"/><path d="m9 12 2 2 4-4"/>',
+        "balanza": '<path d="M12 4v16M8 20h8M5 7h14"/><circle cx="12" cy="4" r="1"/><path d="M5 7 2 13a3 3 0 0 0 6 0zM19 7l-3 6a3 3 0 0 0 6 0z"/>',
+        "paleta": '<path d="M12 3a9 9 0 0 0 0 18c1.4 0 2-1 2-2s-1-1.5-1-2.5 1-1.5 2-1.5h2a4 4 0 0 0 4-4c0-4.4-4-8-9-8z"/><circle cx="7.5" cy="11" r="1.1"/><circle cx="10" cy="7" r="1.1"/><circle cx="15" cy="7.5" r="1.1"/>',
+        "nube": '<path d="M7 18h10a4 4 0 0 0 .6-7.95A6 6 0 0 0 6.1 9.1 4.5 4.5 0 0 0 7 18z"/>',
+        "contenedor": '<path d="M12 3 4 7.5v9L12 21l8-4.5v-9z"/><path d="M4 7.5 12 12l8-4.5M12 12v9"/>',
+        "pipeline": '<circle cx="5" cy="12" r="2.2"/><circle cx="12" cy="12" r="2.2"/><circle cx="19" cy="12" r="2.2"/><path d="M7.2 12h2.6M14.2 12h2.6"/>',
+        "pulso": '<path d="M3 12h4l2-5 4 10 2-5h6"/>',
     }[nombre]
     return f'<svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false">{d}</svg>'
 
@@ -171,28 +181,80 @@ FAQ = [
     ("Ya tengo una web o un programa. ¿Hay que sustituirlo?",
      "No necesariamente. Primero analizamos lo que tienes; si es aprovechable, lo mejoramos. Solo proponemos empezar de cero cuando está justificado."),
     ("¿Quién hace el trabajo: personas o inteligencia artificial?",
-     "Ambos. Los agentes de IA desarrollan, prueban y supervisan; Jordi revisa, decide y es tu interlocutor."),
+     "Ambos. Los agentes de IA coordinan, desarrollan, prueban, publican y supervisan, y cuidan también el cumplimiento y el diseño; Jordi revisa, decide y es tu interlocutor."),
     ("¿Cuál es el coste?",
      "Depende del alcance del proyecto. Tras una primera conversación, sin compromiso, te enviamos una propuesta detallada."),
 ]
 
-# WEB-005: un cambio de esta web, estado a estado. Se rotula «Ejemplo» mientras no esté publicado y validado.
-CASO_PUNTOS = [
-    ("hoja", "Cada cambio queda registrado", "Todo empieza en la hoja de cambios: qué se solicita, quién se encarga y en qué estado se encuentra."),
-    ("lupa", "La información interna no se publica", "Una verificación automática revisa cada versión antes de publicarla."),
-    ("mano", "Ningún cambio sin pasar por pruebas", "Desarrollo implementa y prueba; Operación publica mediante un proceso automatizado."),
-    ("ojo", "Validación final humana", "Jordi revisa el resultado publicado y lo valida."),
+# WEB-012: caso de éxito real. CASO_CON_NOMBRE=True (variante A) nombra a DBM Real Invest, con permiso de JuanJo
+# (Jordi, 2026-11-08). Con False se vuelve a la variante B, anónima (reserva si DBM retirase el permiso).
+CASO_CON_NOMBRE = True
+CASO_TEXTOS = {
+    "A": dict(
+        titulo="DBM Real Invest pide sus cambios por correo y los ve en&nbsp;producción.",
+        entrada=('Desarrollamos y mantenemos la web pública y el CRM de <a href="https://dbmrealinvest.com/" rel="noopener noreferrer">DBM Real Invest</a>, '
+                 'una inmobiliaria. JuanJo, su CTO, no abre tickets ni aprende herramientas nuevas: escribe un correo y eso pone en marcha '
+                 'todo el proceso, hasta que el cambio está publicado y comprobado.'),
+        cliente="DBM Real Invest · inmobiliaria · web pública + CRM · en producción",
+        ticket_cab="Hoja de cambios · DBM Real Invest",
+        cierre="Aplicamos este mismo método a cada proyecto, también a esta web, que gestionamos como un cliente más."),
+    "B": dict(
+        titulo="Una inmobiliaria que pide cambios por correo y los ve en&nbsp;producción.",
+        entrada=('Desarrollamos y mantenemos la web pública y el CRM de una inmobiliaria. Su responsable técnico no abre tickets ni aprende '
+                 'herramientas nuevas: escribe un correo y eso pone en marcha todo el proceso, hasta que el cambio está publicado y comprobado.'),
+        cliente="inmobiliaria · web pública + CRM · en producción",
+        ticket_cab="Hoja de cambios · Inmobiliaria",
+        cierre="Aplicamos este mismo método a cada proyecto, también a esta web, que gestionamos como un cliente más."),
+}
+CASO = CASO_TEXTOS["A" if CASO_CON_NOMBRE else "B"]
+# (icono, título, texto variante B, texto variante A o None si es el mismo)
+CASO_FLUJO = [
+    ("correo", "Pide el cambio por correo", "El cliente escribe a su buzón dedicado, con sus palabras. Sin formularios ni tickets.",
+     "JuanJo escribe a su buzón dedicado, con sus palabras. Sin formularios ni tickets."),
+    ("hoja", "Queda registrado", "Coordinación lo anota en la hoja de cambios, lo prioriza y confirma la recepción.", None),
+    ("codigo", "Se desarrolla y se prueba", "Desarrollo lo implementa en un entorno aislado y pasa las pruebas automáticas.", None),
+    ("copia", "Copia de seguridad", "Antes de tocar nada en producción se hace una copia completa, con vuelta atrás preparada.", None),
+    ("pipeline", "Despliegue automatizado", "Operación lo publica con el flujo de integración y despliegue propio del cliente, y comprueba que todo responde.", None),
+    ("charla-ok", "Informe al cliente", "Un correo explica qué ha cambiado y cómo comprobarlo.",
+     "JuanJo recibe un correo con lo entregado y cómo comprobarlo."),
 ]
-CASO_TITULO = "Añadir a la web el diagrama del proceso"  # texto plano
-CASO_TITULO_HTML = "Añadir a la web el diagrama del&nbsp;proceso"  # mini tarjeta y ticket: sin viuda
-CASO_ESTADOS = [
-    ("Pedido", "Pedido", "Jordi lo pide y Coordinación lo registra en la hoja de cambios."),
-    ("En desarrollo", "Desarrollo", "Desarrollo lo implementa y lo prueba en un entorno aislado."),
-    ("En revisión", "Revisión", "Pasa la verificación automática y una revisión independiente."),
-    ("Publicado", "Publicado", "Operación lo publica con el proceso automatizado de la web."),
-    ("Validado", "Validado", "Jordi valida el resultado."),
+CASO_NOTA = "Si detectamos un riesgo antes de publicar, paramos y lo consultamos con el cliente."
+CASO_TICKET_TITULO_HTML = "Buscar por dirección como lo escribe el&nbsp;equipo"
+CASO_TICKET_QUE = ("«C/», «Calle» y «Carrer» dan el mismo resultado, sin importar acentos ni mayúsculas; "
+                   "cada comercial ve solo lo que ya podía ver.")
+CASO_TICKET_ESTADOS = [
+    ("Pedido por correo", "El cambio llega por correo, con las palabras del cliente."),
+    ("Registrado", "Coordinación lo anota en la hoja de cambios y confirma la recepción."),
+    ("Desarrollado y probado", "Se implementa y se prueba en un entorno aislado."),
+    ("Copia y despliegue", "Copia de seguridad previa y publicación con el flujo del cliente."),
+    ("Validado e informado", "Se comprueba en producción y el cliente recibe el informe."),
 ]
-CASO_ACTUAL = 2  # índice del estado en curso (En revisión)
+CASO_ENTREGADO = [
+    "Buscador en lenguaje natural en la web, en varios idiomas",
+    "Permisos y privacidad por perfil en el CRM",
+    "Historial de cambios en cada ficha",
+    "Exportación a Excel que respeta los permisos",
+    "Certificado energético en fichas y listados",
+    "Posicionamiento por inmueble y páginas por ciudad",
+    "Actualizaciones de base de datos con copia previa y verificación",
+]
+# Mini tarjeta del hero: ejemplo genérico (no es el caso real).
+MINI_TITULO_HTML = "Nuevo filtro en el buscador de la&nbsp;web"
+MINI_ESTADOS = [
+    ("Pedido", "Pedido", ""),
+    ("En desarrollo", "Desarrollo", ""),
+    ("En revisión", "Revisión", ""),
+    ("Publicado", "Publicado", ""),
+    ("Validado", "Validado", ""),
+]
+MINI_ACTUAL = 2  # índice del estado en curso (En revisión)
+ETIQUETAS_SERVICIO = {  # icono y etiqueta técnica de cada tarjeta de servicio
+    "webs": ("nube", "web · accesible · multiidioma"),
+    "gestion": ("contenedor", "app · permisos · datos propios"),
+    "reservas": ("nube", "en línea · agenda · avisos"),
+    "automatizacion": ("pipeline", "correo → proceso → aviso"),
+    "cuidado": ("pulso", "backup ✓ · deploy ✓ · monitor"),
+}
 
 # Diagrama del flujo (HTML+CSS): pasos y carril propio de cada empresa.
 FLUJO_PASOS = [
@@ -214,7 +276,7 @@ CSS = r"""
 unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
 @font-face{font-family:"Source Serif 4";font-style:italic;font-weight:400;font-display:swap;src:url(@RAIZ@fuentes/@CURSIVA@) format("woff2");
 unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
-:root{--negro:#111;--carbon:#1c1917;--ambar:#d97706;--ambar2:#f59e0b;--tostado:#b45309;--crema:#fdf6ec;--blanco:#fff;
+:root{--mono:ui-monospace,"SFMono-Regular",Menlo,Consolas,"DejaVu Sans Mono",monospace;--negro:#111;--carbon:#1c1917;--ambar:#d97706;--ambar2:#f59e0b;--tostado:#b45309;--crema:#fdf6ec;--blanco:#fff;
 --gris1:#f4f1ec;--gris2:#e7e1d6;--gris3:#a8a29e;--texto:#44403c;--apoyo:#57534e;--linea:#e7e1d6;--borde-calido:#ecdcc4;
 --serif:"Source Serif 4",Georgia,"DejaVu Serif","Times New Roman",serif;
 --sans:system-ui,-apple-system,"Segoe UI",Roboto,"DejaVu Sans",Helvetica,Arial,sans-serif;
@@ -228,6 +290,7 @@ h1,h2,h3{font-family:var(--serif);font-weight:400;line-height:1.12;margin:0;lett
 h2{font-size:clamp(2rem,4vw,3rem)}
 h3{font-size:1.35rem}
 p{margin:0;text-wrap:pretty}
+.mono{font-family:var(--mono);font-size:.85em;letter-spacing:0}
 em{font-style:italic}
 .sr{position:absolute!important;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
 
@@ -281,15 +344,18 @@ font:600 .92rem var(--sans);color:var(--negro);cursor:pointer}
 .hero .reticula{align-items:center;min-height:min(80vh,700px);padding-block:calc(var(--ritmo)*10);row-gap:48px}
 .hero-texto{grid-column:1/span 6}
 .hero .sobre{color:var(--ambar2)}
-.hero h1{font-size:clamp(2.6rem,5.4vw,4.4rem);line-height:1.04;letter-spacing:-.02em}
-.hero h1 em{color:var(--ambar2)}
+.hero::before{content:"";position:absolute;inset:0;pointer-events:none;background-image:radial-gradient(circle,rgba(253,246,236,.09) 1px,transparent 1.6px);background-size:24px 24px;
+-webkit-mask-image:linear-gradient(90deg,transparent 0,transparent 30%,#000 75%);mask-image:linear-gradient(90deg,transparent 0,transparent 30%,#000 75%)}
+.hero .contenedor{position:relative;z-index:1}
+.hero h1{font-size:clamp(2.5rem,4.8vw,4rem);line-height:1.06;letter-spacing:-.02em;color:var(--blanco);max-width:12em;text-wrap:balance}
 .hero .apoyo{margin-top:calc(var(--ritmo)*3);font-size:clamp(1.1rem,1.6vw,1.3rem);color:#d6d3d1;max-width:30em}
 .acciones{display:flex;flex-wrap:wrap;align-items:center;gap:16px 28px;margin-top:calc(var(--ritmo)*5)}
 .hero-visual{grid-column:7/span 6}
-.escena{background:var(--crema);color:var(--negro);border-radius:20px;padding:28px 26px 26px;box-shadow:0 40px 80px -40px rgba(0,0,0,.7)}
-.hero-equipo{list-style:none;margin:0 0 20px;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;text-align:center}
-.hero-equipo .retrato{width:72px;height:72px;margin:0 auto 8px}
-.hero-equipo .nombre{display:block;font:600 .82rem/1.3 var(--sans);color:var(--apoyo)}
+.escena{background:var(--crema);color:var(--negro);border-radius:20px;padding:28px 26px 26px;border:1px solid rgba(245,158,11,.35);
+box-shadow:0 0 0 6px rgba(245,158,11,.06),0 40px 80px -40px rgba(0,0,0,.7),0 0 80px -30px rgba(245,158,11,.35)}
+.hero-equipo{list-style:none;margin:0 0 20px;padding:0;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:6px;text-align:center}
+.hero-equipo .retrato{width:56px;height:56px;margin:0 auto 8px}
+.hero-equipo .nombre{display:block;font:600 .74rem/1.25 var(--sans);color:var(--apoyo)}
 .hero-equipo-pie{display:none;margin:-8px 0 16px;font-size:.85rem;color:var(--apoyo);text-align:center}
 .mini{margin:0;background:var(--blanco);border:1px solid var(--borde-calido);border-radius:12px;padding:16px 18px 14px}
 .mini-cab{display:flex;justify-content:space-between;align-items:center;gap:12px;font:700 .8rem/1 var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--apoyo)}
@@ -303,12 +369,17 @@ font:600 .92rem var(--sans);color:var(--negro);cursor:pointer}
 .mini-pasos li.actual{background:#fef3c7;border-color:var(--tostado);color:#7c2d12}
 .mini-pie{margin-top:12px;font-size:.88rem;color:var(--apoyo)}
 .mini-pie a{color:var(--negro);text-decoration-color:var(--ambar);text-underline-offset:3px}
+.pipeline{display:flex;align-items:center;gap:10px;margin:0;padding:6px 12px;border:1px solid rgba(245,158,11,.35);border-radius:99px;font-size:.85rem;color:#d6d3d1;background:rgba(253,246,236,.04)}
+.led{flex:none;width:8px;height:8px;border-radius:50%;background:var(--ambar2);box-shadow:0 0 0 0 rgba(245,158,11,.6);animation:latido 2.4s ease-out infinite}
+@keyframes latido{0%{box-shadow:0 0 0 0 rgba(245,158,11,.55)}70%,100%{box-shadow:0 0 0 8px rgba(245,158,11,0)}}
 
 /* Servicios en tarjetas, con las viñetas dentro */
 .tarjetas{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:var(--gutter)}
-.tarjeta{grid-column:span 4;display:flex;flex-direction:column;background:var(--blanco);border:1px solid var(--linea);
+.tarjeta{grid-column:span 4;display:flex;flex-direction:column;background:var(--blanco);border:1px solid var(--linea);border-radius:12px;overflow:hidden;
 transition:transform .3s ease,box-shadow .3s ease,border-color .3s}
-.tarjeta:hover{transform:translateY(-4px);box-shadow:0 28px 48px -32px rgba(17,17,17,.45);border-color:#d6cfc2}
+.tarjeta:hover{transform:translateY(-4px);border-color:rgba(217,119,6,.55);box-shadow:0 0 0 3px rgba(245,158,11,.12),0 28px 48px -32px rgba(17,17,17,.45)}
+.etq{display:flex;align-items:center;gap:8px;font-size:.82rem;color:var(--tostado)}
+.etq .ico{width:18px;height:18px;padding:0;border:0;background:none;stroke:var(--tostado)}
 .tarjeta .imagen{overflow:hidden;border-bottom:1px solid var(--linea);background:var(--crema)}
 .ilus{display:block;width:100%;height:auto}
 .tarjeta .cuerpo{padding:24px 26px 28px;display:flex;flex-direction:column;gap:12px;flex:1}
@@ -316,7 +387,7 @@ transition:transform .3s ease,box-shadow .3s ease,border-color .3s}
 .vinetas{list-style:none;margin:4px 0 0;padding:14px 0 0;border-top:1px solid var(--linea);display:grid;gap:6px;font-size:.95rem;color:var(--texto)}
 .vinetas li{padding-left:20px;position:relative}
 .vinetas li::before{content:"";position:absolute;left:0;top:.72em;width:10px;height:2px;background:var(--ambar)}
-.tarjeta.cta{background:var(--negro);color:var(--blanco);border-color:var(--negro);justify-content:flex-end}
+.tarjeta.cta{background:var(--negro) radial-gradient(circle,rgba(253,246,236,.08) 1px,transparent 1.6px) 0 0/20px 20px;color:var(--blanco);border-color:var(--negro);justify-content:flex-end}
 .tarjeta.cta .cuerpo{justify-content:flex-end;padding:40px 32px}
 .tarjeta.cta h3{font-size:1.8rem}.tarjeta.cta p{color:#d6d3d1}.tarjeta.cta .mas{color:var(--blanco);border-color:var(--ambar2);margin-top:12px;align-self:flex-start}
 
@@ -344,6 +415,7 @@ border-radius:14px;font:italic 1.05rem/1.3 var(--serif);color:#92400e;position:r
 .carril{position:relative;z-index:2;background:var(--blanco);border:2.5px solid var(--ambar);border-radius:20px;padding:18px 16px 16px}
 .carril-cab{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:12px}
 .carril-cab b{font:400 1.3rem/1.2 var(--serif)}
+.carril-cab .mono{font-family:var(--mono);font-size:.85rem;font-weight:400;letter-spacing:0;text-transform:none}
 .carril-cab span,.capa{font:700 .82rem/1.2 var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--tostado)}
 .carril-pasos{list-style:none;margin:0;padding:0;display:grid;gap:8px}
 .carril-pasos li{display:flex;align-items:center}
@@ -351,11 +423,53 @@ border-radius:14px;font:italic 1.05rem/1.3 var(--serif);color:#92400e;position:r
 .carril-pasos .ico{width:22px;height:22px;padding:0;border:0;background:none;border-radius:0}
 .capa{position:relative;margin:-16px 14px 0;padding:24px 18px 8px;background:var(--blanco);border:2px solid #f1e4cf;border-top:0;border-radius:0 0 18px 18px;color:var(--apoyo);z-index:1}
 .capa+.capa{margin:-16px 28px 0;z-index:0;color:var(--apoyo)}
+.flujo-apoyo{display:flex;align-items:center;gap:8px;margin:4px 0 8px;font-size:.92rem;color:var(--apoyo)}
+.flujo-apoyo .ico{flex:none;width:28px;height:28px;padding:5px}
 .flujo-nota{display:flex;align-items:center;gap:10px;margin-top:20px;color:var(--apoyo);font-size:.95rem}
 .flujo-nota .ico{width:24px;height:24px;padding:0;border:0;background:none;border-radius:0;stroke:var(--apoyo)}
 @media (min-width:1100px){
  .flujo{padding:36px 32px 28px}
  .flujo-fila{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));column-gap:24px}
+ .flujo-apoyo{grid-column:1/-1;justify-content:center}
+ .flujo-aprueba{grid-column:2/5;justify-content:center;margin-bottom:30px;background:none;border:0;padding:0 0 4px}
+ .flujo-aprueba::after{content:"";position:absolute;left:calc((100% - 48px)/6);right:calc((100% - 48px)/6);bottom:-18px;height:12px;
+  border:2px solid var(--negro);border-bottom:0;border-radius:10px 10px 0 0}
+ .pasos{grid-template-columns:repeat(5,minmax(0,1fr));column-gap:24px}
+ .pasos li{grid-template-columns:1fr;justify-items:center;text-align:center;align-items:start;padding:0}
+ .pasos li:not(:last-child)::after{left:calc(50% + 60px);right:calc(-50% + 36px);top:52px;bottom:auto;border-left:0;border-top:2.5px dashed var(--ambar)}
+ .nodo{width:104px;height:104px;margin-bottom:14px}
+ .nodo .ico{width:44px;height:44px}
+ .paso-d{max-width:16em}
+ .conector{grid-column:3/6;flex-direction:column;align-items:center;gap:6px;margin:16px 0 14px;text-align:center}
+ .conector::before{margin:0;height:34px}
+ .carril{padding:16px 24px 18px}
+ .carril-cab{justify-content:flex-start;gap:16px}
+ .carril-pasos{display:flex;flex-wrap:wrap;align-items:center;gap:8px 0}
+ .chip{flex:none;padding:8px 12px;font-size:.9rem;gap:8px}
+ .carril-pasos li+li::before{content:"›";margin:0 6px;color:var(--ambar);font-weight:700;font-size:1.2rem;line-height:1}
+}
+
+/* Caso de éxito */
+.caso .reticula{row-gap:40px;align-items:start}
+.caso .titular{grid-column:1/span 6;margin-bottom:0}
+.caso-izq{grid-column:1/span 6}
+.caso-izq .titular{margin-bottom:20px}
+.caso-izq .titular p a{color:var(--negro);text-decoration-color:var(--ambar);text-underline-offset:3px;font-weight:600}
+.caso-cliente{margin:0 0 32px;font-family:var(--mono);font-size:.85rem;color:var(--tostado)}
+.caso-flujo{list-style:none;margin:0;padding:0;counter-reset:p;display:grid;gap:20px}
+.caso-flujo li{display:grid;grid-template-columns:44px minmax(0,1fr);column-gap:16px;position:relative}
+.caso-flujo li:not(:last-child)::after{content:"";position:absolute;left:21px;top:48px;bottom:-16px;border-left:2px dashed var(--ambar)}
+.caso-flujo li p{color:var(--apoyo)}
+.caso-nota{display:flex;align-items:center;gap:12px;margin-top:28px;font-size:.95rem;color:var(--apoyo)}
+.caso-nota .ico{width:32px;height:32px;padding:6px}
+.caso-lado{grid-column:8/span 5}
+.ico{flex:none;width:28px;height:28px;padding:5px}
+.flujo-nota{display:flex;align-items:center;gap:10px;margin-top:20px;color:var(--apoyo);font-size:.95rem}
+.flujo-nota .ico{width:24px;height:24px;padding:0;border:0;background:none;border-radius:0;stroke:var(--apoyo)}
+@media (min-width:1100px){
+ .flujo{padding:36px 32px 28px}
+ .flujo-fila{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));column-gap:24px}
+ .flujo-apoyo{grid-column:1/-1;justify-content:center}
  .flujo-aprueba{grid-column:2/5;justify-content:center;margin-bottom:30px;background:none;border:0;padding:0 0 4px}
  .flujo-aprueba::after{content:"";position:absolute;left:calc((100% - 48px)/6);right:calc((100% - 48px)/6);bottom:-18px;height:12px;
   border:2px solid var(--negro);border-bottom:0;border-radius:10px 10px 0 0}
@@ -381,9 +495,12 @@ border-radius:14px;font:italic 1.05rem/1.3 var(--serif);color:#92400e;position:r
 .puntos li{display:flex;gap:18px}
 .ico{flex:none;width:44px;height:44px;padding:10px;border-radius:50%;background:var(--blanco);border:1px solid var(--borde-calido);
 fill:none;stroke:var(--tostado);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-.puntos h3,.compromisos h3{font-size:1.15rem;margin-bottom:6px}
-.puntos p,.compromisos p{color:var(--apoyo)}
-.ticket{grid-column:8/span 5;grid-row:1/span 2;background:var(--blanco);border:1px solid var(--linea);box-shadow:0 30px 60px -44px rgba(17,17,17,.5)}
+.caso-flujo h3,.compromisos h3{font-size:1.15rem;margin-bottom:6px}
+.compromisos p{color:var(--apoyo)}
+.ticket{background:var(--blanco);border:1px solid var(--linea);border-radius:12px;overflow:hidden;box-shadow:0 0 0 4px rgba(217,119,6,.06),0 30px 60px -44px rgba(17,17,17,.5)}
+.entregado{margin-top:24px;padding:20px 24px;background:var(--blanco);border:1px solid var(--linea);border-radius:12px}
+.entregado .sobre{margin-bottom:12px}
+.entregado .vinetas{margin:0;padding:0;border-top:0}
 .ticket-cab{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 24px;border-bottom:1px solid var(--linea);
 font:700 .78rem/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--apoyo)}
 .ticket-cuerpo{padding:22px 24px 6px}
@@ -402,6 +519,7 @@ font:700 .78rem/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;colo
 .estados li.actual .punto::after{content:"";position:absolute;left:4px;top:4px;width:8px;height:8px;border-radius:50%;background:var(--tostado)}
 .ticket-pie{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px 12px;padding:14px 24px;border-top:1px solid var(--linea);background:var(--gris1);font-size:.9rem;color:var(--apoyo)}
 .ticket-pie b{color:var(--negro)}
+.ticket-pie .mono{color:var(--apoyo)}
 .cierre{margin-top:calc(var(--ritmo)*8);padding-top:calc(var(--ritmo)*5);border-top:1px solid #e6d6bd;display:flex;flex-wrap:wrap;
 justify-content:space-between;align-items:center;gap:24px}
 .cierre p{font:400 clamp(1.5rem,2.8vw,2.1rem)/1.2 var(--serif);max-width:24em}
@@ -412,10 +530,10 @@ justify-content:space-between;align-items:center;gap:24px}
 .compromisos .ico{margin-bottom:18px;background:var(--blanco);border-color:var(--borde-calido)}
 .compromisos h3{align-self:end}
 
-/* Equipo: dos por dos */
-.equipo{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:40px var(--gutter)}
-.equipo li{display:grid;grid-template-columns:96px minmax(0,1fr);grid-template-areas:"foto nombre" "foto rol" "foto frase";column-gap:24px;align-content:start;align-items:start}
-.equipo .retrato{grid-area:foto;width:96px;height:96px}
+/* Equipo: tres por dos */
+.equipo{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:48px var(--gutter)}
+.equipo li{display:grid;grid-template-columns:80px minmax(0,1fr);grid-template-areas:"foto nombre" "foto rol" "foto frase";column-gap:24px;align-content:start;align-items:start}
+.equipo .retrato{grid-area:foto;width:80px;height:80px}
 .equipo h3{grid-area:nombre;font-size:1.35rem;align-self:end}
 .equipo .rol{grid-area:rol}
 .equipo p{grid-area:frase;color:var(--apoyo);max-width:36ch}
@@ -508,7 +626,9 @@ details p{padding:0 0 22px;color:var(--apoyo);max-width:42em}
  .hero-visual{width:100%;max-width:560px}
  .tarjeta{grid-column:span 6}.tarjeta.cta{grid-column:span 12}
  .mision .frase,.mision .lado{grid-column:1/-1}
- .caso .titular,.puntos{grid-column:1/-1}.ticket{grid-column:1/-1;grid-row:auto;max-width:560px}
+ .hero::before{-webkit-mask-image:linear-gradient(180deg,transparent 0,transparent 45%,#000 85%);mask-image:linear-gradient(180deg,transparent 0,transparent 45%,#000 85%)}
+ .caso-izq,.caso-lado{grid-column:1/-1}.caso-lado{max-width:560px}
+ .equipo{grid-template-columns:repeat(2,minmax(0,1fr))}
  .compromisos{grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:none;row-gap:40px}
  .compromisos li{grid-row:auto;grid-template-rows:none}
  .faq .titular,.faq .lista{grid-column:1/-1}
@@ -547,7 +667,7 @@ details p{padding:0 0 22px;color:var(--apoyo);max-width:42em}
  .compromisos .ico{grid-row:1/span 2;margin:0}
  .compromisos h3{align-self:center;margin:0 0 4px}
  .mision .reticula{row-gap:16px}
- .puntos{gap:18px}
+ .caso-flujo{gap:18px}
  .estados li{padding-bottom:14px}
  .tarjeta.cta .cuerpo{padding:28px 20px}
  .flujo{padding:20px 14px 18px;margin:0 calc(var(--gutter)*-1);border-left:0;border-right:0}
@@ -562,8 +682,9 @@ details p{padding:0 0 22px;color:var(--apoyo);max-width:42em}
  .logotipo{height:22px}
 }
 @media (max-width:480px){
- .hero-equipo{gap:8px;margin-bottom:16px}
- .hero-equipo .retrato{width:56px;height:56px}
+ .hero-equipo{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:16px}
+ .hero-equipo .retrato{width:52px;height:52px;margin-bottom:0}
+ .pipeline .largo{display:none}
  .hero-equipo .nombre{display:none}
  .hero-equipo-pie{display:block}
  .tarjeta .imagen{display:none}
@@ -749,15 +870,15 @@ def pagina(titulo, descripcion, cuerpo, ruta, base="index.html", raiz="", indexa
 
 
 # ── Página principal ─────────────────────────────────────────────────────────
-hero_equipo = "".join(f'<li>{retrato(c)}<span class="nombre" aria-hidden="true">{c["nombre"]}</span></li>' for c in EQUIPO)
+hero_equipo = "".join(f'<li>{retrato(c)}<span class="nombre" aria-hidden="true">{c["corto"]}</span></li>' for c in EQUIPO)
 mini_pasos = "".join(
-    f'<li class="{"hecho" if i < CASO_ACTUAL else "actual" if i == CASO_ACTUAL else ""}"'
-    f'{" aria-current=\"step\"" if i == CASO_ACTUAL else ""}>{corto}'
-    f'<span class="sr">{": hecho" if i < CASO_ACTUAL else ": en curso" if i == CASO_ACTUAL else ": pendiente"}</span></li>'
-    for i, (_, corto, _) in enumerate(CASO_ESTADOS)).replace(' class=""', "")
+    f'<li class="{"hecho" if i < MINI_ACTUAL else "actual" if i == MINI_ACTUAL else ""}"'
+    f'{" aria-current=\"step\"" if i == MINI_ACTUAL else ""}>{corto}'
+    f'<span class="sr">{": hecho" if i < MINI_ACTUAL else ": en curso" if i == MINI_ACTUAL else ": pendiente"}</span></li>'
+    for i, (_, corto, _) in enumerate(MINI_ESTADOS)).replace(' class=""', "")
 
 tarjetas = "".join(
-    f'<article class="tarjeta revela"><div class="imagen">{ILUS[i]}</div><div class="cuerpo"><h3>{t}</h3><p>{d}</p>'
+    f'<article class="tarjeta revela"><div class="imagen">{ILUS[i]}</div><div class="cuerpo"><p class="etq">{icono(ETIQUETAS_SERVICIO[i][0])}<span class="mono">{ETIQUETAS_SERVICIO[i][1]}</span></p><h3>{t}</h3><p>{d}</p>'
     f'<ul class="vinetas">{"".join(f"<li>{x}</li>" for x in v)}</ul></div></article>'
     for i, t, d, v in SERVICIOS) + (
     '<article class="tarjeta cta oscuro revela"><div class="cuerpo"><h3>¿Necesitas otra solución?</h3>'
@@ -774,9 +895,10 @@ carril = "".join(f'<li><span class="chip">{icono(i)}<span>{t}</span></span></li>
 FLUJO = f"""<figure class="flujo revela" aria-labelledby="titulo-dentro">
    <div class="flujo-fila"><p class="flujo-aprueba">{icono("persona")}<span>Jordi revisa y aprueba las decisiones importantes</span></p></div>
    <ol class="pasos">{pasos}</ol>
+   <div class="flujo-fila"><p class="flujo-apoyo">{icono("balanza")}{icono("paleta")}<span>Según el cambio intervienen también Gestión y cumplimiento (datos y aspectos legales) y Marketing y diseño (imagen y textos).</span></p></div>
    <div class="flujo-fila"><p class="conector">Sobre la infraestructura de cada cliente</p></div>
    <div class="carriles">
-    <div class="carril"><p class="carril-cab"><b>Tu empresa</b><span>Entorno propio</span></p><ol class="carril-pasos">{carril}</ol></div>
+    <div class="carril"><p class="carril-cab"><b>Tu empresa</b><span class="mono">entorno propio · aislado</span></p><ol class="carril-pasos">{carril}</ol></div>
     <p class="capa">Empresa B · entorno propio</p>
     <p class="capa">Empresa C · entorno propio</p>
    </div>
@@ -786,31 +908,32 @@ FLUJO = f"""<figure class="flujo revela" aria-labelledby="titulo-dentro">
 compromisos = "".join(f'<li class="revela">{icono(i)}<h3>{t}</h3><p>{d}</p></li>' for i, t, d in COMPROMISOS)
 equipo = "".join(f'<li class="revela">{retrato(c)}<h3>{c["nombre"]}</h3><span class="rol">{c["rol"]}</span><p>{c["frase"]}</p></li>' for c in EQUIPO)
 faq = "".join(f'<details><summary>{q}</summary><p>{a}</p></details>' for q, a in FAQ)
-puntos = "".join(f'<li class="revela">{icono(i)}<div><h3>{t}</h3><p>{d}</p></div></li>' for i, t, d in CASO_PUNTOS)
+caso_flujo = "".join(
+    f'<li class="revela">{icono(i)}<div><h3>{t}</h3><p>{(ta or tb) if CASO_CON_NOMBRE else tb}</p></div></li>' for i, t, tb, ta in CASO_FLUJO)
 estados = "".join(
-    f'<li class="{"hecho" if i < CASO_ACTUAL else "actual" if i == CASO_ACTUAL else "falta"}"'
-    f'{" aria-current=\"step\"" if i == CASO_ACTUAL else ""}><span class="punto" aria-hidden="true"></span>'
-    f'<b>{e}<span class="sr">{": hecho" if i < CASO_ACTUAL else ": en curso" if i == CASO_ACTUAL else ": pendiente"}</span></b><span class="txt">{d}</span></li>'
-    for i, (e, _, d) in enumerate(CASO_ESTADOS))
-ESTADO_ACTUAL = CASO_ESTADOS[CASO_ACTUAL][0]
+    f'<li class="hecho"><span class="punto" aria-hidden="true"></span>'
+    f'<b>{e}<span class="sr">: hecho</span></b><span class="txt">{d}</span></li>' for e, d in CASO_TICKET_ESTADOS)
+entregado = "".join(f"<li>{x}</li>" for x in CASO_ENTREGADO)
+ESTADO_ACTUAL = MINI_ESTADOS[MINI_ACTUAL][0]
 
 INDEX = f"""<section class="hero oscuro" aria-labelledby="titulo-hero">
  <div class="contenedor reticula">
   <div class="hero-texto">
    <span class="sobre">Desarrollo y mantenimiento para pequeñas empresas</span>
-   <h1 id="titulo-hero">Software a la medida <em>de tu negocio.</em></h1>
+   <h1 id="titulo-hero">Software a la medida de tu&nbsp;negocio.</h1>
    <p class="apoyo">Desarrollamos y mantenemos webs y herramientas de gestión a medida, con un responsable único y un proceso trazable de principio a fin.</p>
-   <div class="acciones"><a class="btn claro" href="#contacto">Cuéntanos tu proyecto <span aria-hidden="true">→</span></a></div>
+   <div class="acciones"><a class="btn claro" href="#contacto">Cuéntanos tu proyecto <span aria-hidden="true">→</span></a>
+    <p class="pipeline"><span class="led" aria-hidden="true"></span><span class="mono">pruebas ✓ · copia ✓ · despliegue ✓<span class="largo"> · validación ✓</span></span><span class="sr">: así termina cada cambio</span></p></div>
   </div>
   <div class="hero-visual">
    <div class="escena">
-    <ul class="hero-equipo" aria-label="El equipo: Jordi, responsable, y los agentes de IA de Coordinación, Desarrollo y Operación">{hero_equipo}</ul>
-    <p class="hero-equipo-pie" aria-hidden="true">Jordi y los agentes de Coordinación, Desarrollo y Operación</p>
+    <ul class="hero-equipo" aria-label="El equipo: Jordi, responsable, y los agentes de IA de Coordinación, Desarrollo, Operación, Gestión y cumplimiento, y Marketing y diseño">{hero_equipo}</ul>
+    <p class="hero-equipo-pie" aria-hidden="true">Jordi y los agentes de Coordinación, Desarrollo, Operación, Gestión y Diseño</p>
     <figure class="mini" aria-label="Ejemplo de un cambio en nuestra hoja de cambios">
      <div class="mini-cab"><span>Hoja de cambios</span><span class="etiqueta">Ejemplo</span></div>
-     <p class="mini-titulo">{CASO_TITULO_HTML}</p>
+     <p class="mini-titulo">{MINI_TITULO_HTML}</p>
      <ol class="mini-pasos">{mini_pasos}</ol>
-     <p class="mini-pie">Estado: <b>{ESTADO_ACTUAL}</b> · <a href="#caso">Ver el caso completo</a></p>
+     <p class="mini-pie">Estado: <b>{ESTADO_ACTUAL}</b> · <a href="#caso">Ver un caso real</a></p>
     </figure>
    </div>
   </div>
@@ -846,20 +969,27 @@ INDEX = f"""<section class="hero oscuro" aria-labelledby="titulo-hero">
 <section class="bloque alterno caso" id="caso" aria-labelledby="titulo-caso">
  <div class="contenedor">
   <div class="reticula">
-   <div class="titular"><span class="sobre">Caso de éxito</span><h2 id="titulo-caso">Esta web, gestionada con nuestro método.</h2>
-    <p>Gestionamos nuestra propia web como un cliente más, con el mismo proceso que aplicamos a cada proyecto.</p></div>
-   <ul class="puntos">{puntos}</ul>
-   <article class="ticket revela" aria-labelledby="titulo-ticket">
-    <div class="ticket-cab"><span>Hoja de cambios · Web corporativa</span><span class="etiqueta">Ejemplo</span></div>
-    <div class="ticket-cuerpo">
-     <h3 id="titulo-ticket">{CASO_TITULO_HTML}</h3>
-     <p class="que">Explicar cómo avanza una petición de cambio en el entorno propio de cada cliente.</p>
-     <ol class="estados">{estados}</ol>
-    </div>
-    <div class="ticket-pie"><span>Estado: <b>{ESTADO_ACTUAL}</b></span><span>Probado antes de publicar</span></div>
-   </article>
+   <div class="caso-izq">
+    <div class="titular"><span class="sobre">Caso de éxito</span><h2 id="titulo-caso">{CASO["titulo"]}</h2>
+     <p>{CASO["entrada"]}</p></div>
+    <p class="caso-cliente">{CASO["cliente"]}</p>
+    <ol class="caso-flujo">{caso_flujo}</ol>
+    <p class="caso-nota">{icono("persona")}<span>{CASO_NOTA}</span></p>
+   </div>
+   <div class="caso-lado">
+    <article class="ticket revela" aria-labelledby="titulo-ticket">
+     <div class="ticket-cab"><span>{CASO["ticket_cab"]}</span><span class="etiqueta">Caso real</span></div>
+     <div class="ticket-cuerpo">
+      <h3 id="titulo-ticket">{CASO_TICKET_TITULO_HTML}</h3>
+      <p class="que">{CASO_TICKET_QUE}</p>
+      <ol class="estados">{estados}</ol>
+     </div>
+     <div class="ticket-pie"><span>Estado: <b>Validado</b></span><span class="mono">deploy ✓ · backup ✓</span></div>
+    </article>
+    <div class="entregado revela"><span class="sobre">Otras mejoras entregadas</span><ul class="vinetas">{entregado}</ul></div>
+   </div>
   </div>
-  <div class="cierre revela"><p>Aplicamos este mismo método a cada proyecto.</p>
+  <div class="cierre revela"><p>{CASO["cierre"]}</p>
    <a class="btn" href="#contacto">Cuéntanos tu proyecto <span aria-hidden="true">→</span></a></div>
  </div>
 </section>
@@ -875,7 +1005,7 @@ INDEX = f"""<section class="hero oscuro" aria-labelledby="titulo-hero">
 <section class="bloque alterno" id="equipo" aria-labelledby="titulo-equipo">
  <div class="contenedor">
   <div class="titular"><span class="sobre">Equipo</span><h2 id="titulo-equipo">Un responsable humano, apoyado por agentes de IA.</h2>
-   <p>Jordi dirige cada proyecto y toma las decisiones. Los agentes de IA se encargan de la coordinación, el desarrollo y la operación, y se identifican siempre como tales.</p></div>
+   <p>Jordi dirige cada proyecto y toma las decisiones. Los agentes de IA se encargan de la coordinación, el desarrollo, la operación, la gestión y el cumplimiento, y el diseño, y se identifican siempre como tales.</p></div>
   <ul class="equipo">{equipo}</ul>
  </div>
 </section>
@@ -1160,19 +1290,22 @@ def imagenes():
     caras = (f'@font-face{{font-family:S;src:url({fuente})}}@font-face{{font-family:S;font-style:italic;src:url({cursiva})}}'
              'html,body{margin:0}')
     og = f"""<!doctype html><meta charset="utf-8"><style>{caras}
-body{{width:1200px;height:630px;background:#111;color:#fdf6ec;font-family:S,serif;box-sizing:border-box;padding:88px 96px;overflow:hidden;position:relative}}
-.logotipo{{height:46px;width:auto;color:#fdf6ec;display:block}}.logo-it{{fill:#f59e0b}}
-.raya{{width:120px;height:4px;background:#d97706;margin:44px 0 36px}}
-h1{{font-weight:400;font-size:84px;line-height:1.02;margin:0 0 28px;letter-spacing:-.02em}}h1 em{{color:#f59e0b}}
-p{{font:600 28px system-ui,sans-serif;color:#d6d3d1;margin:0}}
-.pasos{{position:absolute;right:96px;bottom:88px;display:flex;align-items:center}}
+body{{width:1200px;height:630px;background:radial-gradient(circle,rgba(253,246,236,.10) 1.4px,transparent 1.8px) 0 0/28px 28px,#111;color:#fdf6ec;font-family:S,serif;box-sizing:border-box;padding:88px 96px;overflow:hidden;position:relative}}
+body::before{{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#111 0,#111 45%,rgba(17,17,17,0) 85%)}}
+.logotipo{{height:46px;width:auto;color:#fdf6ec;display:block;position:relative;z-index:1}}.logo-it{{fill:#f59e0b}}
+.raya{{width:120px;height:4px;background:#d97706;margin:44px 0 36px;position:relative;z-index:1}}
+h1{{font-weight:400;font-size:80px;line-height:1.04;margin:0 0 28px;letter-spacing:-.02em;max-width:880px;text-wrap:balance;color:#fdf6ec;position:relative;z-index:1}}
+p{{font:600 28px system-ui,sans-serif;color:#d6d3d1;margin:0;position:relative;z-index:1}}
+.mono{{position:absolute;right:96px;bottom:52px;font:500 20px ui-monospace,"DejaVu Sans Mono",monospace;color:#a8a29e}}
+.pasos{{position:absolute;z-index:1;right:96px;bottom:96px;display:flex;align-items:center}}
 .pasos i{{width:22px;height:22px;border-radius:50%;border:3px solid #d97706;box-sizing:border-box}}
 .pasos i.ok{{background:#f59e0b;border-color:#f59e0b}}
 .pasos b{{width:56px;border-top:3px dashed #d97706}}
 </style>
-<body>{LOGOTIPO}<div class="raya"></div><h1>Software a la medida<br><em>de tu negocio.</em></h1>
+<body>{LOGOTIPO}<div class="raya"></div><h1>Software a la medida de tu&nbsp;negocio.</h1>
 <p>Desarrollo y mantenimiento para pequeñas empresas</p>
-<div class="pasos"><i class="ok"></i><b></b><i class="ok"></i><b></b><i class="ok"></i><b></b><i class="ok"></i><b></b><i></i></div></body>"""
+<div class="pasos"><i class="ok"></i><b></b><i class="ok"></i><b></b><i class="ok"></i><b></b><i class="ok"></i><b></b><i></i></div>
+<p class="mono">petición → pruebas ✓ → copia ✓ → despliegue ✓ → validado</p></body>"""
     cuadrado = MONOGRAMA.replace('rx="24"', 'rx="0"')  # iOS ya redondea las esquinas
     icono_html = (f'<!doctype html><meta charset="utf-8"><style>{caras}body{{width:720px;height:720px;background:#111;display:grid;place-items:center;overflow:hidden}}'
                   f'svg{{width:720px;height:720px}}</style><body>{cuadrado}</body>')

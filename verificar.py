@@ -2,7 +2,7 @@
 """Verifica el sitio generado en sitio/ antes de publicarlo (lo ejecuta el pipeline tras construir).
 
 Comprueba: ficheros esperados, cabecera de cada página (lang, title, description, un solo h1), que no hay
-recursos externos (salvo el propio dominio en canonical/og), que los enlaces internos (#id, x.html, x.html#id y
+recursos externos (salvo el propio dominio en canonical/og y los enlaces de ENLACES_PERMITIDOS), que los enlaces internos (#id, x.html, x.html#id y
 rutas desde la raíz /x) y los recursos locales (fuentes, iconos) existen, los presupuestos de peso y que no sale
 contenido interno. Avisa (sin fallar) de los marcadores [PENDIENTE: …] que queden en las páginas.
 Solo biblioteca estándar. Uso: python3 verificar.py [carpeta]   (por defecto sitio/)
@@ -47,8 +47,13 @@ PROHIBIDO = {
     # como «gato-404» o «hero-gatos». Palabra completa para no saltar con «navigator» del JS.
     "gato": re.compile(r"\bgat(?:[oa]s?|it[oa]s?)\b", re.I),
 }
-# Excepciones por página: el aviso legal cita la licencia libre de la tipografía (texto de cto, 2026-11-08).
-PERMITIDO_EN = {"aviso-legal.html": {"licencia"}}
+# Excepciones por página: el aviso legal cita la licencia libre de la tipografía (texto de cto, 2026-11-08) y la
+# portada nombra a DBM Real Invest como caso de éxito, con permiso de JuanJo (Jordi, 2026-11-08, WEB-012).
+# Ningún otro fichero (404, legales) puede nombrar a DBM.
+PERMITIDO_EN = {"aviso-legal.html": {"licencia"}, "index.html": {"DBM", "dbmrealinvest"}}
+# Lista blanca de enlaces de navegación externos (solo <a href> exacto y con rel="noopener noreferrer", sin Referer).
+# src, url( e @import externos siguen prohibidos sin excepción.
+ENLACES_PERMITIDOS = {"https://dbmrealinvest.com/"}
 CORREO = re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}")
 
 # Recursos externos: src=, href=, srcset=, action=, url( y @import hacia http(s):// o //.
@@ -153,6 +158,16 @@ def verificar(sitio: Path) -> list:
             continue  # binario (imágenes): sin texto que revisar
         for m in EXTERNO.finditer(crudo):
             linea = crudo.count("\n", 0, m.start()) + 1
+            etiqueta_ini = crudo.rfind("<", 0, m.start())
+            etiqueta = crudo[etiqueta_ini:crudo.find(">", m.end())] if etiqueta_ini >= 0 else ""
+            if re.match(r"href\b", m.group(0), re.I) and re.match(r"<a\b", etiqueta, re.I):
+                destino = re.search(r"""\bhref\s*=\s*["']([^"']*)["']""", etiqueta, re.I)
+                if destino and destino.group(1) in ENLACES_PERMITIDOS:
+                    rel_attr = re.search(r"""\brel\s*=\s*["']([^"']*)["']""", etiqueta, re.I)
+                    palabras = set((rel_attr.group(1) if rel_attr else "").lower().split())
+                    if not {"noopener", "noreferrer"} <= palabras:
+                        errores.append(f"{rel}:{linea}: el enlace permitido {destino.group(1)} necesita rel=\"noopener noreferrer\"")
+                    continue
             errores.append(f"{rel}:{linea}: recurso externo: {crudo[m.start():m.end() + 40].splitlines()[0]}")
 
         if p.suffix in (".html", ".svg"):
