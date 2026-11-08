@@ -46,7 +46,7 @@ FUENTE_CURSIVA = "source-serif-4-latin-400-italic.woff2"
 # ── El equipo: Jordi y los agentes (iconos lineales) ─────────────────────────
 EQUIPO = [
     dict(nombre="Jordi", corto="Jordi", rol="Fundador y CTO", icono="persona",
-         frase="Analiza las necesidades de tu empresa, toma las decisiones y responde de cada entrega."),
+         frase="Escucha tu negocio, decide y responde de cada entrega."),
     dict(nombre="Coordinación", corto="Coordinación", rol="agente de IA", icono="lista",
          frase="Gestiona las prioridades y te informa de cada avance con claridad."),
     dict(nombre="Desarrollo", corto="Desarrollo", rol="agente de IA", icono="codigo",
@@ -169,51 +169,51 @@ ILUS = {
 # ── Contenido ────────────────────────────────────────────────────────────────
 # Cada línea de servicio con sus tres viñetas dentro de la tarjeta (la antigua sección «En detalle» ya no existe).
 SERVICIOS = [
-    ("inmobiliarias", "Plataforma para inmobiliarias", "Web con buscador y CRM para gestionar clientes, inmuebles y visitas, listos para empezar y adaptados a tu forma de trabajar. Es la base que ya funciona en DBM Real Invest.",
+    ("inmobiliarias", "Plataforma para inmobiliarias", "Web con buscador y CRM de clientes, inmuebles y visitas. Lista para empezar y adaptada a tu forma de trabajar. Ya funciona en DBM Real Invest.",
      ["Buscador en lenguaje natural, en varios idiomas", "Fichas, visitas y permisos por perfil", "Páginas por ciudad e inmueble para aparecer en Google"]),
-    ("webs", "Webs", "Webs rápidas, accesibles y en varios idiomas, orientadas a convertir visitas en contactos y reservas.",
-     ["Diseño a la medida de tu marca", "Versiones en varios idiomas", "Contenido fácil de actualizar"]),
+    ("webs", "Webs", "Webs rápidas y accesibles que convierten visitas en contactos.",
+     ["Diseño a la medida de tu marca", "En varios idiomas", "Fácil de actualizar"]),
     ("gestion", "Herramientas de gestión", "Clientes, pedidos, visitas o expedientes en una aplicación hecha a tu medida, con acceso según el perfil de cada usuario.",
      ["Diseñada sobre tus procesos reales", "Permisos por persona y por equipo", "Los datos son siempre de tu empresa"]),
-    ("reservas", "Reservas y citas", "Reserva en línea para tus clientes y una agenda centralizada, accesible desde cualquier dispositivo.",
-     ["Reservas en línea para tus clientes", "Recordatorios automáticos", "Agenda compartida para todo el equipo"]),
-    ("automatizacion", "Automatización con agentes de IA", "Agentes de IA que hacen el trabajo repetitivo (avisos, correos, informes, seguimiento) bajo la supervisión de una persona, para que tu equipo se dedique a lo que aporta valor.",
-     ["Correos y avisos automáticos", "Informes periódicos automáticos", "Integración con las herramientas que ya utilizas"]),
-    ("cuidado", "Mantenimiento y soporte", "Copias de seguridad, actualizaciones y supervisión continua para que tus sistemas sigan funcionando con seguridad.",
-     ["Copia de seguridad antes de cada cambio", "Actualizaciones y supervisión continua", "Informe de cada cambio realizado"]),
+    ("reservas", "Reservas y citas", "Tus clientes reservan en línea. Tu equipo ve la agenda desde cualquier dispositivo.",
+     ["Recordatorios automáticos", "Agenda compartida", "Desde el móvil"]),
+    ("automatizacion", "Automatización con agentes de IA", "Agentes de IA hacen el trabajo repetitivo, siempre con una persona al mando. Tu equipo gana tiempo para lo importante.",
+     ["Avisos y correos automáticos", "Informes periódicos", "Se conecta con lo que ya usas"]),
+    ("cuidado", "Mantenimiento y soporte", "Tus sistemas, al día y vigilados. Sin que tengas que pensar en ello.",
+     ["Copia de seguridad antes de cada cambio", "Actualizaciones al día", "Informe de cada cambio"]),
 ]
 
 COMPROMISOS = [
     ("persona", "Interlocutor único", "Un responsable identificado para tu proyecto, de principio a fin."),
-    ("candado", "Tus datos, bajo tu control", "Solo los utilizamos para prestarte el servicio y nunca se mezclan con los de otros clientes."),
+    ("candado", "Tus datos, bajo tu control", "Solo los usamos para darte el servicio. Nunca se mezclan con los de otros clientes."),
     ("copia", "Copia de seguridad previa", "Antes de cada cambio hacemos una copia completa, de modo que siempre es posible volver al estado anterior."),
-    ("charla", "Transparencia", "Te informamos de lo realizado, de cómo comprobarlo y de lo pendiente, también cuando surge un problema."),
+    ("charla", "Transparencia", "Qué hemos hecho, cómo comprobarlo y qué falta. También cuando algo sale mal."),
 ]
 
 FAQ = [
     ("¿Necesito conocimientos técnicos?",
-     "No. Tú conoces tu negocio y nosotros nos encargamos de la parte técnica. Te lo explicamos todo sin tecnicismos y te formamos en el uso de cada herramienta."),
+     "No. Tú conoces tu negocio; nosotros, la tecnología. Te lo explicamos sin tecnicismos y te enseñamos a usar cada herramienta."),
     ("¿Trabajáis con empresas pequeñas?",
      "Sí, es nuestro foco. Empezamos por lo más prioritario y ampliamos la solución a medida que crece tu empresa."),
     ("Ya tengo una web o un programa. ¿Hay que sustituirlo?",
      "No necesariamente. Primero analizamos lo que tienes; si es aprovechable, lo mejoramos. Solo proponemos empezar de cero cuando está justificado."),
     ("¿Quién hace el trabajo: personas o inteligencia artificial?",
-     "Ambos. Los agentes de IA coordinan, desarrollan, prueban, publican y supervisan, y cuidan también el cumplimiento y el diseño; Jordi revisa, decide y es tu interlocutor."),
+     "Las dos. Los agentes de IA desarrollan, prueban y publican. Jordi revisa, decide y habla contigo."),
     ("¿Cuál es el coste?",
-     "Depende del alcance. Tras una primera conversación, sin compromiso, te enviamos una propuesta detallada antes de empezar nada."),
+     "Depende de lo que necesites. Después de hablar, te enviamos una propuesta detallada antes de empezar."),
     ("¿Y si algo falla después de un cambio?",
-     "Antes de cada cambio hacemos una copia completa y, si algo no responde como esperas, volvemos al estado anterior. Después te enviamos un correo con lo que ha cambiado y cómo comprobarlo."),
+     "Volvemos atrás. Antes de cada cambio hacemos una copia completa, así que siempre hay un punto seguro al que volver."),
     # WEB-018: solo se promete la entrega de los datos y la documentación, no la del código (decisión del pmo, 2026-11-08).
     ("¿Me quedo atado a vosotros?",
-     "No. Tu proyecto vive en su propio repositorio y con su propia copia de seguridad, y los datos son siempre de tu empresa. Si decides cambiar de proveedor, te entregamos tus datos y la documentación en un formato estándar."),
+     "No. Tus datos son siempre tuyos. Si cambias de proveedor, te entregamos los datos y la documentación en un formato estándar."),
     ("¿Cuánto se tarda en ver algo?",
-     "Empezamos por un primer entregable pequeño y acotado, para que veas resultados pronto. El plazo concreto lo fijamos en la propuesta, según el alcance."),
+     "Empezamos por lo más importante, en una entrega pequeña, para que veas resultados pronto. El plazo exacto va en la propuesta."),
 ]
 # WEB-018: «Cómo empezar», tres pasos antes del contacto (icono, título, texto).
 EMPEZAR = [
-    ("correo", "Nos escribes", "Cuéntanos en pocas líneas qué necesitas o qué te hace perder tiempo."),
-    ("charla", "Hablamos", "Una primera conversación, sin compromiso, para entender tu negocio."),
-    ("hoja", "Recibes una propuesta", "Con el alcance, el primer entregable y cómo lo comprobarás."),
+    ("correo", "Nos escribes", "Cuéntanos qué te hace perder tiempo."),
+    ("charla", "Hablamos", "Una conversación para entender tu negocio."),
+    ("hoja", "Recibes una propuesta", "Qué haremos, qué verás primero y cómo comprobarlo."),
 ]
 
 # WEB-012: caso de éxito real. CASO_CON_NOMBRE=True (variante A) nombra a DBM Real Invest, con permiso del cliente
@@ -475,7 +475,7 @@ JSON_LD = json.dumps({"@context": "https://schema.org", "@graph": [
      "contactPoint": {"@type": "ContactPoint", "contactType": "ventas", "email": MAIL, "availableLanguage": "es"}},
     {"@type": "ProfessionalService", "@id": URL_BASE + "#servicio", "name": "th3b1gbr0th3r IT", "url": URL_BASE,
      "image": URL_BASE + "og.png", "logo": URL_BASE + "apple-touch-icon.png", "parentOrganization": {"@id": URL_BASE + "#empresa"},
-     "description": "Automatización y software a medida para pequeñas empresas: herramientas de gestión, reservas y citas, webs, mantenimiento y soporte.",
+     "description": "Software a medida y automatización para pequeñas empresas.",
      "areaServed": {"@type": "Country", "name": "España"}, "knowsLanguage": "es"},
 ]}, ensure_ascii=False)
 
@@ -554,9 +554,9 @@ tarjetas = "".join(
     f'<article class="tarjeta revela"><div class="imagen">{ILUS[i]}</div><div class="cuerpo"><p class="etq">{icono(ETIQUETAS_SERVICIO[i][0])}<span class="mono">{ETIQUETAS_SERVICIO[i][1]}</span></p><h3>{t}</h3><p>{d}</p>'
     f'<ul class="vinetas">{"".join(f"<li>{x}</li>" for x in v)}</ul></div></article>'
     for i, t, d, v in SERVICIOS) + (
-    '<article class="tarjeta cta oscuro revela"><div class="cuerpo"><h3>¿Necesitas otra solución?</h3>'
-    '<p>Analizamos tu caso y te proponemos la solución más adecuada.</p>'
-    '<a class="mas" href="#contacto">Consúltanos <span aria-hidden="true">→</span></a></div></article>')
+    '<article class="tarjeta cta oscuro revela"><div class="cuerpo"><h3>¿Buscas otra cosa?</h3>'
+    '<p>Cuéntanosla y te diremos cómo resolverla.</p>'
+    '<a class="mas" href="#contacto">Escríbenos <span aria-hidden="true">→</span></a></div></article>')
 
 
 def _nodo(x):
@@ -568,7 +568,7 @@ carril = "".join(f'<li><span class="chip">{icono(i)}<span>{t}</span></span></li>
 FLUJO = f"""<figure class="flujo revela" aria-labelledby="titulo-dentro">
    <div class="flujo-fila"><p class="flujo-aprueba">{icono("persona")}<span>Jordi revisa y aprueba las decisiones importantes</span></p></div>
    <ol class="pasos">{pasos}</ol>
-   <div class="flujo-fila"><p class="flujo-apoyo">{icono("balanza")}{icono("paleta")}<span>Según el cambio intervienen también Gestión y cumplimiento (datos y aspectos legales) y Marketing y diseño (imagen y textos).</span></p></div>
+   <div class="flujo-fila"><p class="flujo-apoyo">{icono("balanza")}{icono("paleta")}<span>Si hace falta, intervienen también Cumplimiento y Diseño.</span></p></div>
    <div class="flujo-fila"><p class="conector">Sobre la infraestructura de cada cliente</p></div>
    <div class="carriles">
     <div class="carril"><p class="carril-cab"><b>Tu empresa</b><span class="mono">entorno propio · aislado</span></p><ol class="carril-pasos">{carril}</ol></div>
@@ -596,20 +596,20 @@ INDEX = f"""<section class="hero oscuro" aria-labelledby="titulo-hero">
   <div class="hero-texto">
    <span class="sobre">Automatización para la pequeña&nbsp;empresa</span>
    <h1 id="titulo-hero">Software a la medida de tu&nbsp;negocio.</h1>
-   <p class="apoyo">Desarrollamos y mantenemos webs y herramientas de gestión a medida, con un responsable único y un proceso trazable.</p>
+   <p class="apoyo">Webs y herramientas de gestión hechas para tu empresa. Una persona responde de cada cambio.</p>
    <div class="acciones"><a class="btn claro" href="#contacto">Cuéntanos tu proyecto <span aria-hidden="true">→</span></a>
-    <a class="enlace-sec" href="#caso">Ver un caso real</a>
+    <a class="enlace-sec" href="#caso">Ver el caso</a>
     <p class="pipeline"><span class="led" aria-hidden="true"></span><span class="mono">pruebas ✓ · copia ✓ · despliegue ✓<span class="largo"> · validación ✓</span></span><span class="sr">: así termina cada cambio</span></p></div>
   </div>
   <div class="hero-visual">
    <div class="escena">
     <ul class="hero-equipo" aria-label="El equipo: Jordi, responsable, y los agentes de IA de Coordinación, Desarrollo, Operación, Gestión y cumplimiento, y Marketing y diseño">{hero_equipo}</ul>
-    <p class="hero-equipo-pie" aria-hidden="true">Jordi y los agentes de Coordinación, Desarrollo, Operación, Gestión y Diseño</p>
+    <p class="hero-equipo-pie" aria-hidden="true">Jordi y cinco agentes de IA</p>
     <figure class="mini" aria-label="Ejemplo de un cambio en nuestra hoja de cambios">
      <div class="mini-cab"><span>Hoja de cambios</span><span class="etiqueta">Ejemplo</span></div>
      <p class="mini-titulo">{MINI_TITULO_HTML}</p>
      <ol class="mini-pasos">{mini_pasos}</ol>
-     <p class="mini-pie">Estado: <b>{ESTADO_ACTUAL}</b> · <a href="#caso">Ver caso de éxito</a></p>
+     <p class="mini-pie">Estado: <b>{ESTADO_ACTUAL}</b> · <a href="#caso">Ver el caso</a></p>
     </figure>
    </div>
   </div>
@@ -618,8 +618,8 @@ INDEX = f"""<section class="hero oscuro" aria-labelledby="titulo-hero">
 
 <section class="bloque" id="servicios" aria-labelledby="titulo-servicios">
  <div class="contenedor">
-  <div class="titular"><span class="sobre">Servicios</span><h2 id="titulo-servicios">Tecnología adaptada a tu forma de trabajar.</h2>
-   <p>Desde la web hasta las herramientas internas de gestión: soluciones diseñadas a partir de tus procesos, no de una plantilla.</p></div>
+  <div class="titular"><span class="sobre">Servicios</span><h2 id="titulo-servicios">Hecho a partir de cómo trabajas.</h2>
+   <p>Partimos de tus procesos, no de una plantilla.</p></div>
   <div class="tarjetas">{tarjetas}</div>
  </div>
 </section>
@@ -655,8 +655,8 @@ INDEX = f"""<section class="hero oscuro" aria-labelledby="titulo-hero">
 
 <section class="bloque" id="por-dentro" aria-labelledby="titulo-dentro">
  <div class="contenedor">
-  <div class="titular"><span class="sobre">Método de trabajo</span><h2 id="titulo-dentro">Un proceso trazable y un entorno aislado para cada cliente.</h2>
-   <p>Así avanza cada petición de cambio, desde que la recibimos hasta que está en funcionamiento. Cada cliente dispone de su propio repositorio, pruebas, copias de seguridad y servidor: nada se comparte entre clientes.</p></div>
+  <div class="titular"><span class="sobre">Método de trabajo</span><h2 id="titulo-dentro">Cada cambio, a la vista. Cada cliente, aparte.</h2>
+   <p>Así llega cada petición desde tu correo hasta producción.</p></div>
   {FLUJO}
  </div>
 </section>
@@ -688,7 +688,7 @@ INDEX = f"""<section class="hero oscuro" aria-labelledby="titulo-hero">
 <section class="bloque alterno" id="equipo" aria-labelledby="titulo-equipo">
  <div class="contenedor">
   <div class="titular"><span class="sobre">Equipo</span><h2 id="titulo-equipo">Un responsable humano, apoyado por agentes de IA.</h2>
-   <p>Jordi dirige cada proyecto y toma las decisiones. Los agentes de IA se encargan de la coordinación, el desarrollo, la operación, la gestión y el cumplimiento, y el diseño, y se identifican siempre como tales.</p></div>
+   <p>Jordi dirige cada proyecto y decide. Cinco agentes de IA hacen el trabajo. Siempre se presentan como lo que son.</p></div>
   <ul class="equipo">{equipo}</ul>
  </div>
 </section>
@@ -711,21 +711,21 @@ INDEX = f"""<section class="hero oscuro" aria-labelledby="titulo-hero">
 <section class="bloque contacto oscuro" id="contacto" aria-labelledby="titulo-contacto">
  <div class="contenedor reticula">
   <div class="titular"><span class="sobre">Contacto</span><h2 id="titulo-contacto">Hablemos de tu proyecto.</h2>
-   <p>Cuéntanos qué necesitas y te proponemos la mejor forma de abordarlo. La primera conversación no implica ningún compromiso.</p></div>
+   <p>Cuéntanos cómo funciona tu negocio. Te diremos cómo hacerlo más fácil.</p></div>
   <div class="accion">
    <a class="btn claro" href="{MAILTO}">Escríbenos <span aria-hidden="true">→</span></a>
    <p class="correo-fila"><a class="correo" href="{MAILTO}">{MAIL}</a><button class="copiar" type="button" data-copiar="{MAIL}" hidden>Copiar dirección</button></p>
    <p class="aviso-copia" id="aviso-copia" aria-live="polite"></p>
    <p class="firma">{icono("persona")}<span>Jordi atiende personalmente cada mensaje.</span></p>
-   <p class="privacidad-linea">Esta web no utiliza <a href="cookies.html">cookies ni analítica</a>. Con tus datos aplicamos el mismo criterio.</p>
+   <p class="privacidad-linea">Esta web no usa <a href="cookies.html">cookies ni analítica</a>. Tus datos, igual de protegidos.</p>
   </div>
  </div>
 </section>
 <a class="cta-movil btn claro" href="#contacto" aria-hidden="true" tabindex="-1">Cuéntanos tu proyecto <span aria-hidden="true">→</span></a>"""
 
 TITULO_INDEX = "Automatización y software a medida para pequeñas empresas · th3b1gbr0th3r IT"
-DESC_INDEX = ("La automatización ya ha llegado a la pequeña empresa. Software a medida en España: herramientas de gestión, "
-              "reservas y citas, webs y mantenimiento, con un responsable único, proceso trazable y casos de éxito.")
+DESC_INDEX = ("La automatización ya ha llegado a la pequeña empresa. Webs y herramientas de gestión a medida, "
+              "con una persona responsable de cada cambio.")
 html = pagina(TITULO_INDEX, DESC_INDEX, INDEX, "index.html", base="",
               extra_head=f'<script type="application/ld+json">{JSON_LD}</script>\n')
 
@@ -851,7 +851,7 @@ NO_ENCONTRADA = pagina("Página no encontrada · th3b1gbr0th3r IT", "La página 
   <div class="simbolo-404">{icono("lupa")}</div>
   <span class="sobre">Error 404</span>
   <h1>Página no encontrada</h1>
-  <p class="subtitulo">La dirección que has abierto no existe o ha cambiado. Desde la página de inicio encontrarás nuestros servicios y la forma de contactar con nosotros.</p>
+  <p class="subtitulo">Esta dirección no existe o ha cambiado.</p>
   <a class="btn" href="/">Volver al inicio</a>
  </div>
 </section>""", "404.html", base="/", raiz="/", indexar=False)
