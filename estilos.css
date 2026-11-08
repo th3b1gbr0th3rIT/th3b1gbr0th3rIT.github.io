@@ -211,13 +211,11 @@ border-radius:14px;font:italic 1.05rem/1.3 var(--serif);color:var(--acento-suave
 .carril-cab{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:12px}
 .carril-cab b{font:400 1.3rem/1.2 var(--serif)}
 .carril-cab .mono{font-family:var(--mono);font-size:.85rem;font-weight:400;letter-spacing:0;text-transform:none}
-.carril-cab span,.capa{font:700 .82rem/1.2 var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--acento)}
+.carril-cab span{font:700 .82rem/1.2 var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--acento)}
 .carril-pasos{list-style:none;margin:0;padding:0;display:grid;gap:8px}
 .carril-pasos li{display:flex;align-items:center}
 .chip{display:flex;align-items:center;gap:10px;flex:1;background:var(--superficie-alt);border-radius:99px;padding:8px 14px;font-weight:600;font-size:.95rem}
 .carril-pasos .ico{width:22px;height:22px;padding:0;border:0;background:none;border-radius:0}
-.capa{position:relative;margin:-16px 14px 0;padding:24px 18px 8px;background:var(--superficie);border:2px solid var(--borde-nodo);border-top:0;border-radius:0 0 18px 18px;color:var(--apoyo);z-index:1}
-.capa+.capa{margin:-16px 28px 0;z-index:0;color:var(--apoyo)}
 .flujo-apoyo{display:flex;align-items:center;gap:8px;margin:4px 0 8px;font-size:.92rem;color:var(--apoyo)}
 .flujo-apoyo .ico{flex:none;width:28px;height:28px;padding:5px}
 .flujo-nota{display:flex;align-items:center;gap:10px;margin-top:20px;color:var(--apoyo);font-size:.95rem}
@@ -247,25 +245,9 @@ border-radius:14px;font:italic 1.05rem/1.3 var(--serif);color:var(--acento-suave
 /* Caso de éxito */
 .caso .reticula{row-gap:40px;align-items:start}
 .caso .titular{grid-column:1/span 6;margin-bottom:0}
-.caso-dibujo{margin:0 0 40px}
-.caso-dib{display:block;width:100%;height:auto;font-family:inherit}
-.caso-dib-v{display:none;max-width:340px;margin:0 auto}
-.caso-dib .fondo{fill:var(--superficie-alt)}.caso-dib .t{fill:var(--tinta)}.caso-dib .t2{fill:var(--acento)}.caso-dib .flecha{stroke:var(--acento)}
-@media (max-width:899px){.caso-dib-h{display:none}.caso-dib-v{display:block}.caso-dibujo{margin-bottom:28px}
- /* Móvil: primero antetítulo, titular y entrada; después el dibujo del flujo y el resto del caso */
- .caso .contenedor{display:flex;flex-direction:column}
- .caso .reticula,.caso-izq{display:contents}
- .caso-izq .titular{order:-2}
- .caso-dibujo{order:-1;margin-top:8px}
- .caso-lado{margin-top:40px}}
 .caso-izq{grid-column:1/span 6}
 .caso-izq .titular{margin-bottom:20px}
 .caso-izq .titular p a{color:var(--tinta);text-decoration-color:var(--ambar);text-underline-offset:3px;font-weight:600}
-.caso-cliente{margin:14px 0 32px;font-family:var(--mono);font-size:.85rem;color:var(--acento)}
-.caso-flujo{list-style:none;margin:0;padding:0;counter-reset:p;display:grid;gap:20px}
-.caso-flujo li{display:grid;grid-template-columns:44px minmax(0,1fr);column-gap:16px;position:relative}
-.caso-flujo li:not(:last-child)::after{content:"";position:absolute;left:21px;top:48px;bottom:-16px;border-left:2px dashed var(--ambar)}
-.caso-flujo li p{color:var(--apoyo)}
 .caso-nota{display:flex;align-items:center;gap:12px;margin-top:28px;font-size:.95rem;color:var(--apoyo)}
 .caso-nota .ico{width:32px;height:32px;padding:6px}
 .caso-lado{grid-column:8/span 5}
@@ -273,17 +255,15 @@ border-radius:14px;font:italic 1.05rem/1.3 var(--serif);color:var(--acento-suave
 .puntos li{display:flex;gap:18px}
 .ico{flex:none;width:44px;height:44px;padding:10px;border-radius:50%;background:var(--superficie);border:1px solid var(--borde-calido);
 fill:none;stroke:var(--acento);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-.caso-flujo h3,.compromisos h3{font-size:1.15rem;margin-bottom:6px}
-.compromisos p{color:var(--apoyo)}
 .ticket{background:var(--superficie);border:1px solid var(--linea);border-radius:12px;overflow:hidden;box-shadow:0 0 0 4px rgb(217 119 6 / .06),0 30px 60px -44px rgb(var(--sombra) / .5)}
-.entregado{margin-top:24px;padding:20px 24px;background:var(--superficie);border:1px solid var(--linea);border-radius:12px}
-.entregado .sobre{margin-bottom:12px}
-.entregado .vinetas{margin:0;padding:0;border-top:0}
 .ticket-cab{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 24px;border-bottom:1px solid var(--linea);
 font:700 .78rem/1.3 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--apoyo)}
 .ticket-cuerpo{padding:22px 24px 6px}
 .ticket h3{font-size:1.45rem;margin-bottom:8px}
-.ticket .que{color:var(--apoyo);font-size:.98rem}
+.ticket-datos{margin:0}
+.ticket-datos dt{margin-top:14px;font:700 .78rem/1.3 var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--apoyo)}
+.ticket-datos dt:first-child{margin-top:0}
+.ticket-datos dd{margin:4px 0 0;font-size:.98rem}
 .estados{list-style:none;margin:22px 0 0;padding:0}
 .estados li{position:relative;padding:0 0 20px 40px}
 .estados li::before{content:"";position:absolute;left:9px;top:22px;bottom:0;width:2px;background:var(--linea)}
@@ -298,7 +278,6 @@ font:700 .78rem/1.3 var(--sans);letter-spacing:.14em;text-transform:uppercase;co
 .ticket-cab .etiqueta{white-space:nowrap}
 .ticket-pie{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px 12px;padding:14px 24px;border-top:1px solid var(--linea);background:var(--fondo-pie);font-size:.9rem;color:var(--apoyo)}
 .ticket-pie b{color:var(--tinta)}
-.ticket-pie .mono{color:var(--apoyo)}
 .cierre{margin-top:calc(var(--ritmo)*8);padding-top:calc(var(--ritmo)*5);border-top:1px solid var(--borde-calido);display:flex;flex-wrap:wrap;
 justify-content:space-between;align-items:center;gap:24px}
 .cierre p{font:400 clamp(1.5rem,2.8vw,2.1rem)/1.2 var(--serif);max-width:24em}
@@ -457,7 +436,6 @@ details p{padding:0 0 22px;color:var(--apoyo);max-width:42em}
  .compromisos li{grid-template-columns:44px minmax(0,1fr);column-gap:14px;padding-top:18px}
  .compromisos .ico{grid-row:1/span 2;margin:0}
  .compromisos h3{align-self:center;margin:0 0 4px}
- .caso-flujo{gap:18px}
  .estados li{padding-bottom:14px}
  .tarjeta.cta .cuerpo{padding:28px 20px}
  .flujo{padding:20px 14px 18px;margin:0 calc(var(--gutter)*-1);border-left:0;border-right:0;border-radius:0}
@@ -509,7 +487,7 @@ details p{padding:0 0 22px;color:var(--apoyo);max-width:42em}
  .hero h1,.hero .apoyo,.hero .sobre,.enlace-sec,.contacto .sobre,.contacto .titular p,.tarjeta.cta p,.tarjeta.cta .mas,.correo-fila,.correo-fila .correo,.firma,.privacidad-linea,.privacidad-linea a,.pipeline{color:#000!important}
  .escena,.ticket,.tarjeta:hover{box-shadow:none!important}
  .bloque{padding:24pt 0}
- .tarjeta,.ticket,.entregado,.escena,.pasos li,.carriles,.compromisos li,.equipo li,details,.legal dl,.legal .tabla,figure{break-inside:avoid}
+ .tarjeta,.ticket,.escena,.pasos li,.carriles,.compromisos li,.equipo li,details,.legal dl,.legal .tabla,figure{break-inside:avoid}
  h1,h2,h3,.sobre{break-after:avoid}
  .titular,.cierre{break-inside:avoid}
  .alterno,.pie,.ticket-pie,.escena{background:#fff!important}

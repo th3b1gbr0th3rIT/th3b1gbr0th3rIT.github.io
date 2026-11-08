@@ -193,8 +193,6 @@ COMPROMISOS = [
 FAQ = [
     ("¿Necesito conocimientos técnicos?",
      "No. Tú conoces tu negocio; nosotros, la tecnología. Te lo explicamos sin tecnicismos y te enseñamos a usar cada herramienta."),
-    ("¿Trabajáis con empresas pequeñas?",
-     "Sí, es nuestro foco. Empezamos por lo más prioritario y ampliamos la solución a medida que crece tu empresa."),
     ("Ya tengo una web o un programa. ¿Hay que sustituirlo?",
      "No necesariamente. Primero analizamos lo que tienes; si es aprovechable, lo mejoramos. Solo proponemos empezar de cero cuando está justificado."),
     ("¿Quién hace el trabajo: personas o inteligencia artificial?",
@@ -221,102 +219,36 @@ EMPEZAR = [
 CASO_CON_NOMBRE = True
 CASO_TEXTOS = {
     "A": dict(
-        titulo="DBM Real Invest pide sus cambios por correo y los ve en&nbsp;producción.",
-        entrada=('Desarrollamos y mantenemos la web pública y el CRM de <a href="https://dbmrealinvest.com/" rel="noopener noreferrer">DBM Real Invest</a>, '
-                 'una inmobiliaria. Su CTO no abre tickets ni aprende herramientas nuevas: escribe un correo y eso pone en marcha '
-                 'todo el proceso, hasta que el cambio está publicado y comprobado.'),
-        cliente="DBM Real Invest · inmobiliaria · web pública + CRM · en producción",
+        titulo="Un pedido. Un cambio en&nbsp;producción.",
+        entrada=('<a href="https://dbmrealinvest.com/" rel="noopener noreferrer">DBM Real Invest</a> es una inmobiliaria. '
+                 'Creamos y mantenemos su web y su CRM. Cuando su CTO necesita algo, nos lo pide. Nosotros nos ocupamos del resto.'),
+        informa="Informamos al CTO de DBM Real Invest.",
         ticket_cab="Hoja de cambios · DBM Real Invest",
-        cierre="Aplicamos este mismo método a cada proyecto, también a esta web, que gestionamos como un cliente más."),
+        cierre="El mismo método para cada cliente. También para esta web."),
     "B": dict(
-        titulo="Una inmobiliaria que pide cambios por correo y los ve en&nbsp;producción.",
-        entrada=('Desarrollamos y mantenemos la web pública y el CRM de una inmobiliaria. Su responsable técnico no abre tickets ni aprende '
-                 'herramientas nuevas: escribe un correo y eso pone en marcha todo el proceso, hasta que el cambio está publicado y comprobado.'),
-        cliente="inmobiliaria · web pública + CRM · en producción",
+        titulo="Un pedido. Un cambio en&nbsp;producción.",
+        entrada=('Una inmobiliaria. Creamos y mantenemos su web y su CRM. Cuando su responsable técnico necesita algo, nos lo pide. '
+                 'Nosotros nos ocupamos del resto.'),
+        informa="Informamos al cliente.",
         ticket_cab="Hoja de cambios · Inmobiliaria",
-        cierre="Aplicamos este mismo método a cada proyecto, también a esta web, que gestionamos como un cliente más."),
+        cierre="El mismo método para cada cliente. También para esta web."),
 }
 CASO = CASO_TEXTOS["A" if CASO_CON_NOMBRE else "B"]
-# (icono, título, texto variante B, texto variante A o None si es el mismo)
-CASO_FLUJO = [
-    ("correo", "Pide el cambio por correo", "El cliente escribe a su buzón dedicado, con sus palabras. Sin formularios ni tickets.",
-     "El CTO de DBM escribe a su buzón dedicado, con sus palabras. Sin formularios ni tickets."),
-    ("hoja", "Queda registrado", "Coordinación lo anota en la hoja de cambios, lo prioriza y confirma la recepción.", None),
-    ("codigo", "Se desarrolla y se prueba", "Desarrollo lo implementa en un entorno aislado y pasa las pruebas automáticas.", None),
-    ("copia", "Copia de seguridad", "Antes de tocar nada en producción se hace una copia completa, con vuelta atrás preparada.", None),
-    ("pipeline", "Despliegue automatizado", "Operación lo publica con el flujo de integración y despliegue propio del cliente, y comprueba que todo responde.", None),
-    ("charla-ok", "Informe al cliente", "Un correo explica qué ha cambiado y cómo comprobarlo.",
-     "El CTO de DBM recibe un correo con lo entregado y cómo comprobarlo."),
+CASO_NOTA = "Si vemos un riesgo antes de publicar, paramos y lo consultamos con el cliente."
+CASO_TICKET_TITULO_HTML = "Buscar una calle se escriba como se&nbsp;escriba"
+# Calles públicas de ejemplo (DW-020-J2): sin datos de clientes ni de propietarios.
+CASO_TICKET_DATOS = [
+    ("Lo que pidió", "Que el CRM encuentre una calle se escriba como se escriba."),
+    ("Lo que hicimos", "«C/», «Calle» y «Carrer» dan el mismo resultado, igual que «Avda.» y «Avinguda». "
+                       "Da igual si hay acentos o mayúsculas. Cada comercial sigue viendo solo lo suyo."),
+    ("Cómo lo comprobamos", "En producción, «Carrer de Sepúlveda», «C/ Sepúlveda» y «calle sepulveda» devuelven los mismos resultados."),
 ]
-
-# WEB-013: dibujo del flujo del caso DBM (SVG en línea, sin recursos externos, sin animación).
-CASO_DIBUJO_PASOS = [
-    ("correo", "Correo del CTO", "de DBM Real Invest"),
-    ("hoja", "Hoja de", "cambios"),
-    ("codigo", "Desarrollo", "y pruebas"),
-    ("copia", "Copia de", "seguridad"),
-    ("pipeline", "Despliegue", ""),
-    ("charla-ok", "Validación", "e informe"),
-]
-
-
-def _trazos(nombre):
-    return re.search(r'focusable="false">(.*)</svg>$', icono(nombre)).group(1)
-
-
-def dibujo_caso():
-    n = len(CASO_DIBUJO_PASOS)
-    nodo = lambda x, y, i, ic: (
-        f'<circle cx="{x}" cy="{y}" r="34" fill="#111" stroke="#f59e0b" stroke-width="2"/>'
-        f'<g transform="translate({x-19} {y-19}) scale(1.58)" fill="none" stroke="#f59e0b" stroke-width="1.6" '
-        f'stroke-linecap="round" stroke-linejoin="round">{_trazos(ic)}</g>'
-        f'<circle cx="{x+27}" cy="{y-27}" r="11" fill="#f59e0b"/>'
-        f'<text x="{x+27}" y="{y-22.5}" text-anchor="middle" font-size="13" font-weight="700" fill="#111">{i+1}</text>')
-    h = ['<svg class="caso-dib caso-dib-h" viewBox="0 0 1080 190" role="img" aria-label="Flujo de trabajo del caso DBM Real Invest en seis pasos: '
-         'correo del CTO de DBM, hoja de cambios, desarrollo y pruebas, copia de seguridad, despliegue, validación e informe.">',
-         '<rect class="fondo" width="1080" height="190" rx="14" fill="#fdf6ec"/>']
-    for i, (ic, a, b) in enumerate(CASO_DIBUJO_PASOS):
-        x = 90 + 180 * i
-        if i < n - 1:
-            h.append(f'<path class="flecha" d="M{x+40} 78H{x+140}" stroke="#b45309" stroke-width="2.5" stroke-dasharray="6 5" fill="none"/>'
-                     f'<path class="flecha" d="M{x+134} 71l9 7-9 7" stroke="#b45309" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>')
-        h.append(nodo(x, 78, i, ic))
-        h.append(f'<text class="t" x="{x}" y="145" text-anchor="middle" font-size="16" font-weight="600" fill="#111">{a}</text>'
-                 + (f'<text class="t2" x="{x}" y="165" text-anchor="middle" font-size="15" fill="#b45309">{b}</text>' if b else ''))
-    h.append('</svg>')
-    v = ['<svg class="caso-dib caso-dib-v" viewBox="0 0 320 612" role="img" aria-label="Flujo de trabajo del caso DBM Real Invest en seis pasos, de arriba abajo: '
-         'correo del CTO de DBM, hoja de cambios, desarrollo y pruebas, copia de seguridad, despliegue, validación e informe.">',
-         '<rect class="fondo" width="320" height="612" rx="14" fill="#fdf6ec"/>']
-    for i, (ic, a, b) in enumerate(CASO_DIBUJO_PASOS):
-        y = 50 + 102 * i
-        if i < n - 1:
-            v.append(f'<path class="flecha" d="M52 {y+39}V{y+63}" stroke="#b45309" stroke-width="2.5" stroke-dasharray="6 5" fill="none"/>'
-                     f'<path class="flecha" d="M45 {y+55}l7 9 7-9" stroke="#b45309" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>')
-        v.append(nodo(52, y, i, ic))
-        v.append(f'<text class="t" x="108" y="{y-2 if b else y+5}" font-size="17" font-weight="600" fill="#111">{a}</text>'
-                 + (f'<text class="t2" x="108" y="{y+19}" font-size="15" fill="#b45309">{b}</text>' if b else ''))
-    v.append('</svg>')
-    return '<figure class="caso-dibujo">' + "".join(h) + "".join(v) + '</figure>'
-
-CASO_NOTA = "Si detectamos un riesgo antes de publicar, paramos y lo consultamos con el cliente."
-CASO_TICKET_TITULO_HTML = "Buscar por dirección como lo escribe el&nbsp;equipo"
-CASO_TICKET_QUE = ("«C/», «Calle» y «Carrer» dan el mismo resultado, sin importar acentos ni mayúsculas; "
-                   "cada comercial ve solo lo que ya podía ver.")
 CASO_TICKET_ESTADOS = [
-    ("Pedido por correo", "El cambio llega por correo, con las palabras del cliente."),
-    ("Registrado", "Coordinación lo anota en la hoja de cambios y confirma la recepción."),
-    ("Desarrollado y probado", "Se implementa y se prueba en un entorno aislado."),
-    ("Copia y despliegue", "Copia de seguridad previa y publicación con el flujo del cliente."),
-    ("Validado e informado", "Se comprueba en producción y el cliente recibe el informe."),
-]
-CASO_ENTREGADO = [
-    "Buscador en lenguaje natural en la web, en varios idiomas",
-    "Permisos y privacidad por perfil en el CRM",
-    "Historial de cambios en cada ficha",
-    "Exportación a Excel que respeta los permisos",
-    "Certificado energético en fichas y listados",
-    "Posicionamiento por inmueble y páginas por ciudad",
-    "Actualizaciones de base de datos con copia previa y verificación",
+    ("Pedido por el cliente", "Con sus palabras."),
+    ("Registrado", "En la hoja de cambios."),
+    ("Probado", "En un entorno aislado."),
+    ("Copia de seguridad y publicación", "Con vuelta atrás preparada."),
+    ("Comprobado e informado", f"Validado en producción. {CASO['informa']}"),
 ]
 # Mini tarjeta del hero: ejemplo genérico (no es el caso real).
 MINI_TITULO_HTML = "Nuevo filtro en el buscador de la&nbsp;web"
@@ -328,14 +260,8 @@ MINI_ESTADOS = [
     ("Validado", "Validado", ""),
 ]
 MINI_ACTUAL = 2  # índice del estado en curso (En revisión)
-ETIQUETAS_SERVICIO = {  # icono y etiqueta técnica de cada tarjeta de servicio
-    "inmobiliarias": ("casa", "web · crm · buscador"),
-    "webs": ("nube", "web · accesible · multiidioma"),
-    "gestion": ("contenedor", "app · permisos · datos propios"),
-    "reservas": ("calendario", "en línea · agenda · avisos"),
-    "automatizacion": ("pipeline", "correo → proceso → aviso"),
-    "cuidado": ("pulso", "backup ✓ · deploy ✓ · monitor"),
-}
+ICONO_SERVICIO = {"inmobiliarias": "casa", "webs": "nube", "gestion": "contenedor", "reservas": "calendario",
+                  "automatizacion": "pipeline", "cuidado": "pulso"}  # icono de cada tarjeta de servicio
 
 # Diagrama del flujo (HTML+CSS): pasos y carril propio de cada empresa.
 FLUJO_PASOS = [
@@ -551,7 +477,7 @@ mini_pasos = "".join(
     for i, (_, corto, _) in enumerate(MINI_ESTADOS)).replace(' class=""', "")
 
 tarjetas = "".join(
-    f'<article class="tarjeta revela"><div class="imagen">{ILUS[i]}</div><div class="cuerpo"><p class="etq">{icono(ETIQUETAS_SERVICIO[i][0])}<span class="mono">{ETIQUETAS_SERVICIO[i][1]}</span></p><h3>{t}</h3><p>{d}</p>'
+    f'<article class="tarjeta revela"><div class="imagen">{ILUS[i]}</div><div class="cuerpo"><p class="etq">{icono(ICONO_SERVICIO[i])}</p><h3>{t}</h3><p>{d}</p>'
     f'<ul class="vinetas">{"".join(f"<li>{x}</li>" for x in v)}</ul></div></article>'
     for i, t, d, v in SERVICIOS) + (
     '<article class="tarjeta cta oscuro revela"><div class="cuerpo"><h3>¿Buscas otra cosa?</h3>'
@@ -572,10 +498,8 @@ FLUJO = f"""<figure class="flujo revela" aria-labelledby="titulo-dentro">
    <div class="flujo-fila"><p class="conector">Sobre la infraestructura de cada cliente</p></div>
    <div class="carriles">
     <div class="carril"><p class="carril-cab"><b>Tu empresa</b><span class="mono">entorno propio · aislado</span></p><ol class="carril-pasos">{carril}</ol></div>
-    <p class="capa">Empresa B · entorno propio</p>
-    <p class="capa">Empresa C · entorno propio</p>
    </div>
-   <p class="flujo-nota">{icono("candado")}<span>El código, los datos y las credenciales de cada cliente están siempre separados.</span></p>
+   <p class="flujo-nota">{icono("candado")}<span>Cada cliente tiene su propio entorno. Nada se comparte.</span></p>
   </figure>"""
 
 compromisos = "".join(f'<li class="revela">{icono(i)}<h3>{t}</h3><p>{d}</p></li>' for i, t, d in COMPROMISOS)
@@ -583,12 +507,10 @@ equipo = "".join(f'<li class="revela">{retrato(c)}<h3>{c["nombre"]}</h3><span cl
 empezar = "".join(f'<li class="revela"><span class="num" aria-hidden="true">{n}</span>{icono(i)}<h3>{t}</h3><p>{d}</p></li>'
                   for n, (i, t, d) in enumerate(EMPEZAR, 1))
 faq = "".join(f'<details><summary>{q}</summary><p>{a}</p></details>' for q, a in FAQ)
-caso_flujo = "".join(
-    f'<li class="revela">{icono(i)}<div><h3>{t}</h3><p>{(ta or tb) if CASO_CON_NOMBRE else tb}</p></div></li>' for i, t, tb, ta in CASO_FLUJO)
 estados = "".join(
     f'<li class="hecho"><span class="punto" aria-hidden="true"></span>'
     f'<b>{e}<span class="sr">: hecho</span></b><span class="txt">{d}</span></li>' for e, d in CASO_TICKET_ESTADOS)
-entregado = "".join(f"<li>{x}</li>" for x in CASO_ENTREGADO)
+datos = "".join(f"<dt>{k}</dt><dd>{v}</dd>" for k, v in CASO_TICKET_DATOS)
 ESTADO_ACTUAL = MINI_ESTADOS[MINI_ACTUAL][0]
 
 INDEX = f"""<section class="hero oscuro" aria-labelledby="titulo-hero">
@@ -626,13 +548,10 @@ INDEX = f"""<section class="hero oscuro" aria-labelledby="titulo-hero">
 
 <section class="bloque alterno caso" id="caso" aria-labelledby="titulo-caso">
  <div class="contenedor">
-  {dibujo_caso()}
   <div class="reticula">
    <div class="caso-izq">
-    <div class="titular"><span class="sobre">Caso de éxito</span><h2 id="titulo-caso">{CASO["titulo"]}</h2>
+    <div class="titular"><span class="sobre">Caso real · DBM Real Invest</span><h2 id="titulo-caso">{CASO["titulo"]}</h2>
      <p>{CASO["entrada"]}</p></div>
-    <p class="caso-cliente">{CASO["cliente"]}</p>
-    <ol class="caso-flujo">{caso_flujo}</ol>
     <p class="caso-nota">{icono("persona")}<span>{CASO_NOTA}</span></p>
    </div>
    <div class="caso-lado">
@@ -640,12 +559,11 @@ INDEX = f"""<section class="hero oscuro" aria-labelledby="titulo-hero">
      <div class="ticket-cab"><span>{CASO["ticket_cab"]}</span><span class="etiqueta">Caso real</span></div>
      <div class="ticket-cuerpo">
       <h3 id="titulo-ticket">{CASO_TICKET_TITULO_HTML}</h3>
-      <p class="que">{CASO_TICKET_QUE}</p>
+      <dl class="ticket-datos">{datos}</dl>
       <ol class="estados">{estados}</ol>
      </div>
-     <div class="ticket-pie"><span>Estado: <b>Validado</b></span><span class="mono">deploy ✓ · backup ✓</span></div>
+     <div class="ticket-pie"><span><b>Validado</b> en producción</span></div>
     </article>
-    <div class="entregado revela"><span class="sobre">Otras mejoras entregadas</span><ul class="vinetas">{entregado}</ul></div>
    </div>
   </div>
   <div class="cierre revela"><p>{CASO["cierre"]}</p>

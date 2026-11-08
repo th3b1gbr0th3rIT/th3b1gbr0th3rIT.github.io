@@ -349,6 +349,7 @@ def verificar(sitio: Path) -> list:
             elif ancla and destino_rel in lectores and ancla not in lectores[destino_rel].ids:
                 errores.append(f"{origen}: el enlace {href} apunta a #{ancla}, que no existe en {destino_rel}")
 
+    errores += comprobar_caso(sitio)
     for clave, maximo in PRESUPUESTO.items():
         if pesos[clave] > maximo:
             errores.append(f"{clave} pesa {pesos[clave]} bytes (presupuesto {maximo})")
@@ -356,6 +357,30 @@ def verificar(sitio: Path) -> list:
     print("Pesos: " + ", ".join(f"{k} {v} B (máx. {PRESUPUESTO[k]})" for k, v in pesos.items()))
     for a in avisos:
         print(f"AVISO pendiente: {a}")
+    return errores
+
+
+def comprobar_caso(sitio: Path) -> list:
+    """El ticket del caso (WEB-020b) cuenta un solo ejemplo: cinco estados, todos «hecho», y cierra «Validado»."""
+    errores = []
+    index = sitio / "index.html"
+    if not index.is_file():
+        return errores
+    crudo = index.read_text(encoding="utf-8")
+    m = re.search(r'<article class="ticket[^"]*".*?</article>', crudo, re.S)
+    if not m:
+        return ["index.html: falta el ticket del caso"]
+    ticket = m.group(0)
+    if len(re.findall(r'<li class="hecho">', ticket)) != 5 or '<li class="actual"' in ticket or "<li>" in ticket:
+        errores.append("index.html: el ticket del caso debe tener cinco estados y todos «hecho»")
+    if not re.search(r'<div class="ticket-pie">.*?<b>Validado</b>', ticket, re.S):
+        errores.append("index.html: el ticket del caso debe cerrar con «Validado»")
+    if "Pedido por el cliente" not in ticket:
+        errores.append("index.html: el caso debe empezar por «Pedido por el cliente» (DW-020-J2)")
+    # Sin restos del caso antiguo (seis tarjetas, dibujo, lista de mejoras)
+    for resto in ('class="caso-flujo"', 'class="caso-dibujo"', "Otras mejoras entregadas", "deploy ✓", "backup ✓"):
+        if resto in crudo:
+            errores.append(f"index.html: queda un resto del caso antiguo: {resto}")
     return errores
 
 
