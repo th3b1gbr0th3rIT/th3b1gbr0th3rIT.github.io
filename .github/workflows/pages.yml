@@ -1,0 +1,61 @@
+name: Pages
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  construir:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Construir la web
+        run: python3 construir_web.py
+      - name: Verificar contenido
+        run: python3 verificar.py
+      - name: Subir artefacto de Pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: sitio
+
+  publicar:
+    if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
+    needs: construir
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.despliegue.outputs.page_url }}
+    steps:
+      - name: Desplegar en GitHub Pages
+        id: despliegue
+        uses: actions/deploy-pages@v4
+      - name: Comprobar la URL publicada
+        env:
+          URL: ${{ steps.despliegue.outputs.page_url }}
+        run: |
+          for i in 1 2 3 4 5 6 7 8 9 10; do
+            code=$(curl -s -o pagina.html -w '%{http_code}' -m 15 "$URL" || true)
+            if [ "$code" = "200" ] && grep -qi 'th3b1gbr0th3r' pagina.html; then
+              echo "OK: $URL responde 200 y contiene la marca"
+              exit 0
+            fi
+            echo "Intento $i: HTTP $code, reintento en 15 s"
+            sleep 15
+          done
+          echo "La URL publicada no responde correctamente" >&2
+          exit 1
