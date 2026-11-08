@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 """Verifica el sitio generado en sitio/ antes de publicarlo (lo ejecuta el pipeline tras construir).
 
-Comprueba: ficheros esperados, cabecera de index.html (lang, title, description), que no hay recursos
-externos, que los enlaces internos #id existen, el tamaño total y que no sale contenido interno.
+Comprueba: ficheros esperados, cabecera de cada página (lang, title, description, un solo h1), que no hay
+recursos externos (salvo el propio dominio en canonical/og), que los enlaces internos (#id, x.html, x.html#id y
+rutas desde la raíz /x) y los recursos locales (fuentes, iconos) existen, los presupuestos de peso y que no sale
+contenido interno. Avisa (sin fallar) de los marcadores [PENDIENTE: …] que queden en las páginas.
 Solo biblioteca estándar. Uso: python3 verificar.py [carpeta]   (por defecto sitio/)
 Sale con código 1 si algo falla.
 """
@@ -12,8 +14,18 @@ from html.parser import HTMLParser
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
-ESPERADOS = ["index.html", "404.html", "favicon.svg", "flujo.svg", "flujo-vertical.svg", ".nojekyll", "robots.txt"]
-TAMANO_MAX = 1024 * 1024  # 1 MB
+PAGINAS_LEGALES = ["aviso-legal.html", "privacidad.html", "cookies.html"]
+FUENTES = ["fuentes/source-serif-4-latin-400-normal.woff2", "fuentes/source-serif-4-latin-400-italic.woff2"]
+ESPERADOS = ["index.html", "404.html", *PAGINAS_LEGALES, "favicon.svg", "apple-touch-icon.png", "og.png", *FUENTES, "fuentes/OFL.txt",
+             ".nojekyll", "robots.txt", "sitemap.xml"]
+NO_PUBLICAR = ["flujo.svg", "flujo-vertical.svg"]  # el diagrama es HTML+CSS desde la ronda 2 de WEB-006
+TAMANO_MAX = 1024 * 1024  # 1 MB en total
+PRESUPUESTO = {  # bytes por fichero o grupo
+    "index.html": 120 * 1024,
+    "fuentes (woff2)": 60 * 1024,
+    "og.png": 150 * 1024,
+}
+DOMINIO_PROPIO = "th3b1gbr0th3rit.github.io"
 CORREO_PUBLICO = "jordi.gonzalez.roig@gmail.com"
 
 # Contenido interno que nunca puede salir en lo público (regla de la empresa: «lo interno no sale»).
@@ -30,14 +42,20 @@ PROHIBIDO = {
     "licencia": re.compile(r"\blicencias?\b", re.I),
     "GHCR": re.compile(r"\bghcr\b", re.I),
     "ssh": re.compile(r"\bssh\b", re.I),
+    "manada": re.compile(r"\bmanada\b", re.I),  # retirada de toda la marca (cto, 2026-11-08)
 }
+# Excepciones por página: el aviso legal cita la licencia libre de la tipografía (texto de cto, 2026-11-08).
+PERMITIDO_EN = {"aviso-legal.html": {"licencia"}}
 CORREO = re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}")
 
 # Recursos externos: src=, href=, srcset=, action=, url( y @import hacia http(s):// o //.
 EXTERNO = re.compile(
-    r"""(?:\b(?:src|href|srcset|action|poster|data)\s*=\s*["']?\s*|url\(\s*["']?\s*|@import\s+["']?\s*)(?:https?:)?//""",
+    r"""(?:\b(?:src|href|srcset|action|poster|data)\s*=\s*["']?\s*|url\(\s*["']?\s*|@import\s+["']?\s*)(?:https?:)?//(?!th3b1gbr0th3rit\.github\.io/)""",
     re.I,
 )
+
+
+avisos = []  # marcadores [PENDIENTE: …]: no bloquean, pero se listan para Jordi
 
 
 class Lector(HTMLParser):
@@ -48,6 +66,9 @@ class Lector(HTMLParser):
         self.textos = []
         self.ids = set()
         self.anclas = []
+        self.enlaces = []  # href a otros ficheros del sitio (relativos o desde la raíz)
+        self.recursos = []  # link href / script src / img src locales
+        self.h1 = 0
         self.lang = None
         self.titulo = ""
         self.description = None
@@ -63,7 +84,16 @@ class Lector(HTMLParser):
                 self.ids.add(valor)
             if nombre in ("href", "xlink:href") and valor.startswith("#"):
                 self.anclas.append(valor[1:])
+            elif nombre == "href" and tag == "a" and not re.match(r"^(?:[a-z][a-z0-9+.-]*:|//)", valor, re.I):
+                self.enlaces.append(valor)
         a = dict(attrs)
+        local = lambda v: v and not re.match(r"^(?:[a-z][a-z0-9+.-]*:|//|#)", v, re.I)
+        if tag == "link" and local(a.get("href")):
+            self.recursos.append(a["href"])
+        if tag in ("script", "img", "source") and local(a.get("src")):
+            self.recursos.append(a["src"])
+        if tag == "h1":
+            self.h1 += 1
         if tag == "html":
             self.lang = a.get("lang")
         if tag == "title":
@@ -88,6 +118,7 @@ class Lector(HTMLParser):
 
 def verificar(sitio: Path) -> list:
     errores = []
+    avisos.clear()
     if not sitio.is_dir():
         return [f"no existe la carpeta {sitio} (¿has ejecutado construir_web.py?)"]
 
@@ -95,11 +126,22 @@ def verificar(sitio: Path) -> list:
         if not (sitio / nombre).is_file():
             errores.append(f"falta el fichero esperado: {nombre}")
 
+    for nombre in NO_PUBLICAR:
+        if (sitio / nombre).exists():
+            errores.append(f"{nombre} ya no se publica (la página no lo usa)")
+
     ficheros = sorted(p for p in sitio.rglob("*") if p.is_file())
     total = sum(p.stat().st_size for p in ficheros)
     if total >= TAMANO_MAX:
         errores.append(f"el sitio ocupa {total} bytes (máximo {TAMANO_MAX})")
+    pesos = {"index.html": (sitio / "index.html").stat().st_size if (sitio / "index.html").is_file() else 0,
+             "fuentes (woff2)": sum(p.stat().st_size for p in sitio.rglob("*.woff2")),
+             "og.png": (sitio / "og.png").stat().st_size if (sitio / "og.png").is_file() else 0}
+    for clave, maximo in PRESUPUESTO.items():
+        if pesos[clave] > maximo:
+            errores.append(f"{clave} pesa {pesos[clave]} bytes (presupuesto {maximo})")
 
+    lectores = {}
     for p in ficheros:
         rel = p.relative_to(sitio)
         try:
@@ -115,21 +157,28 @@ def verificar(sitio: Path) -> list:
             lector.feed(crudo)
             lector.close()
             texto = "\n".join(lector.textos)
+            lectores[rel.as_posix()] = lector
             for ancla in lector.anclas:
                 # href="#" (la marca) vuelve al inicio de la página: es válido sin id.
                 if ancla and ancla not in lector.ids:
                     errores.append(f"{rel}: el enlace #{ancla} no tiene su id")
-            if rel.as_posix() == "index.html":
+            if p.suffix == ".html":
                 if lector.lang != "es":
-                    errores.append(f"index.html: lang={lector.lang!r}, se esperaba 'es'")
+                    errores.append(f"{rel}: lang={lector.lang!r}, se esperaba 'es'")
                 if not lector.titulo.strip():
-                    errores.append("index.html: falta <title> o está vacío")
+                    errores.append(f"{rel}: falta <title> o está vacío")
                 if not (lector.description or "").strip():
-                    errores.append("index.html: falta <meta name=\"description\"> o está vacía")
+                    errores.append(f"{rel}: falta <meta name=\"description\"> o está vacía")
+                if lector.h1 != 1:
+                    errores.append(f"{rel}: tiene {lector.h1} <h1>, debe tener exactamente uno")
+                for m in re.finditer(r"\[PENDIENTE:[^\]]*\]", texto):
+                    avisos.append(f"{rel}: {m.group(0)}")
         else:
             texto = crudo
 
         for etiqueta, patron in PROHIBIDO.items():
+            if etiqueta in PERMITIDO_EN.get(rel.as_posix(), set()):
+                continue
             for m in patron.finditer(texto):
                 contexto = texto[max(0, m.start() - 30):m.end() + 30].replace("\n", " ")
                 errores.append(f"{rel}: contenido interno prohibido ({etiqueta}): «…{contexto}…»")
@@ -137,7 +186,32 @@ def verificar(sitio: Path) -> list:
             if m.group(0).lower() != CORREO_PUBLICO:
                 errores.append(f"{rel}: correo no permitido: {m.group(0)}")
 
+    # Enlaces entre páginas: el fichero existe y, si llevan #id, el id existe en la página destino.
+    for origen, lector in lectores.items():
+        base = (sitio / origen).parent
+        for href in lector.enlaces + lector.recursos:
+            ruta, _, ancla = href.partition("#")
+            ruta = ruta.split("?", 1)[0]
+            if ruta.startswith("/"):  # desde la raíz del dominio (404.html)
+                destino = (sitio / ruta.lstrip("/")).resolve()
+            else:
+                destino = (base / ruta).resolve() if ruta else (sitio / origen).resolve()
+            if destino.is_dir():
+                destino = destino / "index.html"
+            try:
+                destino_rel = destino.relative_to(sitio.resolve()).as_posix()
+            except ValueError:
+                errores.append(f"{origen}: el enlace {href} sale del sitio")
+                continue
+            if not destino.is_file():
+                errores.append(f"{origen}: el enlace {href} apunta a un fichero que no existe")
+            elif ancla and destino_rel in lectores and ancla not in lectores[destino_rel].ids:
+                errores.append(f"{origen}: el enlace {href} apunta a #{ancla}, que no existe en {destino_rel}")
+
     print(f"Revisados {len(ficheros)} ficheros, {total} bytes en {sitio}")
+    print("Pesos: " + ", ".join(f"{k} {v} B (máx. {PRESUPUESTO[k]})" for k, v in pesos.items()))
+    for a in avisos:
+        print(f"AVISO pendiente: {a}")
     return errores
 
 

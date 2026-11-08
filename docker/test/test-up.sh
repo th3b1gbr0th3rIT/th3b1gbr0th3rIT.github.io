@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Test local de la web: construye sitio/, lo verifica y lo sirve en http://127.0.0.1:8088
 # con nginx:1.27-alpine (contenedor web-test, sitio/ montado en solo lectura, sin volúmenes con nombre).
-# Después comprueba con curl las rutas principales.
+# Después comprueba con curl las rutas principales (incluidas las páginas legales).
 #   docker/test/test-up.sh              -> nginx en docker
 #   docker/test/test-up.sh --sin-docker -> servidor de Python (si no se puede usar docker o bajar la imagen)
 # Al terminar las pruebas, SIEMPRE: docker/test/test-down.sh
@@ -46,6 +46,7 @@ class H(http.server.SimpleHTTPRequestHandler):
         else:
             super().send_error(code, message, explain)
 H.extensions_map[".svg"] = "image/svg+xml"
+H.extensions_map[".woff2"] = "font/woff2"
 http.server.ThreadingHTTPServer(("127.0.0.1", puerto), functools.partial(H, directory=sitio)).serve_forever()
 PY
   echo $! > "$PIDFILE"
@@ -92,7 +93,8 @@ FALLOS=0
 # comprobar RUTA CODIGO [TEXTO_EN_CUERPO] [TIPO]
 comprobar() {
   local ruta="$1" codigo="$2" texto="${3:-}" tipo="${4:-}" salida cuerpo estado ctype
-  salida="$(curl -s --noproxy '*' --max-time 5 -w $'\n%{http_code} %{content_type}' "$URL$ruta" || true)"
+  local destino=-; [ -n "$texto" ] || destino=/dev/null  # binarios (fuentes, png): solo código y tipo
+  salida="$(curl -s --noproxy '*' --max-time 5 -o "$destino" -w $'\n%{http_code} %{content_type}' "$URL$ruta" || true)"
   cuerpo="${salida%$'\n'*}"; estado="${salida##*$'\n'}"; ctype="${estado#* }"; estado="${estado%% *}"
   local ok=1
   [ "$estado" = "$codigo" ] || ok=0
@@ -102,10 +104,17 @@ comprobar() {
   else echo "  FALLA $ruta -> $estado $ctype (esperado $codigo ${tipo:-} ${texto:+con «$texto»})"; FALLOS=$((FALLOS+1)); fi
 }
 comprobar /               200 'lang="es"'                     text/html
-comprobar /404.html       200 'Esta página se ha escondido'   text/html
-comprobar /no-existe      404 'Esta página se ha escondido'   text/html
-comprobar /flujo.svg      200 '<svg'                          image/svg+xml
+comprobar /404.html       200 'Los gatos somos así'           text/html
+comprobar /no-existe      404 'Los gatos somos así'           text/html
 comprobar /favicon.svg    200 '<svg'                          image/svg+xml
+comprobar /fuentes/source-serif-4-latin-400-normal.woff2 200 '' font/woff2
+comprobar /og.png         200 ''                              image/png
+comprobar /apple-touch-icon.png 200 ''                        image/png
+comprobar /una/carpeta/inexistente 404 'href="/fuentes/'      text/html
+comprobar /flujo.svg      404 ''
+comprobar /aviso-legal.html 200 'Aviso legal'                   text/html
+comprobar /privacidad.html  200 'Política de privacidad'        text/html
+comprobar /cookies.html     200 'Esta web no usa cookies'       text/html
 
 if [ "$FALLOS" -gt 0 ]; then
   echo "FALLA: $FALLOS prueba(s). Recuerda: docker/test/test-down.sh"; exit 1
