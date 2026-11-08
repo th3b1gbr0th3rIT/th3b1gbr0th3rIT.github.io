@@ -353,7 +353,7 @@ font:600 .92rem var(--sans);color:var(--negro);cursor:pointer}
 .hero-visual{grid-column:7/span 6}
 .escena{background:var(--crema);color:var(--negro);border-radius:20px;padding:28px 26px 26px;border:1px solid rgba(245,158,11,.35);
 box-shadow:0 0 0 6px rgba(245,158,11,.06),0 40px 80px -40px rgba(0,0,0,.7),0 0 80px -30px rgba(245,158,11,.35)}
-.hero-equipo{list-style:none;margin:0 0 20px;padding:0;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:6px;text-align:center}
+.hero-equipo{list-style:none;margin:0 0 20px;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px 8px;text-align:center}
 .hero-equipo .retrato{width:56px;height:56px;margin:0 auto 8px}
 .hero-equipo .nombre{display:block;font:600 .74rem/1.25 var(--sans);color:var(--apoyo)}
 .hero-equipo-pie{display:none;margin:-8px 0 16px;font-size:.85rem;color:var(--apoyo);text-align:center}
@@ -682,7 +682,7 @@ details p{padding:0 0 22px;color:var(--apoyo);max-width:42em}
  .logotipo{height:22px}
 }
 @media (max-width:480px){
- .hero-equipo{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:16px}
+ .hero-equipo{gap:8px;margin-bottom:16px}
  .hero-equipo .retrato{width:52px;height:52px;margin-bottom:0}
  .pipeline .largo{display:none}
  .hero-equipo .nombre{display:none}
