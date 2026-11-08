@@ -53,9 +53,9 @@ EQUIPO = [
          frase="Implementa cada mejora y la prueba a fondo antes de entregarla."),
     dict(nombre="Operación", corto="Operación", rol="agente de IA", icono="escudo",
          frase="Realiza las copias de seguridad, publica los cambios y supervisa el funcionamiento."),
-    dict(nombre="Gestión y cumplimiento", corto="Gestión", rol="agente de IA", icono="balanza",
+    dict(nombre="Cumplimiento", corto="Cumplimiento", rol="agente de IA", icono="balanza",
          frase="Mantiene al día la documentación, la protección de datos y las condiciones de cada servicio."),
-    dict(nombre="Marketing y diseño", corto="Diseño", rol="agente de IA", icono="paleta",
+    dict(nombre="Diseño", corto="Diseño", rol="agente de IA", icono="paleta",
          frase="Cuida la imagen, los textos y la experiencia de uso de cada web."),
 ]
 
@@ -183,11 +183,12 @@ SERVICIOS = [
      ["Copia de seguridad antes de cada cambio", "Actualizaciones al día", "Informe de cada cambio"]),
 ]
 
+# P31: cuatro líneas al final de «Método», sin título propio (antes, la sección «Compromisos»).
 COMPROMISOS = [
-    ("persona", "Interlocutor único", "Un responsable identificado para tu proyecto, de principio a fin."),
-    ("candado", "Tus datos, bajo tu control", "Solo los usamos para darte el servicio. Nunca se mezclan con los de otros clientes."),
-    ("copia", "Copia de seguridad previa", "Antes de cada cambio hacemos una copia completa, de modo que siempre es posible volver al estado anterior."),
-    ("charla", "Transparencia", "Qué hemos hecho, cómo comprobarlo y qué falta. También cuando algo sale mal."),
+    ("persona", "Una persona responsable"),
+    ("candado", "Tus datos, solo tuyos"),
+    ("copia", "Copia antes de cada cambio"),
+    ("charla", "Te contamos todo, también lo que falla"),
 ]
 
 FAQ = [
@@ -210,7 +211,7 @@ FAQ = [
 # WEB-018: «Cómo empezar», tres pasos antes del contacto (icono, título, texto).
 EMPEZAR = [
     ("correo", "Nos escribes", "Cuéntanos qué te hace perder tiempo."),
-    ("charla", "Hablamos", "Una conversación para entender tu negocio."),
+    ("charla", "Hablamos", "Una conversación sin compromiso para entender tu negocio."),
     ("hoja", "Recibes una propuesta", "Qué haremos, qué verás primero y cómo comprobarlo."),
 ]
 
@@ -250,16 +251,10 @@ CASO_TICKET_ESTADOS = [
     ("Copia de seguridad y publicación", "Con vuelta atrás preparada."),
     ("Comprobado e informado", f"Validado en producción. {CASO['informa']}"),
 ]
-# Mini tarjeta del hero: ejemplo genérico (no es el caso real).
-MINI_TITULO_HTML = "Nuevo filtro en el buscador de la&nbsp;web"
-MINI_ESTADOS = [
-    ("Pedido", "Pedido", ""),
-    ("En desarrollo", "Desarrollo", ""),
-    ("En revisión", "Revisión", ""),
-    ("Publicado", "Publicado", ""),
-    ("Validado", "Validado", ""),
-]
-MINI_ACTUAL = 2  # índice del estado en curso (En revisión)
+# Mini tarjeta del hero: resumen del caso real (el mismo ticket que más abajo), todo «hecho».
+MINI_ESTADOS = [("Pedido", "Pedido", ""), ("En desarrollo", "Desarrollo", ""), ("En revisión", "Revisión", ""),
+                ("Publicado", "Publicado", ""), ("Validado", "Validado", "")]
+MINI_ACTUAL = len(MINI_ESTADOS)  # ningún estado en curso: el cambio está validado
 ICONO_SERVICIO = {"inmobiliarias": "casa", "webs": "nube", "gestion": "contenedor", "reservas": "calendario",
                   "automatizacion": "pipeline", "cuidado": "pulso"}  # icono de cada tarjeta de servicio
 
@@ -502,7 +497,7 @@ FLUJO = f"""<figure class="flujo revela" aria-labelledby="titulo-dentro">
    <p class="flujo-nota">{icono("candado")}<span>Cada cliente tiene su propio entorno. Nada se comparte.</span></p>
   </figure>"""
 
-compromisos = "".join(f'<li class="revela">{icono(i)}<h3>{t}</h3><p>{d}</p></li>' for i, t, d in COMPROMISOS)
+compromisos = "".join(f'<li class="revela">{icono(i)}<span>{t}</span></li>' for i, t in COMPROMISOS)
 equipo = "".join(f'<li class="revela">{retrato(c)}<h3>{c["nombre"]}</h3><span class="rol">{c["rol"]}</span><p>{c["frase"]}</p></li>' for c in EQUIPO)
 empezar = "".join(f'<li class="revela"><span class="num" aria-hidden="true">{n}</span>{icono(i)}<h3>{t}</h3><p>{d}</p></li>'
                   for n, (i, t, d) in enumerate(EMPEZAR, 1))
@@ -511,27 +506,25 @@ estados = "".join(
     f'<li class="hecho"><span class="punto" aria-hidden="true"></span>'
     f'<b>{e}<span class="sr">: hecho</span></b><span class="txt">{d}</span></li>' for e, d in CASO_TICKET_ESTADOS)
 datos = "".join(f"<dt>{k}</dt><dd>{v}</dd>" for k, v in CASO_TICKET_DATOS)
-ESTADO_ACTUAL = MINI_ESTADOS[MINI_ACTUAL][0]
 
 INDEX = f"""<section class="hero oscuro" aria-labelledby="titulo-hero">
  <div class="contenedor reticula">
   <div class="hero-texto">
-   <span class="sobre">Automatización para la pequeña&nbsp;empresa</span>
+   <span class="sobre">La automatización ya ha llegado a la pequeña&nbsp;empresa</span>
    <h1 id="titulo-hero">Software a la medida de tu&nbsp;negocio.</h1>
    <p class="apoyo">Webs y herramientas de gestión hechas para tu empresa. Una persona responde de cada cambio.</p>
    <div class="acciones"><a class="btn claro" href="#contacto">Cuéntanos tu proyecto <span aria-hidden="true">→</span></a>
-    <a class="enlace-sec" href="#caso">Ver el caso</a>
-    <p class="pipeline"><span class="led" aria-hidden="true"></span><span class="mono">pruebas ✓ · copia ✓ · despliegue ✓<span class="largo"> · validación ✓</span></span><span class="sr">: así termina cada cambio</span></p></div>
+    <a class="enlace-sec" href="#caso">Ver el caso</a></div>
   </div>
   <div class="hero-visual">
    <div class="escena">
-    <ul class="hero-equipo" aria-label="El equipo: Jordi, responsable, y los agentes de IA de Coordinación, Desarrollo, Operación, Gestión y cumplimiento, y Marketing y diseño">{hero_equipo}</ul>
+    <ul class="hero-equipo" aria-label="El equipo: Jordi, responsable, y los agentes de IA de Coordinación, Desarrollo, Operación, Cumplimiento y Diseño">{hero_equipo}</ul>
     <p class="hero-equipo-pie" aria-hidden="true">Jordi y cinco agentes de IA</p>
-    <figure class="mini" aria-label="Ejemplo de un cambio en nuestra hoja de cambios">
-     <div class="mini-cab"><span>Hoja de cambios</span><span class="etiqueta">Ejemplo</span></div>
-     <p class="mini-titulo">{MINI_TITULO_HTML}</p>
+    <figure class="mini" aria-label="El caso real de nuestra hoja de cambios">
+     <div class="mini-cab"><span>{CASO["ticket_cab"]}</span><span class="etiqueta">Caso real</span></div>
+     <p class="mini-titulo">{CASO_TICKET_TITULO_HTML}</p>
      <ol class="mini-pasos">{mini_pasos}</ol>
-     <p class="mini-pie">Estado: <b>{ESTADO_ACTUAL}</b> · <a href="#caso">Ver el caso</a></p>
+     <p class="mini-pie">Estado: <b>Validado</b> · <a href="#caso">Ver el caso</a></p>
     </figure>
    </div>
   </div>
@@ -576,30 +569,7 @@ INDEX = f"""<section class="hero oscuro" aria-labelledby="titulo-hero">
   <div class="titular"><span class="sobre">Método de trabajo</span><h2 id="titulo-dentro">Cada cambio, a la vista. Cada cliente, aparte.</h2>
    <p>Así llega cada petición desde tu correo hasta producción.</p></div>
   {FLUJO}
- </div>
-</section>
-
-<section class="bloque alterno" id="ahora" aria-labelledby="titulo-ahora">
- <div class="contenedor">
-  <div class="titular"><span class="sobre">Por qué ahora</span>
-   <h2 id="titulo-ahora">Lo que antes solo podían permitirse las grandes, hoy está al alcance de tu&nbsp;negocio.</h2>
-</div>
-  <div class="tarjetas">
-   <article class="tarjeta"><div class="cuerpo"><h3>Herramientas a tu medida</h3>
-    <p>CRM, gestión interna, reservas y despliegues con pruebas, antes reservados a grandes organizaciones, adaptados a cómo trabajas.</p></div></article>
-   <article class="tarjeta"><div class="cuerpo"><h3>Lo repetitivo, automático</h3>
-    <p>Avisos, informes, altas y seguimiento dejan de hacerse a mano, y tu equipo dedica el tiempo a lo que aporta valor.</p></div></article>
-   <article class="tarjeta"><div class="cuerpo"><h3>Con un responsable humano</h3>
-    <p>La IA trabaja bajo la supervisión de una persona y con un proceso trazable: pruebas, copia de seguridad y validación en cada cambio.</p></div></article>
-  </div>
- </div>
-</section>
-
-<section class="bloque" id="compromisos" aria-labelledby="titulo-compromisos">
- <div class="contenedor">
-  <div class="titular"><span class="sobre">Compromisos</span><h2 id="titulo-compromisos">Lo que puedes esperar de nosotros.</h2>
-   <p>Principios que aplicamos en cada proyecto, sin excepciones.</p></div>
-  <ul class="compromisos">{compromisos}</ul>
+  <ul class="promesas" aria-label="Nuestros compromisos">{compromisos}</ul>
  </div>
 </section>
 
@@ -619,17 +589,11 @@ INDEX = f"""<section class="hero oscuro" aria-labelledby="titulo-hero">
  </div>
 </section>
 
-<section class="bloque alterno" id="empezar" aria-labelledby="titulo-empezar">
- <div class="contenedor">
-  <div class="titular"><span class="sobre">Cómo empezar</span><h2 id="titulo-empezar">Tres pasos, sin compromiso.</h2></div>
-  <ol class="empezar">{empezar}</ol>
- </div>
-</section>
-
 <section class="bloque contacto oscuro" id="contacto" aria-labelledby="titulo-contacto">
  <div class="contenedor reticula">
   <div class="titular"><span class="sobre">Contacto</span><h2 id="titulo-contacto">Hablemos de tu proyecto.</h2>
    <p>Cuéntanos cómo funciona tu negocio. Te diremos cómo hacerlo más fácil.</p></div>
+  <ol class="empezar" aria-label="Cómo empezar">{empezar}</ol>
   <div class="accion">
    <a class="btn claro" href="{MAILTO}">Escríbenos <span aria-hidden="true">→</span></a>
    <p class="correo-fila"><a class="correo" href="{MAILTO}">{MAIL}</a><button class="copiar" type="button" data-copiar="{MAIL}" hidden>Copiar dirección</button></p>
@@ -641,7 +605,7 @@ INDEX = f"""<section class="hero oscuro" aria-labelledby="titulo-hero">
 </section>
 <a class="cta-movil btn claro" href="#contacto" aria-hidden="true" tabindex="-1">Cuéntanos tu proyecto <span aria-hidden="true">→</span></a>"""
 
-TITULO_INDEX = "Automatización y software a medida para pequeñas empresas · th3b1gbr0th3r IT"
+TITULO_INDEX = "Software a medida para pequeñas empresas · th3b1gbr0th3r IT"
 DESC_INDEX = ("La automatización ya ha llegado a la pequeña empresa. Webs y herramientas de gestión a medida, "
               "con una persona responsable de cada cambio.")
 html = pagina(TITULO_INDEX, DESC_INDEX, INDEX, "index.html", base="",
@@ -904,7 +868,7 @@ def capturas():
     trabajos += [(f"legal-{n.removesuffix('.html')}", "1440,3200", f"/{n}", True) for n in PAGINAS_LEGALES]
     # Esquema oscuro (prefers-color-scheme: dark): portada, menú, una legal y la 404.
     trabajos += [(f"{n}-oscuro", tam, ruta, rec) for n, tam, ruta, rec in trabajos
-                 if n in ("escritorio", "movil-390", "movil-menu", "legal-privacidad-movil", "404")]
+                 if n in ("escritorio", "tableta-1024", "tableta-820", "movil-390", "movil-360", "movil-menu", "legal-privacidad-movil", "404")]
     srv, url = servidor(extra)
     try:
         with tempfile.TemporaryDirectory(dir=base_temporal()) as tmp:

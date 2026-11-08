@@ -361,7 +361,7 @@ def verificar(sitio: Path) -> list:
 
 
 def comprobar_caso(sitio: Path) -> list:
-    """El ticket del caso (WEB-020b) cuenta un solo ejemplo: cinco estados, todos «hecho», y cierra «Validado»."""
+    """WEB-020: el caso se cuenta una vez (ticket de cinco estados «hecho» y tarjeta del hero) y la página tiene seis secciones."""
     errores = []
     index = sitio / "index.html"
     if not index.is_file():
@@ -381,6 +381,30 @@ def comprobar_caso(sitio: Path) -> list:
     for resto in ('class="caso-flujo"', 'class="caso-dibujo"', "Otras mejoras entregadas", "deploy ✓", "backup ✓"):
         if resto in crudo:
             errores.append(f"index.html: queda un resto del caso antiguo: {resto}")
+    # Tarjeta del hero (WEB-020c): resumen del mismo caso real, con todos los estados «hecho» y enlace al caso
+    mini = re.search(r'<figure class="mini".*?</figure>', crudo, re.S)
+    if not mini:
+        errores.append("index.html: falta la tarjeta del hero")
+    else:
+        t = mini.group(0)
+        if len(re.findall(r'<li class="hecho"', t)) != 5 or '<li class="actual"' in t or 'aria-current="step"' in t:
+            errores.append("index.html: la tarjeta del hero debe tener cinco estados y todos «hecho»")
+        if "Caso real" not in t or "<b>Validado</b>" not in t or 'href="#caso"' not in t:
+            errores.append("index.html: la tarjeta del hero debe ser «Caso real», «Validado» y enlazar a #caso")
+        if "Ejemplo" in t:
+            errores.append("index.html: la tarjeta del hero ya no es un ejemplo inventado (WEB-020)")
+    if 'class="pipeline"' in crudo:
+        errores.append("index.html: el chip del proceso del hero se quitó (DW-020-J3)")
+    # Estructura de ocho bloques: sin «Por qué ahora», «Compromisos» ni «Cómo empezar» como secciones (DW-020-J1, P31, P32)
+    secciones = re.findall(r'<section[^>]*\bid="([^"]+)"', crudo)
+    if secciones != ["servicios", "caso", "por-dentro", "equipo", "preguntas", "contacto"]:
+        errores.append(f"index.html: secciones inesperadas: {secciones}")
+    # Ningún enlace ni id a las secciones retiradas, en ninguna página ni en el sitemap
+    for f in sorted(sitio.iterdir()):
+        if f.suffix in (".html", ".xml", ".webmanifest", ".txt", ".json"):
+            texto = f.read_text(encoding="utf-8")
+            if re.search(r'#(?:ahora|compromisos|empezar)\b|\bid="(?:ahora|compromisos|empezar)"', texto):
+                errores.append(f"{f.name}: queda una referencia a #ahora, #compromisos o #empezar")
     return errores
 
 

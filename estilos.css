@@ -131,7 +131,7 @@ box-shadow:0 0 0 6px rgb(245 158 11 / .06),0 40px 80px -40px rgb(0 0 0 / .7),0 0
 .hero-equipo .nombre{display:block;font:600 .74rem/1.25 var(--sans);color:var(--apoyo)}
 .hero-equipo-pie{display:none;margin:-8px 0 16px;font-size:.85rem;color:var(--apoyo);text-align:center}
 .mini{margin:0;background:var(--superficie);border:1px solid var(--borde-calido);border-radius:12px;padding:16px 14px 14px}
-.mini-cab{display:flex;justify-content:space-between;align-items:center;gap:12px;font:700 .8rem/1 var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--apoyo)}
+.mini-cab{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px 12px;font:700 .8rem/1 var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--apoyo)}
 .etiqueta{display:inline-block;padding:4px 8px;border-radius:99px;background:var(--etq-fondo);color:var(--etq-texto);border:1px solid var(--etq-borde);letter-spacing:.08em}
 .mini-titulo{margin:12px 0 12px;font:400 1.2rem/1.25 var(--serif)}
 .mini-titulo,.ticket h3{text-wrap:balance}
@@ -142,9 +142,6 @@ box-shadow:0 0 0 6px rgb(245 158 11 / .06),0 40px 80px -40px rgb(0 0 0 / .7),0 0
 .mini-pasos li.actual{background:var(--etq-fondo);border-color:var(--acento);color:var(--etq-texto)}
 .mini-pie{margin-top:12px;font-size:.88rem;color:var(--apoyo)}
 .mini-pie a{color:var(--tinta);text-decoration-color:var(--ambar);text-underline-offset:3px}
-.pipeline{display:flex;align-items:center;gap:10px;margin:0;padding:6px 12px;border:1px solid rgb(245 158 11 / .35);border-radius:99px;font-size:.85rem;color:var(--oscuro-texto);background:rgb(253 246 236 / .04)}
-.led{flex:none;width:8px;height:8px;border-radius:50%;background:var(--ambar2);box-shadow:0 0 0 0 rgb(245 158 11 / .6);animation:latido 2.4s ease-out infinite}
-@keyframes latido{0%{box-shadow:0 0 0 0 rgb(245 158 11 / .55)}70%,100%{box-shadow:0 0 0 8px rgb(245 158 11 / 0)}}
 
 /* Servicios en tarjetas, con las viñetas dentro */
 .tarjetas{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:var(--gutter)}
@@ -282,11 +279,10 @@ font:700 .78rem/1.3 var(--sans);letter-spacing:.14em;text-transform:uppercase;co
 justify-content:space-between;align-items:center;gap:24px}
 .cierre p{font:400 clamp(1.5rem,2.8vw,2.1rem)/1.2 var(--serif);max-width:24em}
 
-/* Compromisos: títulos alineados con subgrid */
-.compromisos{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));grid-template-rows:auto auto auto;gap:0 var(--gutter)}
-.compromisos li{display:grid;grid-row:span 3;grid-template-rows:subgrid;align-content:start;border-top:2px solid var(--tinta);padding-top:24px}
-.compromisos .ico{margin-bottom:18px;background:var(--superficie);border-color:var(--borde-calido)}
-.compromisos h3{align-self:end}
+/* Compromisos: cuatro líneas al final de «Método» */
+.promesas{list-style:none;margin:calc(var(--ritmo)*8) 0 0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px var(--gutter)}
+.promesas li{display:flex;align-items:center;gap:14px;border-top:2px solid var(--tinta);padding-top:20px;font:400 1.15rem/1.25 var(--serif)}
+.promesas .ico{background:var(--superficie);border-color:var(--borde-calido)}
 
 /* Equipo: tres por dos */
 .equipo{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:48px var(--gutter)}
@@ -322,11 +318,16 @@ details p{padding:0 0 22px;color:var(--apoyo);max-width:42em}
 /* Contacto */
 .contacto{background:var(--oscuro-fondo);color:var(--blanco)}
 .contacto .reticula{align-items:end;row-gap:32px}
-.contacto .titular{grid-column:1/span 7;margin:0}
+.contacto .titular{grid-column:1/span 8;margin:0}
 .contacto .sobre{color:var(--ambar2)}
 .contacto h2{font-size:clamp(2.2rem,5vw,3.8rem)}
 .contacto .titular p{color:var(--oscuro-texto)}
-.contacto .accion{grid-column:8/span 5;display:flex;flex-direction:column;align-items:flex-start;gap:14px}
+.contacto .accion{grid-column:1/-1;display:flex;flex-direction:column;align-items:flex-start;gap:14px}
+.contacto .empezar{grid-column:1/-1;margin:calc(var(--ritmo)*2) 0}
+.contacto .empezar li{background:rgb(253 246 236 / .05);border-color:var(--oscuro-linea)}
+.contacto .empezar .num{color:var(--ambar2)}
+.contacto .empezar .ico{background:transparent;border-color:#57534e;stroke:var(--ambar2)}
+.contacto .empezar p{color:var(--oscuro-texto)}
 .correo-fila{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;color:var(--oscuro-claro);font-size:1rem}
 .correo-fila .correo{word-break:break-all;color:var(--oscuro-claro);text-decoration-color:var(--ambar2);text-underline-offset:3px}
 .copiar{background:none;border:1px solid var(--oscuro-borde);border-radius:4px;color:var(--blanco);font:600 .88rem var(--sans);padding:10px 14px;cursor:pointer;transition:border-color .2s,background .2s}
@@ -398,8 +399,7 @@ details p{padding:0 0 22px;color:var(--apoyo);max-width:42em}
  .hero::before{-webkit-mask-image:linear-gradient(180deg,transparent 0,transparent 45%,#000 85%);mask-image:linear-gradient(180deg,transparent 0,transparent 45%,#000 85%)}
  .caso-izq,.caso-lado{grid-column:1/-1}.caso-lado{max-width:560px}
  .equipo{grid-template-columns:repeat(2,minmax(0,1fr))}
- .compromisos{grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:none;row-gap:40px}
- .compromisos li{grid-row:auto;grid-template-rows:none}
+ .promesas{grid-template-columns:repeat(2,minmax(0,1fr))}
  .faq .titular,.faq .lista{grid-column:1/-1}
  .contacto .titular,.contacto .accion{grid-column:1/-1}
  .pie .col-marca{grid-column:1/-1}.pie nav,.pie .col{grid-column:span 4}.pie .col-contacto{grid-column:span 4}
@@ -433,13 +433,11 @@ details p{padding:0 0 22px;color:var(--apoyo);max-width:42em}
  .tarjeta .cuerpo{padding:20px 20px 22px}
  .ilus{height:104px}
  .vinetas{gap:4px;padding-top:12px;font-size:.92rem}
- .compromisos li{grid-template-columns:44px minmax(0,1fr);column-gap:14px;padding-top:18px}
- .compromisos .ico{grid-row:1/span 2;margin:0}
- .compromisos h3{align-self:center;margin:0 0 4px}
  .estados li{padding-bottom:14px}
  .tarjeta.cta .cuerpo{padding:28px 20px}
  .flujo{padding:20px 14px 18px;margin:0 calc(var(--gutter)*-1);border-left:0;border-right:0;border-radius:0}
- .compromisos{grid-template-columns:1fr;row-gap:28px}
+ .promesas{grid-template-columns:1fr;gap:20px}
+ .promesas li{padding-top:16px}
  .equipo{grid-template-columns:1fr;row-gap:28px}
  .equipo li{grid-template-columns:72px minmax(0,1fr);grid-template-areas:"foto nombre" "foto rol" "frase frase";column-gap:16px}
  .equipo .retrato{width:72px;height:72px}
@@ -452,7 +450,6 @@ details p{padding:0 0 22px;color:var(--apoyo);max-width:42em}
 @media (max-width:480px){
  .hero-equipo{gap:8px;margin-bottom:16px}
  .hero-equipo .retrato{width:52px;height:52px;margin-bottom:0}
- .pipeline .largo{display:none}
  .hero-equipo .nombre{display:none}
  .hero-equipo-pie{display:block}
  .tarjeta .imagen{display:none}
@@ -482,12 +479,12 @@ details p{padding:0 0 22px;color:var(--apoyo);max-width:42em}
  html,body{background:#fff}
  body{font-size:11pt;color:#000}
  .revela{transform:none!important}
- .cab,.saltar,.cta-movil,.menu-boton,.copiar,.aviso-copia,.pie nav,.pie .col,.pie .col-contacto,.hero::before,.led{display:none!important}
+ .cab,.saltar,.cta-movil,.menu-boton,.copiar,.aviso-copia,.pie nav,.pie .col,.pie .col-contacto,.hero::before{display:none!important}
  .hero,.contacto,.tarjeta.cta{background:#fff!important;color:#000!important}
- .hero h1,.hero .apoyo,.hero .sobre,.enlace-sec,.contacto .sobre,.contacto .titular p,.tarjeta.cta p,.tarjeta.cta .mas,.correo-fila,.correo-fila .correo,.firma,.privacidad-linea,.privacidad-linea a,.pipeline{color:#000!important}
+ .hero h1,.hero .apoyo,.hero .sobre,.enlace-sec,.contacto .sobre,.contacto .titular p,.tarjeta.cta p,.tarjeta.cta .mas,.correo-fila,.correo-fila .correo,.firma,.privacidad-linea,.privacidad-linea a{color:#000!important}
  .escena,.ticket,.tarjeta:hover{box-shadow:none!important}
  .bloque{padding:24pt 0}
- .tarjeta,.ticket,.escena,.pasos li,.carriles,.compromisos li,.equipo li,details,.legal dl,.legal .tabla,figure{break-inside:avoid}
+ .tarjeta,.ticket,.escena,.pasos li,.carriles,.promesas li,.equipo li,details,.legal dl,.legal .tabla,figure{break-inside:avoid}
  h1,h2,h3,.sobre{break-after:avoid}
  .titular,.cierre{break-inside:avoid}
  .alterno,.pie,.ticket-pie,.escena{background:#fff!important}
