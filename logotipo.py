@@ -26,7 +26,7 @@ def svg(clase="logotipo", titulo="th3b1gbr0th3r IT"):
 
 def definicion(id_="logo-trazos"):
     """Bloque oculto con los trazos, una vez por página; los logotipos de la página lo reutilizan con uso()."""
-    return (f'<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><g id="{id_}">'
+    return (f'<svg class="svg-defs" width="0" height="0" aria-hidden="true" focusable="false"><defs><g id="{id_}">'
             f'<path d="{TRAZOS}" fill="currentColor"/><path class="logo-it" d="{ACENTO_TRAZOS}" fill="#b45309"/></g></defs></svg>')
 
 

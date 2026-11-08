@@ -7,7 +7,7 @@ Sin cifras ni precios; el único cliente nombrado es DBM (CASO_CON_NOMBRE). Sin 
 (Source Serif 4, OFL) se sirve desde la propia web, en fuentes/.
 Uso: python3 construir_web.py [--capturas] [--imagenes]
   --capturas  capturas de revisión en capturas/ (necesita google-chrome; Pillow opcional para recortar)
-  --imagenes  regenera recursos/og.png y recursos/apple-touch-icon.png (necesita google-chrome y Pillow)
+  --imagenes  regenera las imágenes de recursos/ (og, iconos y favicons; necesita google-chrome y Pillow)
 La construcción solo usa la biblioteca estándar de Python 3 (funciona tal cual en un runner de GitHub).
 """
 import base64
@@ -246,27 +246,27 @@ def dibujo_caso():
         f'<text x="{x+27}" y="{y-22.5}" text-anchor="middle" font-size="13" font-weight="700" fill="#111">{i+1}</text>')
     h = ['<svg class="caso-dib caso-dib-h" viewBox="0 0 1080 190" role="img" aria-label="Flujo de trabajo del caso DBM Real Invest en seis pasos: '
          'correo del CTO de DBM, hoja de cambios, desarrollo y pruebas, copia de seguridad, despliegue, validación e informe.">',
-         '<rect width="1080" height="190" rx="14" fill="#fdf6ec"/>']
+         '<rect class="fondo" width="1080" height="190" rx="14" fill="#fdf6ec"/>']
     for i, (ic, a, b) in enumerate(CASO_DIBUJO_PASOS):
         x = 90 + 180 * i
         if i < n - 1:
-            h.append(f'<path d="M{x+40} 78H{x+140}" stroke="#b45309" stroke-width="2.5" stroke-dasharray="6 5" fill="none"/>'
-                     f'<path d="M{x+134} 71l9 7-9 7" stroke="#b45309" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>')
+            h.append(f'<path class="flecha" d="M{x+40} 78H{x+140}" stroke="#b45309" stroke-width="2.5" stroke-dasharray="6 5" fill="none"/>'
+                     f'<path class="flecha" d="M{x+134} 71l9 7-9 7" stroke="#b45309" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>')
         h.append(nodo(x, 78, i, ic))
-        h.append(f'<text x="{x}" y="145" text-anchor="middle" font-size="16" font-weight="600" fill="#111">{a}</text>'
-                 + (f'<text x="{x}" y="165" text-anchor="middle" font-size="15" fill="#b45309">{b}</text>' if b else ''))
+        h.append(f'<text class="t" x="{x}" y="145" text-anchor="middle" font-size="16" font-weight="600" fill="#111">{a}</text>'
+                 + (f'<text class="t2" x="{x}" y="165" text-anchor="middle" font-size="15" fill="#b45309">{b}</text>' if b else ''))
     h.append('</svg>')
     v = ['<svg class="caso-dib caso-dib-v" viewBox="0 0 320 612" role="img" aria-label="Flujo de trabajo del caso DBM Real Invest en seis pasos, de arriba abajo: '
          'correo del CTO de DBM, hoja de cambios, desarrollo y pruebas, copia de seguridad, despliegue, validación e informe.">',
-         '<rect width="320" height="612" rx="14" fill="#fdf6ec"/>']
+         '<rect class="fondo" width="320" height="612" rx="14" fill="#fdf6ec"/>']
     for i, (ic, a, b) in enumerate(CASO_DIBUJO_PASOS):
         y = 50 + 102 * i
         if i < n - 1:
-            v.append(f'<path d="M52 {y+39}V{y+63}" stroke="#b45309" stroke-width="2.5" stroke-dasharray="6 5" fill="none"/>'
-                     f'<path d="M45 {y+55}l7 9 7-9" stroke="#b45309" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>')
+            v.append(f'<path class="flecha" d="M52 {y+39}V{y+63}" stroke="#b45309" stroke-width="2.5" stroke-dasharray="6 5" fill="none"/>'
+                     f'<path class="flecha" d="M45 {y+55}l7 9 7-9" stroke="#b45309" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>')
         v.append(nodo(52, y, i, ic))
-        v.append(f'<text x="108" y="{y-2 if b else y+5}" font-size="17" font-weight="600" fill="#111">{a}</text>'
-                 + (f'<text x="108" y="{y+19}" font-size="15" fill="#b45309">{b}</text>' if b else ''))
+        v.append(f'<text class="t" x="108" y="{y-2 if b else y+5}" font-size="17" font-weight="600" fill="#111">{a}</text>'
+                 + (f'<text class="t2" x="108" y="{y+19}" font-size="15" fill="#b45309">{b}</text>' if b else ''))
     v.append('</svg>')
     return '<figure class="caso-dibujo">' + "".join(h) + "".join(v) + '</figure>'
 
@@ -323,449 +323,10 @@ NAV = [("servicios", "Servicios"), ("por-dentro", "Método"), ("caso", "Caso de 
 LEGALES = [("aviso-legal.html", "Aviso legal"), ("privacidad.html", "Privacidad"), ("cookies.html", "Cookies")]
 
 # ── CSS ──────────────────────────────────────────────────────────────────────
-CSS = r"""
-@font-face{font-family:"Source Serif 4";font-style:normal;font-weight:400;font-display:swap;src:url(@RAIZ@fuentes/@NORMAL@) format("woff2");
-unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
-@font-face{font-family:"Source Serif 4";font-style:italic;font-weight:400;font-display:swap;src:url(@RAIZ@fuentes/@CURSIVA@) format("woff2");
-unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
-:root{--mono:ui-monospace,"SFMono-Regular",Menlo,Consolas,"DejaVu Sans Mono",monospace;--negro:#111;--carbon:#1c1917;--ambar:#d97706;--ambar2:#f59e0b;--tostado:#b45309;--crema:#fdf6ec;--blanco:#fff;
---gris1:#f4f1ec;--gris2:#e7e1d6;--gris3:#a8a29e;--texto:#44403c;--apoyo:#57534e;--linea:#e7e1d6;--borde-calido:#ecdcc4;
---serif:"Source Serif 4",Georgia,"DejaVu Serif","Times New Roman",serif;
---sans:system-ui,-apple-system,"Segoe UI",Roboto,"DejaVu Sans",Helvetica,Arial,sans-serif;
---ancho:1200px;--gutter:24px;--ritmo:8px;--cab:72px;
---t-h1:clamp(2.6rem,5.4vw,4.5rem);--t-h2:clamp(2rem,4.2vw,3.25rem);--t-h3:1.35rem;
---s-h1:-.028em;--s-h2:-.022em;--s-h3:-.012em;--s-sobre:.14em}
-*{box-sizing:border-box}
-[id]{scroll-margin-top:calc(var(--cab) + 16px)}
-html{scroll-behavior:smooth;scroll-padding-top:calc(var(--cab) + 16px);background:var(--gris1)}
-body{margin:0;background:var(--blanco);color:var(--negro);font:17px/1.6 var(--sans);font-kerning:normal;font-synthesis:none;-webkit-font-smoothing:antialiased;overflow-x:hidden}
-img,svg{max-width:100%}
-a{color:inherit}
-h1,h2,h3{font-family:var(--serif);font-weight:400;line-height:1.1;margin:0;letter-spacing:var(--s-h2);text-wrap:balance;font-variant-numeric:lining-nums}
-h2{font-size:var(--t-h2)}
-h3{font-size:var(--t-h3);letter-spacing:var(--s-h3)}
-p{margin:0;text-wrap:pretty}
-.mono{font-family:var(--mono);font-size:.85em;letter-spacing:0}
-em{font-style:italic}
-.sr{position:absolute!important;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
-
-/* Foco visible: anillo ámbar pegado al elemento y contorno negro por fuera (≥3:1 sobre blanco, crema y gris del pie).
-   En fondos oscuros el contorno exterior pasa a crema. */
-:focus{outline:none}
-:focus-visible{outline:2px solid var(--negro);outline-offset:3px;box-shadow:0 0 0 3px var(--ambar2);border-radius:2px}
-.oscuro :focus-visible{outline-color:var(--crema)}
-.saltar{position:absolute;left:16px;top:-100px;z-index:100;background:var(--negro);color:var(--blanco);padding:12px 18px;text-decoration:none}
-.saltar:focus{top:12px}
-.contenedor{max-width:var(--ancho);margin:0 auto;padding:0 var(--gutter)}
-.reticula{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:var(--gutter)}
-.bloque{padding:calc(var(--ritmo)*13) 0}
-.alterno{background:var(--crema)}
-.sobre{display:block;font:600 .76rem/1.2 var(--sans);letter-spacing:var(--s-sobre);text-transform:uppercase;color:var(--tostado);margin-bottom:calc(var(--ritmo)*2)}
-.titular{max-width:900px;margin-bottom:calc(var(--ritmo)*6)}
-.titular p{margin-top:calc(var(--ritmo)*2.5);font-size:1.15rem;color:var(--apoyo);max-width:60ch}
-.titular .mas{margin-top:calc(var(--ritmo)*3)}
-.mas{display:inline-flex;align-items:center;gap:8px;font-weight:700;text-decoration:none;color:var(--negro);border-bottom:2px solid var(--ambar);padding-bottom:3px}
-.mas span{transition:transform .25s ease}.mas:hover span,.mas:focus-visible span{transform:translateX(4px)}
-.btn{display:inline-flex;align-items:center;gap:10px;background:var(--negro);color:var(--blanco);padding:15px 26px;border-radius:4px;
-font-weight:700;text-decoration:none;border:2px solid var(--negro);transition:background .2s,color .2s,border-color .2s;cursor:pointer;font-family:var(--sans);font-size:1rem}
-.btn:hover{background:var(--carbon);border-color:var(--ambar)}
-.btn.claro{background:var(--ambar2);border-color:var(--ambar2);color:var(--negro)}
-.btn.claro:hover{background:#fbbf24;border-color:#fbbf24}
-
-/* Logotipo (trazos SVG) */
-.marca{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--negro)}
-.logotipo{display:block;height:26px;width:auto}
-
-/* Cabecera fija */
-.cab{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.97);border-bottom:1px solid transparent;transition:border-color .3s,box-shadow .3s}
-.cab.scroll{border-color:var(--linea);box-shadow:0 8px 24px -20px rgba(17,17,17,.4)}
-.cab .contenedor{display:flex;align-items:center;justify-content:space-between;gap:24px;height:var(--cab)}
-.menu ul{display:flex;align-items:center;gap:32px;list-style:none;margin:0;padding:0}
-.menu a{display:inline-block;min-height:24px;padding-block:2px;text-decoration:none;font-weight:500;font-size:.95rem;letter-spacing:-.005em;color:var(--texto)}
-.menu a:hover{color:var(--negro);text-decoration:underline;text-decoration-color:var(--ambar);text-underline-offset:6px;text-decoration-thickness:2px}
-.menu .solo-movil{display:none}
-.cab .btn{padding:10px 20px;font-size:.92rem}
-.menu-boton{display:none;align-items:center;gap:10px;background:none;border:1px solid var(--linea);border-radius:4px;padding:9px 12px;
-font:600 .92rem var(--sans);color:var(--negro);cursor:pointer}
-.menu-boton .barras{position:relative;width:20px;height:14px}
-.menu-boton .barras i{position:absolute;left:0;width:100%;height:2px;background:var(--negro);transition:transform .25s,opacity .25s}
-.menu-boton .barras i:nth-child(1){top:0}.menu-boton .barras i:nth-child(2){top:6px}.menu-boton .barras i:nth-child(3){top:12px}
-.menu-boton[aria-expanded="true"] .barras i:nth-child(1){transform:translateY(6px) rotate(45deg)}
-.menu-boton[aria-expanded="true"] .barras i:nth-child(2){opacity:0}
-.menu-boton[aria-expanded="true"] .barras i:nth-child(3){transform:translateY(-6px) rotate(-45deg)}
-
-/* Hero: texto + iconos de rol y la mini tarjeta del cambio */
-.hero{background:var(--negro);color:var(--blanco);position:relative;overflow:hidden}
-.hero .reticula{align-items:center;min-height:min(80vh,700px);padding-block:calc(var(--ritmo)*10);row-gap:48px}
-.hero-texto{grid-column:1/span 6}
-.hero .sobre{color:var(--ambar2);text-wrap:balance}
-.hero::before{content:"";position:absolute;inset:0;pointer-events:none;background-image:radial-gradient(circle,rgba(253,246,236,.09) 1px,transparent 1.6px);background-size:24px 24px;
--webkit-mask-image:linear-gradient(90deg,transparent 0,transparent 30%,#000 75%);mask-image:linear-gradient(90deg,transparent 0,transparent 30%,#000 75%)}
-.hero .contenedor{position:relative;z-index:1}
-.hero h1{font-size:var(--t-h1);line-height:1.04;letter-spacing:var(--s-h1);color:var(--blanco);max-width:12em;text-wrap:balance}
-.hero .apoyo{margin-top:calc(var(--ritmo)*3);font-size:clamp(1.1rem,1.6vw,1.3rem);color:#d6d3d1;max-width:30em}
-.acciones{display:flex;flex-wrap:wrap;align-items:center;gap:16px 28px;margin-top:calc(var(--ritmo)*5)}
-.hero-visual{grid-column:7/span 6}
-.escena{background:var(--crema);color:var(--negro);border-radius:20px;padding:28px 26px 26px;border:1px solid rgba(245,158,11,.35);
-box-shadow:0 0 0 6px rgba(245,158,11,.06),0 40px 80px -40px rgba(0,0,0,.7),0 0 80px -30px rgba(245,158,11,.35)}
-.hero-equipo{list-style:none;margin:0 0 20px;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px 8px;text-align:center}
-.hero-equipo .retrato{width:56px;height:56px;margin:0 auto 8px}
-.hero-equipo .nombre{display:block;font:600 .74rem/1.25 var(--sans);color:var(--apoyo)}
-.hero-equipo-pie{display:none;margin:-8px 0 16px;font-size:.85rem;color:var(--apoyo);text-align:center}
-.mini{margin:0;background:var(--blanco);border:1px solid var(--borde-calido);border-radius:12px;padding:16px 14px 14px}
-.mini-cab{display:flex;justify-content:space-between;align-items:center;gap:12px;font:700 .8rem/1 var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--apoyo)}
-.etiqueta{display:inline-block;padding:4px 8px;border-radius:99px;background:#fef3c7;color:#7c2d12;border:1px solid #f5d08a;letter-spacing:.08em}
-.mini-titulo{margin:12px 0 12px;font:400 1.2rem/1.25 var(--serif)}
-.mini-titulo,.ticket h3{text-wrap:balance}
-.mini-pasos{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:3px}
-.mini-pasos li{font:600 .74rem/1 var(--sans);padding:6px 7px;white-space:nowrap;border-radius:99px;border:1px solid var(--gris2);color:var(--apoyo)}
-.mini-pasos li.hecho{background:var(--negro);border-color:var(--negro);color:var(--blanco)}
-.mini-pasos li.hecho::before{content:"✓ ";color:var(--ambar2)}
-.mini-pasos li.actual{background:#fef3c7;border-color:var(--tostado);color:#7c2d12}
-.mini-pie{margin-top:12px;font-size:.88rem;color:var(--apoyo)}
-.mini-pie a{color:var(--negro);text-decoration-color:var(--ambar);text-underline-offset:3px}
-.pipeline{display:flex;align-items:center;gap:10px;margin:0;padding:6px 12px;border:1px solid rgba(245,158,11,.35);border-radius:99px;font-size:.85rem;color:#d6d3d1;background:rgba(253,246,236,.04)}
-.led{flex:none;width:8px;height:8px;border-radius:50%;background:var(--ambar2);box-shadow:0 0 0 0 rgba(245,158,11,.6);animation:latido 2.4s ease-out infinite}
-@keyframes latido{0%{box-shadow:0 0 0 0 rgba(245,158,11,.55)}70%,100%{box-shadow:0 0 0 8px rgba(245,158,11,0)}}
-
-/* Servicios en tarjetas, con las viñetas dentro */
-.tarjetas{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:var(--gutter)}
-.tarjeta{grid-column:span 4;display:flex;flex-direction:column;background:var(--blanco);border:1px solid var(--linea);border-radius:12px;overflow:hidden;
-transition:transform .3s ease,box-shadow .3s ease,border-color .3s}
-.tarjeta:hover{transform:translateY(-4px);border-color:rgba(217,119,6,.55);box-shadow:0 0 0 3px rgba(245,158,11,.12),0 28px 48px -32px rgba(17,17,17,.45)}
-.etq{display:flex;align-items:center;gap:8px;font-size:.82rem;color:var(--tostado)}
-.etq .ico{width:18px;height:18px;padding:0;border:0;background:none;stroke:var(--tostado)}
-.tarjeta .imagen{overflow:hidden;border-bottom:1px solid var(--linea);background:var(--crema)}
-.ilus{display:block;width:100%;height:auto}
-.tarjeta .cuerpo{padding:24px 26px 28px;display:flex;flex-direction:column;gap:12px;flex:1}
-.tarjeta p{color:var(--apoyo)}
-.vinetas{list-style:none;margin:4px 0 0;padding:14px 0 0;border-top:1px solid var(--linea);display:grid;gap:6px;font-size:.95rem;color:var(--texto)}
-.vinetas li{padding-left:20px;position:relative}
-.vinetas li::before{content:"";position:absolute;left:0;top:.72em;width:10px;height:2px;background:var(--ambar)}
-.tarjeta.cta{background:var(--negro) radial-gradient(circle,rgba(253,246,236,.08) 1px,transparent 1.6px) 0 0/20px 20px;color:var(--blanco);border-color:var(--negro);justify-content:flex-end}
-.tarjeta.cta .cuerpo{justify-content:flex-end;padding:40px 32px}
-.tarjeta.cta h3{font-size:1.8rem}.tarjeta.cta p{color:#d6d3d1}.tarjeta.cta .mas{color:var(--blanco);border-color:var(--ambar2);margin-top:12px;align-self:flex-start}
-
-/* Misión */
-.mision .reticula{align-items:end;row-gap:24px}
-.mision .frase{grid-column:1/span 8;font-size:clamp(1.9rem,3.8vw,3rem);line-height:1.18}
-.mision .frase em{color:var(--tostado)}
-.mision .lado{grid-column:9/span 4;color:var(--apoyo);font-size:1.1rem}
-
-/* Por dentro: diagrama del flujo en HTML+CSS (vertical por defecto, horizontal desde 1100 px) */
-.flujo{margin:0;background:var(--blanco);border:1px solid var(--linea);padding:28px 20px 24px;font-size:15px}
-.flujo-aprueba{display:flex;align-items:center;gap:12px;margin:0 0 24px;padding:10px 16px;background:var(--crema);border:1px solid var(--borde-calido);
-border-radius:14px;font:italic 1.05rem/1.3 var(--serif);color:#92400e;position:relative}
-.flujo-aprueba .ico{width:40px;height:40px;padding:9px;background:var(--negro);border-color:var(--negro);stroke:var(--ambar2)}
-.pasos{list-style:none;margin:0;padding:0;display:grid;gap:0}
-.pasos li{position:relative;display:grid;align-content:start;grid-template-columns:76px minmax(0,1fr);column-gap:16px;align-items:center;padding-bottom:22px}
-.pasos li:not(:last-child)::after{content:"";position:absolute;left:37px;top:80px;bottom:4px;border-left:2.5px dashed var(--ambar)}
-.nodo{width:76px;height:76px;border-radius:50%;background:var(--crema);border:3px solid #f1e4cf;display:grid;place-items:center;overflow:hidden}
-.nodo .ico{width:34px;height:34px;padding:0;border:0;background:none;border-radius:0}
-.paso-t{display:block;font:400 1.25rem/1.2 var(--serif);color:var(--negro)}
-.paso-d{display:block;color:var(--apoyo);font-size:.95rem;line-height:1.4;margin-top:2px}
-.conector{display:flex;align-items:center;gap:10px;margin:2px 0 14px;font:700 .82rem/1.2 var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--tostado)}
-.conector::before{content:"";width:2.5px;height:28px;margin-left:36px;border-left:2.5px dashed var(--ambar)}
-.carriles{position:relative}
-.carril{position:relative;z-index:2;background:var(--blanco);border:2.5px solid var(--ambar);border-radius:20px;padding:18px 16px 16px}
-.carril-cab{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:12px}
-.carril-cab b{font:400 1.3rem/1.2 var(--serif)}
-.carril-cab .mono{font-family:var(--mono);font-size:.85rem;font-weight:400;letter-spacing:0;text-transform:none}
-.carril-cab span,.capa{font:700 .82rem/1.2 var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--tostado)}
-.carril-pasos{list-style:none;margin:0;padding:0;display:grid;gap:8px}
-.carril-pasos li{display:flex;align-items:center}
-.chip{display:flex;align-items:center;gap:10px;flex:1;background:var(--crema);border-radius:99px;padding:8px 14px;font-weight:600;font-size:.95rem}
-.carril-pasos .ico{width:22px;height:22px;padding:0;border:0;background:none;border-radius:0}
-.capa{position:relative;margin:-16px 14px 0;padding:24px 18px 8px;background:var(--blanco);border:2px solid #f1e4cf;border-top:0;border-radius:0 0 18px 18px;color:var(--apoyo);z-index:1}
-.capa+.capa{margin:-16px 28px 0;z-index:0;color:var(--apoyo)}
-.flujo-apoyo{display:flex;align-items:center;gap:8px;margin:4px 0 8px;font-size:.92rem;color:var(--apoyo)}
-.flujo-apoyo .ico{flex:none;width:28px;height:28px;padding:5px}
-.flujo-nota{display:flex;align-items:center;gap:10px;margin-top:20px;color:var(--apoyo);font-size:.95rem}
-.flujo-nota .ico{width:24px;height:24px;padding:0;border:0;background:none;border-radius:0;stroke:var(--apoyo)}
-@media (min-width:1100px){
- .flujo{padding:36px 32px 28px}
- .flujo-fila{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));column-gap:24px}
- .flujo-apoyo{grid-column:1/-1;justify-content:center}
- .flujo-aprueba{grid-column:2/5;justify-content:center;margin-bottom:30px;background:none;border:0;padding:0 0 4px}
- .flujo-aprueba::after{content:"";position:absolute;left:calc((100% - 48px)/6);right:calc((100% - 48px)/6);bottom:-18px;height:12px;
-  border:2px solid var(--negro);border-bottom:0;border-radius:10px 10px 0 0}
- .pasos{grid-template-columns:repeat(5,minmax(0,1fr));column-gap:24px}
- .pasos li{grid-template-columns:1fr;justify-items:center;text-align:center;align-items:start;padding:0}
- .pasos li:not(:last-child)::after{left:calc(50% + 60px);right:calc(-50% + 36px);top:52px;bottom:auto;border-left:0;border-top:2.5px dashed var(--ambar)}
- .nodo{width:104px;height:104px;margin-bottom:14px}
- .nodo .ico{width:44px;height:44px}
- .paso-d{max-width:16em}
- .conector{grid-column:3/6;flex-direction:column;align-items:center;gap:6px;margin:16px 0 14px;text-align:center}
- .conector::before{margin:0;height:34px}
- .carril{padding:16px 24px 18px}
- .carril-cab{justify-content:flex-start;gap:16px}
- .carril-pasos{display:flex;flex-wrap:wrap;align-items:center;gap:8px 0}
- .chip{flex:none;padding:8px 12px;font-size:.9rem;gap:8px}
- .carril-pasos li+li::before{content:"›";margin:0 6px;color:var(--ambar);font-weight:700;font-size:1.2rem;line-height:1}
-}
-
-/* Caso de éxito */
-.caso .reticula{row-gap:40px;align-items:start}
-.caso .titular{grid-column:1/span 6;margin-bottom:0}
-.caso-dibujo{margin:0 0 40px}
-.caso-dib{display:block;width:100%;height:auto;font-family:inherit}
-.caso-dib-v{display:none;max-width:340px;margin:0 auto}
-@media (max-width:899px){.caso-dib-h{display:none}.caso-dib-v{display:block}.caso-dibujo{margin-bottom:28px}}
-.caso-izq{grid-column:1/span 6}
-.caso-izq .titular{margin-bottom:20px}
-.caso-izq .titular p a{color:var(--negro);text-decoration-color:var(--ambar);text-underline-offset:3px;font-weight:600}
-.caso-cliente{margin:14px 0 32px;font-family:var(--mono);font-size:.85rem;color:var(--tostado)}
-.caso-flujo{list-style:none;margin:0;padding:0;counter-reset:p;display:grid;gap:20px}
-.caso-flujo li{display:grid;grid-template-columns:44px minmax(0,1fr);column-gap:16px;position:relative}
-.caso-flujo li:not(:last-child)::after{content:"";position:absolute;left:21px;top:48px;bottom:-16px;border-left:2px dashed var(--ambar)}
-.caso-flujo li p{color:var(--apoyo)}
-.caso-nota{display:flex;align-items:center;gap:12px;margin-top:28px;font-size:.95rem;color:var(--apoyo)}
-.caso-nota .ico{width:32px;height:32px;padding:6px}
-.caso-lado{grid-column:8/span 5}
-.ico{flex:none;width:28px;height:28px;padding:5px}
-.flujo-nota{display:flex;align-items:center;gap:10px;margin-top:20px;color:var(--apoyo);font-size:.95rem}
-.flujo-nota .ico{width:24px;height:24px;padding:0;border:0;background:none;border-radius:0;stroke:var(--apoyo)}
-@media (min-width:1100px){
- .flujo{padding:36px 32px 28px}
- .flujo-fila{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));column-gap:24px}
- .flujo-apoyo{grid-column:1/-1;justify-content:center}
- .flujo-aprueba{grid-column:2/5;justify-content:center;margin-bottom:30px;background:none;border:0;padding:0 0 4px}
- .flujo-aprueba::after{content:"";position:absolute;left:calc((100% - 48px)/6);right:calc((100% - 48px)/6);bottom:-18px;height:12px;
-  border:2px solid var(--negro);border-bottom:0;border-radius:10px 10px 0 0}
- .pasos{grid-template-columns:repeat(5,minmax(0,1fr));column-gap:24px}
- .pasos li{grid-template-columns:1fr;justify-items:center;text-align:center;align-items:start;padding:0}
- .pasos li:not(:last-child)::after{left:calc(50% + 60px);right:calc(-50% + 36px);top:52px;bottom:auto;border-left:0;border-top:2.5px dashed var(--ambar)}
- .nodo{width:104px;height:104px;margin-bottom:14px}
- .nodo .ico{width:44px;height:44px}
- .paso-d{max-width:16em}
- .conector{grid-column:3/6;flex-direction:column;align-items:center;gap:6px;margin:16px 0 14px;text-align:center}
- .conector::before{margin:0;height:34px}
- .carril{padding:16px 24px 18px}
- .carril-cab{justify-content:flex-start;gap:16px}
- .carril-pasos{display:flex;flex-wrap:wrap;align-items:center;gap:8px 0}
- .chip{flex:none;padding:8px 12px;font-size:.9rem;gap:8px}
- .carril-pasos li+li::before{content:"›";margin:0 6px;color:var(--ambar);font-weight:700;font-size:1.2rem;line-height:1}
-}
-
-/* Caso de éxito */
-.caso .reticula{row-gap:40px;align-items:start}
-.caso .titular{grid-column:1/span 6;margin-bottom:0}
-.puntos{grid-column:1/span 6;list-style:none;margin:0;padding:0;display:grid;gap:24px}
-.puntos li{display:flex;gap:18px}
-.ico{flex:none;width:44px;height:44px;padding:10px;border-radius:50%;background:var(--blanco);border:1px solid var(--borde-calido);
-fill:none;stroke:var(--tostado);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-.caso-flujo h3,.compromisos h3{font-size:1.15rem;margin-bottom:6px}
-.compromisos p{color:var(--apoyo)}
-.ticket{background:var(--blanco);border:1px solid var(--linea);border-radius:12px;overflow:hidden;box-shadow:0 0 0 4px rgba(217,119,6,.06),0 30px 60px -44px rgba(17,17,17,.5)}
-.entregado{margin-top:24px;padding:20px 24px;background:var(--blanco);border:1px solid var(--linea);border-radius:12px}
-.entregado .sobre{margin-bottom:12px}
-.entregado .vinetas{margin:0;padding:0;border-top:0}
-.ticket-cab{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 24px;border-bottom:1px solid var(--linea);
-font:700 .78rem/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--apoyo)}
-.ticket-cuerpo{padding:22px 24px 6px}
-.ticket h3{font-size:1.45rem;margin-bottom:8px}
-.ticket .que{color:var(--apoyo);font-size:.98rem}
-.estados{list-style:none;margin:22px 0 0;padding:0}
-.estados li{position:relative;padding:0 0 20px 40px}
-.estados li::before{content:"";position:absolute;left:9px;top:22px;bottom:0;width:2px;background:var(--gris2)}
-.estados li:last-child::before{display:none}
-.estados .punto{position:absolute;left:0;top:2px;width:20px;height:20px;border-radius:50%;border:2px solid var(--gris3);background:var(--blanco)}
-.estados b{display:block;font-size:.98rem}
-.estados .txt{display:block;color:var(--apoyo);font-size:.92rem}
-.estados li.hecho .punto{background:var(--negro);border-color:var(--negro)}
-.estados li.hecho .punto::after{content:"";position:absolute;left:5px;top:2px;width:5px;height:9px;border:solid var(--ambar2);border-width:0 2px 2px 0;transform:rotate(45deg)}
-.estados li.actual .punto{border-color:var(--tostado);background:#fef3c7}
-.estados li.actual .punto::after{content:"";position:absolute;left:4px;top:4px;width:8px;height:8px;border-radius:50%;background:var(--tostado)}
-.ticket-pie{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px 12px;padding:14px 24px;border-top:1px solid var(--linea);background:var(--gris1);font-size:.9rem;color:var(--apoyo)}
-.ticket-pie b{color:var(--negro)}
-.ticket-pie .mono{color:var(--apoyo)}
-.cierre{margin-top:calc(var(--ritmo)*8);padding-top:calc(var(--ritmo)*5);border-top:1px solid #e6d6bd;display:flex;flex-wrap:wrap;
-justify-content:space-between;align-items:center;gap:24px}
-.cierre p{font:400 clamp(1.5rem,2.8vw,2.1rem)/1.2 var(--serif);max-width:24em}
-
-/* Compromisos: títulos alineados con subgrid */
-.compromisos{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));grid-template-rows:auto auto auto;gap:0 var(--gutter)}
-.compromisos li{display:grid;grid-row:span 3;grid-template-rows:subgrid;align-content:start;border-top:2px solid var(--negro);padding-top:24px}
-.compromisos .ico{margin-bottom:18px;background:var(--blanco);border-color:var(--borde-calido)}
-.compromisos h3{align-self:end}
-
-/* Equipo: tres por dos */
-.equipo{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:48px var(--gutter)}
-.equipo li{display:grid;grid-template-columns:80px minmax(0,1fr);grid-template-areas:"foto nombre" "foto rol" "foto frase";column-gap:24px;align-content:start;align-items:start}
-.equipo .retrato{grid-area:foto;width:80px;height:80px}
-.equipo h3{grid-area:nombre;font-size:1.35rem;align-self:end}
-.equipo .rol{grid-area:rol}
-.equipo p{grid-area:frase;color:var(--apoyo);max-width:36ch}
-.retrato{display:grid;place-items:center;flex:none;border-radius:50%;background:var(--blanco);border:1px solid var(--borde-calido)}
-.retrato .ico{width:44%;height:44%;padding:0;border:0;background:none;border-radius:0;stroke-width:1.6}
-.retrato.jefe{background:var(--negro);border-color:var(--negro)}
-.retrato.jefe .ico{stroke:var(--ambar2)}
-.rol{display:block;font-size:.78rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--tostado);margin:4px 0 8px}
-
-/* Preguntas */
-.faq .reticula{row-gap:32px}
-.faq .titular{grid-column:1/span 4;margin:0}
-.faq h2{font-size:clamp(2rem,3vw,2.5rem)}
-.faq .lista{grid-column:6/span 7;border-top:1px solid var(--linea)}
-details{border-bottom:1px solid var(--linea)}
-summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:20px;padding:20px 0;font:400 1.25rem/1.3 var(--serif)}
-summary::-webkit-details-marker{display:none}
-summary::after{content:"";flex:none;width:14px;height:14px;margin-right:6px;border:solid var(--tostado);border-width:0 2px 2px 0;transform:rotate(45deg) translateY(-4px);transition:transform .25s}
-details[open] summary::after{transform:rotate(-135deg) translateY(-4px)}
-details p{padding:0 0 22px;color:var(--apoyo);max-width:42em}
-
-/* Contacto */
-.contacto{background:var(--negro);color:var(--blanco)}
-.contacto .reticula{align-items:end;row-gap:32px}
-.contacto .titular{grid-column:1/span 7;margin:0}
-.contacto .sobre{color:var(--ambar2)}
-.contacto h2{font-size:clamp(2.2rem,5vw,3.8rem)}
-.contacto .titular p{color:#d6d3d1}
-.contacto .accion{grid-column:8/span 5;display:flex;flex-direction:column;align-items:flex-start;gap:14px}
-.correo-fila{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;color:#e7e5e4;font-size:1rem}
-.correo-fila .correo{word-break:break-all;color:#e7e5e4;text-decoration-color:var(--ambar2);text-underline-offset:3px}
-.copiar{background:none;border:1px solid #78716c;border-radius:4px;color:var(--blanco);font:600 .88rem var(--sans);padding:10px 14px;cursor:pointer}
-.copiar:hover{border-color:var(--ambar2)}
-.aviso-copia{min-height:1.3em;font-size:.9rem;color:var(--ambar2)}
-.firma{display:flex;align-items:center;gap:14px;color:#d6d3d1;font-size:.95rem}
-.firma .ico{width:44px;height:44px;background:transparent;border-color:#57534e;stroke:var(--ambar2)}
-.privacidad-linea{margin-top:4px;padding-top:16px;border-top:1px solid #3a3530;color:#d6d3d1;font-size:.92rem;max-width:40ch}
-.privacidad-linea a{color:var(--blanco);text-decoration-color:var(--ambar2);text-underline-offset:3px}
-
-/* Pie */
-.pie{background:var(--gris1);color:var(--texto);font-size:.95rem;padding:calc(var(--ritmo)*9) 0 calc(var(--ritmo)*4)}
-.pie .reticula{row-gap:40px}
-.pie .col-marca{grid-column:1/span 4}
-.pie .col-marca p{margin-top:16px;font:italic 1.05rem var(--serif);color:#92400e}
-.pie nav,.pie .col{grid-column:span 2}
-.pie .col-contacto{grid-column:span 4}
-.pie h2{font:700 .78rem/1.2 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--negro);margin-bottom:16px}
-.pie ul{list-style:none;margin:0;padding:0;display:grid;gap:10px}
-.pie a{text-decoration:none;color:var(--texto);display:inline-block;min-height:24px;padding-block:2px}
-.pie a:hover{color:var(--negro);text-decoration:underline;text-decoration-color:var(--ambar);text-underline-offset:4px}
-.pie .correo{word-break:break-all}
-.pie .base{margin-top:calc(var(--ritmo)*7);padding-top:24px;border-top:1px solid #ddd5c8;color:var(--apoyo);font-size:.88rem}
-
-/* CTA fija en móvil: solo al subir, pasado el hero y fuera de contacto */
-.cta-movil{display:none}
-@media (max-width:760px){
- .js .cta-movil{display:flex;justify-content:center;position:fixed;left:16px;right:16px;bottom:16px;z-index:40;
-  box-shadow:0 16px 32px -12px rgba(17,17,17,.55);transform:translateY(140%);visibility:hidden;transition:transform .3s ease,visibility 0s linear .3s}
- .js .cta-movil.visible{transform:none;visibility:visible;transition:transform .3s ease}
- .js body.con-cta .pie{padding-bottom:110px}
-}
-/* Páginas legales y 404 */
-.legal{padding:calc(var(--ritmo)*10) 0 calc(var(--ritmo)*12)}
-.legal .contenedor{max-width:820px}
-.legal h1{font-size:clamp(2.2rem,5vw,3.4rem);margin-bottom:12px}
-.legal .fecha{color:var(--apoyo);font-size:.95rem;margin-bottom:48px}
-.legal h2{font-size:1.5rem;margin:44px 0 14px}
-.legal p,.legal li{color:var(--texto);max-width:68ch}
-.legal p+p{margin-top:12px}
-.legal ul{padding-left:22px;margin:12px 0 0}.legal li+li{margin-top:10px}
-.legal dl{display:grid;grid-template-columns:minmax(0,180px) minmax(0,1fr);gap:10px 24px;margin:0;padding:24px;background:var(--crema)}
-.legal dt{font-weight:700}.legal dd{margin:0}
-.legal a:not(.btn){color:var(--negro);text-decoration-color:var(--ambar);text-underline-offset:3px}
-.legal .tabla{overflow-x:auto;margin-top:16px;border:1px solid var(--linea)}
-.legal table{border-collapse:collapse;width:100%;min-width:560px;font-size:.95rem}
-.legal th,.legal td{text-align:left;vertical-align:top;padding:12px 14px;border-bottom:1px solid var(--linea)}
-.legal th{background:var(--crema);font-weight:700}.legal tbody tr:last-child td{border-bottom:0}
-.pendiente{background:#fef3c7;color:#7c2d12;padding:1px 6px;border:1px dashed #b45309;font-weight:600}
-.no-encontrada .contenedor{text-align:center}
-.simbolo-404 .ico{width:88px;height:88px;padding:22px;margin:0 auto 24px;background:var(--crema);stroke-width:1.5}
-.no-encontrada .subtitulo{margin:16px auto 32px;color:var(--apoyo);font-size:1.15rem;max-width:32em}
-
-/* Aparición al hacer scroll: solo desplazamiento (nada queda invisible si falla el JS) */
-.js .revela{transform:translateY(28px);transition:transform .7s cubic-bezier(.2,.7,.2,1)}
-.js .revela.visto{transform:none}
-
-@media (max-width:1000px){
- .hero .reticula{min-height:0}
- .hero-texto,.hero-visual{grid-column:1/-1}
- .hero-visual{width:100%;max-width:560px}
- .tarjeta{grid-column:span 6}.tarjeta.cta{grid-column:span 12}
- .mision .frase,.mision .lado{grid-column:1/-1}
- .hero::before{-webkit-mask-image:linear-gradient(180deg,transparent 0,transparent 45%,#000 85%);mask-image:linear-gradient(180deg,transparent 0,transparent 45%,#000 85%)}
- .caso-izq,.caso-lado{grid-column:1/-1}.caso-lado{max-width:560px}
- .equipo{grid-template-columns:repeat(2,minmax(0,1fr))}
- .compromisos{grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:none;row-gap:40px}
- .compromisos li{grid-row:auto;grid-template-rows:none}
- .faq .titular,.faq .lista{grid-column:1/-1}
- .contacto .titular,.contacto .accion{grid-column:1/-1}
- .pie .col-marca{grid-column:1/-1}.pie nav,.pie .col{grid-column:span 4}.pie .col-contacto{grid-column:span 4}
-}
-@media (max-width:900px){
- .menu-boton{display:inline-flex}
- .cab .cab-cta{display:none}
- .js .menu{display:none;position:absolute;top:100%;left:0;right:0;background:var(--blanco);border-bottom:1px solid var(--linea);
-  box-shadow:0 24px 32px -24px rgba(17,17,17,.35);padding:8px var(--gutter) 24px}
- .js .menu.abierto{display:block}
- .js .menu ul{flex-direction:column;align-items:stretch;gap:0}
- .js .menu li a{display:block;padding:14px 8px;border-bottom:1px solid var(--linea);font-size:1.05rem}
- .js .menu a:focus-visible{outline-offset:-2px;box-shadow:inset 0 0 0 5px var(--ambar2)}
- .js .menu .solo-movil{display:block;margin-top:20px}
- .js .menu .solo-movil a{display:flex;justify-content:center;border:2px solid var(--negro);color:var(--blanco)}
- html:not(.js) .menu-boton{display:none}
- html:not(.js) .cab .contenedor{height:auto;flex-wrap:wrap;padding-top:12px;padding-bottom:12px}
- html:not(.js) .menu ul{flex-wrap:wrap;gap:8px 20px}
-}
-@media (max-width:760px){
- :root{--gutter:16px;--cab:64px}
- body{font-size:16px}
- .bloque{padding:calc(var(--ritmo)*7) 0}
- .titular{margin-bottom:calc(var(--ritmo)*4)}
- .titular p{font-size:1.05rem}
- .hero .reticula{padding-block:calc(var(--ritmo)*6) calc(var(--ritmo)*6);row-gap:32px}
- .acciones{margin-top:calc(var(--ritmo)*4)}
- .escena{padding:20px 16px 16px;border-radius:16px}
- .tarjeta,.tarjeta.cta{grid-column:1/-1}
- .tarjeta .cuerpo{padding:20px 20px 22px}
- .ilus{height:104px}
- .vinetas{gap:4px;padding-top:12px;font-size:.92rem}
- .compromisos li{grid-template-columns:44px minmax(0,1fr);column-gap:14px;padding-top:18px}
- .compromisos .ico{grid-row:1/span 2;margin:0}
- .compromisos h3{align-self:center;margin:0 0 4px}
- .mision .reticula{row-gap:16px}
- .caso-flujo{gap:18px}
- .estados li{padding-bottom:14px}
- .tarjeta.cta .cuerpo{padding:28px 20px}
- .flujo{padding:20px 14px 18px;margin:0 calc(var(--gutter)*-1);border-left:0;border-right:0}
- .compromisos{grid-template-columns:1fr;row-gap:28px}
- .equipo{grid-template-columns:1fr;row-gap:28px}
- .equipo li{grid-template-columns:72px minmax(0,1fr);grid-template-areas:"foto nombre" "foto rol" "frase frase";column-gap:16px}
- .equipo .retrato{width:72px;height:72px}
- .equipo p{margin-top:8px;max-width:none}
- .cierre{margin-top:calc(var(--ritmo)*6)}
- .pie nav,.pie .col,.pie .col-contacto{grid-column:span 6}.pie .col-contacto{grid-column:1/-1}
- .legal dl{grid-template-columns:1fr;gap:4px}.legal dd{margin-bottom:12px}
- .logotipo{height:22px}
-}
-@media (max-width:480px){
- .hero-equipo{gap:8px;margin-bottom:16px}
- .hero-equipo .retrato{width:52px;height:52px;margin-bottom:0}
- .pipeline .largo{display:none}
- .hero-equipo .nombre{display:none}
- .hero-equipo-pie{display:block}
- .tarjeta .imagen{display:none}
- .tarjeta .cuerpo{padding-top:22px;border-top:3px solid var(--ambar)}
- .pasos li{grid-template-columns:60px minmax(0,1fr);padding-bottom:16px}
- .nodo{width:60px;height:60px}.nodo .ico{width:28px;height:28px}
- .pasos li:not(:last-child)::after{left:29px;top:64px}
- .conector::before{margin-left:28px}
- .flujo-aprueba{margin-bottom:18px}
- .logotipo{height:20px}
-}
-@media (prefers-reduced-motion:reduce){
- html{scroll-behavior:auto}
- *,*::before,*::after{animation:none!important;transition:none!important}
- .js .revela{transform:none}
-}
-@media print{
- .revela{opacity:1!important;transform:none!important}
- .cab,.cta-movil,.menu-boton,.copiar{display:none!important}
- .hero,.contacto,.tarjeta.cta{background:#fff!important;color:#000!important}
-}
-"""
+# La hoja de estilos vive en estilos.css (WEB-017) y se publica con su hash en el nombre: el navegador la guarda
+# en caché entre páginas y visitas, y un cambio de estilos cambia el nombre (nunca se sirve una versión vieja).
+CSS = (HERE / "estilos.css").read_text(encoding="utf-8")
+CSS_NOMBRE = f"estilos.{hashlib.sha256(CSS.encode('utf-8')).hexdigest()[:10]}.css"
 
 JS = r"""
 (function(){
@@ -777,7 +338,10 @@ JS = r"""
  }catch(e){io=null;}
  function todo(){document.querySelectorAll('.revela').forEach(function(e){e.classList.add('visto');});}
  function alCambiar(mq,f){if(mq.addEventListener)mq.addEventListener('change',f);else if(mq.addListener)mq.addListener(f);}
- addEventListener('beforeprint',todo);
+ // Al imprimir: todo en su sitio y las preguntas abiertas; al terminar, las que estaban cerradas se vuelven a cerrar.
+ var cerradas=[];
+ addEventListener('beforeprint',function(){todo();cerradas=[].filter.call(document.querySelectorAll('details:not([open])'),function(x){x.open=true;return true;});});
+ addEventListener('afterprint',function(){cerradas.forEach(function(x){x.open=false;});cerradas=[];});
  addEventListener('DOMContentLoaded',function(){
   try{
    var cab=document.querySelector('.cab');
@@ -871,6 +435,9 @@ def sin_viudas(fragmento):
     return re.sub(r"(<h[12][^>]*>)(.*?)(</h[12]>)", unir, fragmento, flags=re.S)
 
 
+HASH_JS = "sha256-" + base64.b64encode(hashlib.sha256(JS.encode("utf-8")).digest()).decode()
+OG_ALT = "Logotipo de th3b1gbr0th3r IT junto al lema «Software a la medida de tu negocio»."
+
 JSON_LD = json.dumps({"@context": "https://schema.org", "@graph": [
     {"@type": "WebSite", "@id": URL_BASE + "#sitio", "url": URL_BASE, "name": "th3b1gbr0th3r IT", "inLanguage": "es",
      "publisher": {"@id": URL_BASE + "#empresa"}},
@@ -884,27 +451,34 @@ JSON_LD = json.dumps({"@context": "https://schema.org", "@graph": [
 ]}, ensure_ascii=False)
 
 
-def pagina(titulo, descripcion, cuerpo, ruta, base="index.html", raiz="", indexar=True, extra_head=""):
+def pagina(titulo, descripcion, cuerpo, ruta, base="index.html", raiz="", indexar=True, extra_head="",
+           og_imagen="og.png", og_alt=OG_ALT):
     """ruta: nombre publicado (para og:url). raiz: "" (rutas relativas) o "/" (404: rutas desde la raíz del dominio)."""
     cuerpo = sin_viudas(cuerpo)
     inicio = raiz or "index.html"
-    css = CSS.replace("@RAIZ@", raiz).replace("@NORMAL@", FUENTE_NORMAL).replace("@CURSIVA@", FUENTE_CURSIVA)
     url = URL_BASE + ("" if ruta == "index.html" else ruta)
     robots = ('<meta name="robots" content="index,follow,max-image-preview:large">\n' if indexar
               else '<meta name="robots" content="noindex">\n')
-    hash_js = "sha256-" + base64.b64encode(hashlib.sha256(JS.encode("utf-8")).digest()).decode()
-    csp = (f"default-src 'none'; script-src '{hash_js}'; style-src 'unsafe-inline'; img-src 'self' data:; "
-           "font-src 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'")
+    # CSP: sin 'unsafe-inline' en ningún sitio. El JS va en línea con su hash; los estilos, solo desde la hoja propia
+    # (no hay atributos style ni <style> en las páginas). connect-src 'self' permite leer robots.txt a las herramientas
+    # de auditoría (Lighthouse) sin abrir nada hacia fuera.
+    csp = (f"default-src 'none'; script-src '{HASH_JS}'; style-src 'self'; img-src 'self' data:; "
+           "font-src 'self'; manifest-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'")
     return f"""<!doctype html>
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta http-equiv="Content-Security-Policy" content="{csp}">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <title>{titulo}</title>
 <meta name="description" content="{descripcion}">
-{robots}<meta name="theme-color" content="#111111">
+{robots}<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#111111" media="(prefers-color-scheme: dark)">
+<link rel="preload" href="{raiz}fuentes/{FUENTE_NORMAL}" as="font" type="font/woff2" crossorigin fetchpriority="high">
+<script>{JS}</script>
+<link rel="stylesheet" href="{raiz}{CSS_NOMBRE}">
 <link rel="canonical" href="{url}">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="es_ES">
@@ -912,22 +486,21 @@ def pagina(titulo, descripcion, cuerpo, ruta, base="index.html", raiz="", indexa
 <meta property="og:title" content="{titulo}">
 <meta property="og:description" content="{descripcion}">
 <meta property="og:url" content="{url}">
-<meta property="og:image" content="{URL_BASE}og.png">
+<meta property="og:image" content="{URL_BASE}{og_imagen}">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Logotipo de th3b1gbr0th3r IT junto al lema «Software a la medida de tu negocio».">
+<meta property="og:image:alt" content="{og_alt}">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="{titulo}">
 <meta name="twitter:description" content="{descripcion}">
-<meta name="twitter:image" content="{URL_BASE}og.png">
-<link rel="icon" href="{raiz}favicon.svg" type="image/svg+xml">
+<meta name="twitter:image" content="{URL_BASE}{og_imagen}">
+<meta name="twitter:image:alt" content="{og_alt}">
+<link rel="icon" href="{raiz}favicon.svg" type="image/svg+xml" sizes="any">
+<link rel="icon" href="{raiz}favicon-32.png" type="image/png" sizes="32x32">
+<link rel="icon" href="{raiz}favicon-16.png" type="image/png" sizes="16x16">
 <link rel="apple-touch-icon" href="{raiz}apple-touch-icon.png">
 <link rel="manifest" href="{raiz}site.webmanifest">
-<link rel="preload" href="{raiz}fuentes/{FUENTE_NORMAL}" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="{raiz}fuentes/{FUENTE_CURSIVA}" as="font" type="font/woff2" crossorigin>
-{extra_head}<style>{css}</style>
-<script>{JS}</script>
-</head>
+{extra_head}</head>
 <body>
 {logotipo.definicion()}
 {cabecera(base, inicio)}
@@ -1231,11 +804,19 @@ COOKIES = legal("Política de cookies", f"""
 <p>Más información en el <a href="aviso-legal.html">aviso legal</a> y en la <a href="privacidad.html">política de privacidad</a>, o escribiéndonos a <a href="{MAILTO_DERECHOS}">{MAIL}</a>.</p>
 """)
 
+def og_legal(nombre):
+    """Imagen para redes propia de cada página legal (recursos/og-<página>.png, se genera con --imagenes)."""
+    return f"og-{nombre.removesuffix('.html')}.png"
+
+
 PAGINAS_LEGALES = {
     "aviso-legal.html": ("Aviso legal · th3b1gbr0th3r IT", "Aviso legal de la web de th3b1gbr0th3r IT: datos del titular y condiciones de uso.", AVISO),
     "privacidad.html": ("Política de privacidad · th3b1gbr0th3r IT", "Qué datos personales tratamos, para qué, con qué proveedores y cuáles son tus derechos.", PRIVACIDAD),
     "cookies.html": ("Política de cookies · th3b1gbr0th3r IT", "Esta web no usa cookies ni rastreadores.", COOKIES),
 }
+
+IMAGENES_PUBLICADAS = ("og.png", "apple-touch-icon.png", "icono-192.png", "icono-512.png", "favicon-32.png", "favicon-16.png",
+                       "favicon.ico", *(og_legal(n) for n in PAGINAS_LEGALES))
 
 # 404: GitHub Pages la sirve en cualquier ruta inexistente, así que todo va desde la raíz del dominio.
 NO_ENCONTRADA = pagina("Página no encontrada · th3b1gbr0th3r IT", "La página que buscas no existe.", f"""<section class="legal no-encontrada">
@@ -1256,12 +837,15 @@ def construir():
     (SITIO / "index.html").write_text(html, encoding="utf-8")
     (SITIO / "404.html").write_text(NO_ENCONTRADA, encoding="utf-8")
     for nombre, (titulo, desc, cuerpo) in PAGINAS_LEGALES.items():
-        (SITIO / nombre).write_text(pagina(titulo, desc, cuerpo, nombre), encoding="utf-8")
+        corto = titulo.split(" · ")[0]
+        (SITIO / nombre).write_text(pagina(titulo, desc, cuerpo, nombre, og_imagen=og_legal(nombre),
+                                           og_alt=f"th3b1gbr0th3r IT · {corto}"), encoding="utf-8")
+    (SITIO / CSS_NOMBRE).write_text(CSS, encoding="utf-8")
     (SITIO / "favicon.svg").write_text(MONOGRAMA.replace('aria-hidden="true"', 'xmlns="http://www.w3.org/2000/svg"'), encoding="utf-8")
     (SITIO / "fuentes").mkdir()
     for f in (FUENTE_NORMAL, FUENTE_CURSIVA, "OFL.txt"):
         shutil.copy2(FUENTES / f, SITIO / "fuentes" / f)
-    for f in ("og.png", "apple-touch-icon.png", "icono-192.png", "icono-512.png"):
+    for f in IMAGENES_PUBLICADAS:
         shutil.copy2(RECURSOS / f, SITIO / f)
     (SITIO / "site.webmanifest").write_text(json.dumps({
         "name": "th3b1gbr0th3r IT", "short_name": "th3b1gbr0th3r", "lang": "es", "start_url": "./", "display": "browser",
@@ -1319,11 +903,15 @@ def servidor(extra):
     return srv, f"http://127.0.0.1:{srv.server_address[1]}"
 
 
-def _chrome(destino, tam, url, perfil, movimiento=False):
+def _chrome(destino, tam, url, perfil, movimiento=False, oscuro=False, transparente=False):
     args = ["google-chrome", "--headless=new", "--disable-gpu", "--no-sandbox", "--hide-scrollbars", "--no-proxy-server",
             f"--user-data-dir={perfil}", "--virtual-time-budget=4000", f"--screenshot={destino}", f"--window-size={tam}", url]
     if not movimiento:
         args.insert(5, "--force-prefers-reduced-motion")
+    if oscuro:  # prefers-color-scheme: dark
+        args[5:5] = ["--force-dark-mode", "--blink-settings=preferredColorScheme=0"]
+    if transparente:
+        args.insert(5, "--default-background-color=00000000")
     subprocess.run(args, check=True, capture_output=True)
 
 
@@ -1343,16 +931,23 @@ def _recortar(png):
         im.crop((0, 0, w, min(h, y + 2))).save(png)
 
 
+def sin_csp(pagina_html):
+    """Solo para las páginas de captura (servidas en local desde /_captura/, nunca publicadas): sin la CSP, para poder
+    inyectarles estilos y JS, y con la hoja de estilos y la fuente desde la raíz."""
+    pagina_html = re.sub(r'<meta http-equiv="Content-Security-Policy"[^>]*>\n', "", pagina_html)
+    return pagina_html.replace(f'href="{CSS_NOMBRE}"', f'href="/{CSS_NOMBRE}"').replace('href="fuentes/', 'href="/fuentes/')
+
+
 def capturas():
     CAPTURAS.mkdir(exist_ok=True)
     extra = {
         # Menú móvil abierto con teclado (click() sin ratón: el foco va al primer enlace).
-        "/_captura/menu.html": html.replace("</body>", "<script>addEventListener('load',()=>document.querySelector('.menu-boton').click())</script></body>"),
+        "/_captura/menu.html": sin_csp(html).replace("</body>", "<script>addEventListener('load',()=>document.querySelector('.menu-boton').click())</script></body>"),
         # CTA fija en móvil tal como aparece al subir a media página.
-        "/_captura/cta.html": html.replace("</head>", "<style>main>section:nth-of-type(-n+4){display:none}"
+        "/_captura/cta.html": sin_csp(html).replace("</head>", "<style>main>section:nth-of-type(-n+4){display:none}"
                                                       ".js .cta-movil{visibility:visible!important;transform:none!important}</style></head>"),
         # Solo el diagrama del flujo (imagen para redes, capturas/flujo.png).
-        "/_captura/flujo.html": html.replace("</head>", "<style>.cab,.pie,.cta-movil,main>section:not(#por-dentro){display:none!important}"
+        "/_captura/flujo.html": sin_csp(html).replace("</head>", "<style>.cab,.pie,.cta-movil,main>section:not(#por-dentro){display:none!important}"
                                                         "#por-dentro{padding:40px 0}#por-dentro .titular{margin-bottom:28px}</style></head>"),
     }
     trabajos = [("escritorio", "1440,12000", "/", True), ("tableta-1024", "1024,14000", "/", True), ("tableta-820", "820,15000", "/", True),
@@ -1362,29 +957,29 @@ def capturas():
                 ("legal-privacidad-movil", "390,5200", "/privacidad.html", True),
                 ("404", "1440,900", "/una/ruta/que/no-existe", False), ("404-movil", "360,780", "/otra/que/tampoco", False)]
     trabajos += [(f"legal-{n.removesuffix('.html')}", "1440,3200", f"/{n}", True) for n in PAGINAS_LEGALES]
+    # Esquema oscuro (prefers-color-scheme: dark): portada, menú, una legal y la 404.
+    trabajos += [(f"{n}-oscuro", tam, ruta, rec) for n, tam, ruta, rec in trabajos
+                 if n in ("escritorio", "movil-390", "movil-menu", "legal-privacidad-movil", "404")]
     srv, url = servidor(extra)
     try:
         with tempfile.TemporaryDirectory(dir=base_temporal()) as tmp:
             for i, (nombre, tam, ruta, recortar) in enumerate(trabajos):
                 destino = CAPTURAS / f"{nombre}.png"
-                _chrome(destino, tam, url + ruta, Path(tmp) / f"perfil{i}")
+                _chrome(destino, tam, url + ruta, Path(tmp) / f"perfil{i}", oscuro=nombre.endswith("-oscuro"))
                 if recortar:
                     _recortar(destino)
     finally:
         srv.shutdown()
-    for f in ("og.png", "apple-touch-icon.png"):
+    for f in ("og.png", "apple-touch-icon.png", *(og_legal(n) for n in PAGINAS_LEGALES)):
         shutil.copy2(RECURSOS / f, CAPTURAS / f)
     print(f"Capturas: {CAPTURAS}")
 
 
-def imagenes():
-    """Regenera recursos/og.png (1200×630) y recursos/apple-touch-icon.png (180×180) con Chrome headless."""
-    from PIL import Image
-    fuente = (FUENTES / FUENTE_NORMAL).as_uri()
-    cursiva = (FUENTES / FUENTE_CURSIVA).as_uri()
-    caras = (f'@font-face{{font-family:S;src:url({fuente})}}@font-face{{font-family:S;font-style:italic;src:url({cursiva})}}'
-             'html,body{margin:0}')
-    og = f"""<!doctype html><meta charset="utf-8"><style>{caras}
+def _og_html(caras, titulo, lema, pasos=True):
+    """Imagen para redes de 1200×630: logotipo, raya ámbar, titular y lema (y el flujo de estados en la portada)."""
+    extra = ('<div class="pasos"><i class="ok"></i><b></b><i class="ok"></i><b></b><i class="ok"></i><b></b><i class="ok"></i><b></b><i></i></div>'
+             '<p class="mono">petición → pruebas ✓ → copia ✓ → despliegue ✓ → validado</p>') if pasos else ""
+    return f"""<!doctype html><meta charset="utf-8"><style>{caras}
 body{{width:1200px;height:630px;background:radial-gradient(circle,rgba(253,246,236,.10) 1.4px,transparent 1.8px) 0 0/28px 28px,#111;color:#fdf6ec;font-family:S,serif;box-sizing:border-box;padding:88px 96px;overflow:hidden;position:relative}}
 body::before{{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#111 0,#111 45%,rgba(17,17,17,0) 85%)}}
 .logotipo{{height:46px;width:auto;color:#fdf6ec;display:block;position:relative;z-index:1}}.logo-it{{fill:#f59e0b}}
@@ -1397,32 +992,50 @@ p{{font:600 28px system-ui,sans-serif;color:#d6d3d1;margin:0;position:relative;z
 .pasos i.ok{{background:#f59e0b;border-color:#f59e0b}}
 .pasos b{{width:56px;border-top:3px dashed #d97706}}
 </style>
-<body>{LOGOTIPO}<div class="raya"></div><h1>Software a la medida de tu&nbsp;negocio.</h1>
-<p>Desarrollo y mantenimiento para pequeñas empresas</p>
-<div class="pasos"><i class="ok"></i><b></b><i class="ok"></i><b></b><i class="ok"></i><b></b><i class="ok"></i><b></b><i></i></div>
-<p class="mono">petición → pruebas ✓ → copia ✓ → despliegue ✓ → validado</p></body>"""
+<body>{LOGOTIPO}<div class="raya"></div><h1>{titulo}</h1>
+<p>{lema}</p>{extra}</body>"""
+
+
+def imagenes():
+    """Regenera en recursos/ las imágenes con Chrome headless y Pillow: og.png y una og por página legal (1200×630),
+    apple-touch-icon.png (180×180), icono-192/512.png (manifest), favicon-32/16.png y favicon.ico (16+32)."""
+    from PIL import Image
+    fuente = (FUENTES / FUENTE_NORMAL).as_uri()
+    cursiva = (FUENTES / FUENTE_CURSIVA).as_uri()
+    caras = (f'@font-face{{font-family:S;src:url({fuente})}}@font-face{{font-family:S;font-style:italic;src:url({cursiva})}}'
+             'html,body{margin:0}')
+    lema = "Desarrollo y mantenimiento para pequeñas empresas"
+    ogs = {"og.png": _og_html(caras, "Software a la medida de tu&nbsp;negocio.", lema)}
+    for nombre, (titulo, _, _) in PAGINAS_LEGALES.items():
+        ogs[og_legal(nombre)] = _og_html(caras, titulo.split(" · ")[0], lema, pasos=False)
     cuadrado = MONOGRAMA.replace('rx="24"', 'rx="0"')  # iOS ya redondea las esquinas
-    icono_html = (f'<!doctype html><meta charset="utf-8"><style>{caras}body{{width:720px;height:720px;background:#111;display:grid;place-items:center;overflow:hidden}}'
-                  f'svg{{width:720px;height:720px}}</style><body>{cuadrado}</body>')
+    lienzo = '<!doctype html><meta charset="utf-8"><style>{c}html,body{{background:transparent}}body{{width:720px;height:720px;display:grid;place-items:center;overflow:hidden}}svg{{width:720px;height:720px}}</style><body>{s}</body>'
     with tempfile.TemporaryDirectory(dir=base_temporal()) as tmp:
-        for nombre, contenido, tam, final in (("og", og, "1200,630", (1200, 630)), ("icono", icono_html, "720,720", (180, 180))):
-            if nombre == "icono":
-                png0 = Path(tmp) / "icono0.png"
-                p0 = Path(tmp) / "icono0.html"
-                p0.write_text(contenido, encoding="utf-8")
-                _chrome(png0, tam, p0.as_uri(), Path(tmp) / "perfil-icono0")
-                for lado in (192, 512):
-                    Image.open(png0).convert("RGB").resize((lado, lado), Image.LANCZOS).save(RECURSOS / f"icono-{lado}.png", optimize=True)
-            pagina_tmp = Path(tmp) / f"{nombre}.html"
+        t = Path(tmp)
+
+        def render(nombre, contenido, tam, transparente=False):
+            pagina_tmp = t / f"{nombre}.html"
             pagina_tmp.write_text(contenido, encoding="utf-8")
-            png = Path(tmp) / f"{nombre}.png"
-            _chrome(png, tam, pagina_tmp.as_uri(), Path(tmp) / f"perfil-{nombre}")
-            im = Image.open(png).convert("RGB")
-            im = im.crop((0, 0, *[int(v) for v in tam.split(",")])) if im.size != final and nombre == "og" else im
-            im = im.resize(final, Image.LANCZOS) if im.size != final else im
-            destino = RECURSOS / ("og.png" if nombre == "og" else "apple-touch-icon.png")
-            im.save(destino, optimize=True)
-            print(f"{destino} {im.size}")
+            png = t / f"{nombre}.png"
+            _chrome(png, tam, pagina_tmp.as_uri(), t / f"perfil-{nombre}", transparente=transparente)
+            return Image.open(png)
+
+        for destino, contenido in ogs.items():
+            im = render(destino.removesuffix(".png"), contenido, "1200,630").convert("RGB")
+            im = im.crop((0, 0, 1200, 630)) if im.size != (1200, 630) else im
+            # Paleta de 256 colores: la imagen es plana (fondo, texto y ámbar) y pesa mucho menos sin pérdida visible.
+            im.quantize(colors=256, method=Image.Quantize.MEDIANCUT, dither=Image.Dither.NONE).save(RECURSOS / destino, optimize=True)
+            print(f"{RECURSOS / destino} {im.size}")
+        icono = render("icono", lienzo.format(c=caras, s=cuadrado), "720,720").convert("RGB")
+        icono.resize((180, 180), Image.LANCZOS).save(RECURSOS / "apple-touch-icon.png", optimize=True)
+        for lado in (192, 512):
+            icono.resize((lado, lado), Image.LANCZOS).save(RECURSOS / f"icono-{lado}.png", optimize=True)
+        # Favicon con las esquinas redondeadas del SVG, sobre fondo transparente.
+        fav = render("favicon", lienzo.format(c=caras, s=MONOGRAMA), "720,720", transparente=True).convert("RGBA")
+        for lado in (32, 16):
+            fav.resize((lado, lado), Image.LANCZOS).save(RECURSOS / f"favicon-{lado}.png", optimize=True)
+        fav.resize((64, 64), Image.LANCZOS).save(RECURSOS / "favicon.ico", sizes=[(16, 16), (32, 32)])
+        print(f"{RECURSOS}: apple-touch-icon, icono-192/512, favicon-32/16 y favicon.ico")
 
 
 if __name__ == "__main__":

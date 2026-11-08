@@ -8,6 +8,7 @@ contenido interno. Avisa (sin fallar) de los marcadores [PENDIENTE: …] que que
 Solo biblioteca estándar. Uso: python3 verificar.py [carpeta]   (por defecto sitio/)
 Sale con código 1 si algo falla.
 """
+import hashlib
 import re
 import sys
 from html.parser import HTMLParser
@@ -16,17 +17,28 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 PAGINAS_LEGALES = ["aviso-legal.html", "privacidad.html", "cookies.html"]
 FUENTES = ["fuentes/source-serif-4-latin-400-normal.woff2", "fuentes/source-serif-4-latin-400-italic.woff2"]
-ESPERADOS = ["index.html", "404.html", *PAGINAS_LEGALES, "favicon.svg", "apple-touch-icon.png", "og.png", *FUENTES, "fuentes/OFL.txt",
+ESPERADOS = ["index.html", "404.html", *PAGINAS_LEGALES, "favicon.svg", "favicon-32.png", "favicon-16.png", "favicon.ico",
+             "apple-touch-icon.png", "og.png", *(f"og-{n.removesuffix('.html')}.png" for n in PAGINAS_LEGALES), *FUENTES, "fuentes/OFL.txt",
              ".nojekyll", "robots.txt", "sitemap.xml", "site.webmanifest", "icono-192.png", "icono-512.png"]
 NO_PUBLICAR = ["flujo.svg", "flujo-vertical.svg"]  # el diagrama es HTML+CSS desde la ronda 2 de WEB-006
 TAMANO_MAX = 1024 * 1024  # 1 MB en total
-# Pares texto/fondo que deben cumplir WCAG AA (nombres de variables de :root o colores literales): (texto, fondo, mínimo)
+# Pares texto/fondo que deben cumplir WCAG AA en los DOS esquemas (claro y oscuro), con los tokens de :root de la hoja
+# de estilos (o colores literales): (texto, fondo, mínimo). 4,5:1 para texto; 3:1 para el foco y los elementos gráficos.
 PARES_CONTRASTE = [
-    ("texto", "blanco", 4.5), ("apoyo", "blanco", 4.5), ("texto", "gris1", 4.5), ("apoyo", "gris1", 4.5),
-    ("tostado", "blanco", 4.5), ("#92400e", "gris1", 4.5), ("negro", "blanco", 4.5),
-    ("crema", "negro", 4.5), ("ambar2", "negro", 4.5), ("#d6d3d1", "negro", 4.5), ("#e7e5e4", "negro", 4.5),
-    ("blanco", "negro", 4.5), ("negro", "ambar2", 4.5), ("ambar", "negro", 3.0),
+    # Texto sobre los fondos de página, secciones alternas, tarjetas y pie
+    *[(t, f, 4.5) for t in ("tinta", "texto", "apoyo", "acento")
+      for f in ("fondo", "fondo-alt", "fondo-pie", "superficie", "superficie-alt")
+      if (t, f) != ("acento", "fondo-pie")],  # el tostado de marca no se usa sobre el gris del pie (4,46:1)
+    ("acento-suave", "superficie-alt", 4.5), ("acento-suave", "fondo-pie", 4.5), ("acento-suave", "fondo-alt", 4.5),
+    ("etq-texto", "etq-fondo", 4.5), ("btn-texto", "btn-fondo", 4.5), ("btn-texto", "btn-hover", 4.5),
+    ("apoyo", "etq-fondo", 4.5),
+    # Foco (anillo exterior) y trazos decorativos
+    ("foco", "fondo", 3.0), ("foco", "fondo-alt", 3.0), ("foco", "superficie", 3.0), ("ambar", "fondo", 3.0), ("ambar", "superficie", 3.0),
+    # Secciones oscuras (hero, contacto, tarjeta de llamada): oscuras en los dos esquemas
+    *[(t, "oscuro-fondo", 4.5) for t in ("crema", "ambar2", "oscuro-texto", "oscuro-claro", "blanco")],
+    ("negro", "ambar2", 4.5), ("negro", "#fbbf24", 4.5), ("ambar", "oscuro-fondo", 3.0), ("crema", "oscuro-fondo", 3.0),
 ]
+ESQUEMA_OSCURO = re.compile(r"@media screen and \(prefers-color-scheme:dark\)\s*\{\s*:root\{([^}]*)\}")
 CSP_REQUERIDA = ("default-src 'none'", "base-uri 'none'", "form-action 'none'")
 
 
@@ -39,6 +51,15 @@ def _luz(h):
     return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2]
 
 
+def tokens(css):
+    """Tokens de color del esquema claro (primer :root) y del oscuro (claro + lo que redefine la media query)."""
+    base = re.search(r":root\{([^}]*)\}", css)
+    claro = dict(re.findall(r"--([a-z0-9-]+):(#[0-9a-fA-F]{3,6})\b", base.group(1) if base else ""))
+    m = ESQUEMA_OSCURO.search(css)
+    oscuro = {**claro, **dict(re.findall(r"--([a-z0-9-]+):(#[0-9a-fA-F]{3,6})\b", m.group(1)))} if m else None
+    return claro, oscuro
+
+
 def contraste(a, b):
     la, lb = sorted((_luz(a), _luz(b)), reverse=True)
     return (la + 0.05) / (lb + 0.05)
@@ -46,6 +67,7 @@ def contraste(a, b):
 
 PRESUPUESTO = {  # bytes por fichero o grupo
     "index.html": 120 * 1024,
+    "estilos (css)": 48 * 1024,
     "fuentes (woff2)": 60 * 1024,
     "og.png": 150 * 1024,
 }
@@ -112,6 +134,9 @@ class Lector(HTMLParser):
         self.navs_sin_etiqueta = 0
         self.aria_current = 0
         self.manifest = False
+        self.estilos = []  # hojas de estilo enlazadas
+        self.style_attr = 0
+        self.theme_color = []
 
     def handle_starttag(self, tag, attrs):
         for nombre, valor in attrs:
@@ -144,6 +169,12 @@ class Lector(HTMLParser):
                 self.meta_name[a["name"].lower()] = a.get("content") or ""
         if tag == "link" and a.get("rel") == "manifest":
             self.manifest = True
+        if tag == "link" and a.get("rel") == "stylesheet":
+            self.estilos.append((a.get("href") or "").lstrip("/"))
+        if "style" in a:
+            self.style_attr += 1
+        if tag == "meta" and (a.get("name") or "").lower() == "theme-color":
+            self.theme_color.append(a.get("media") or "")
         if tag in ("header", "nav", "main", "footer"):
             self.landmarks[tag] = self.landmarks.get(tag, 0) + 1
             if tag == "nav" and not a.get("aria-label") and not a.get("aria-labelledby"):
@@ -188,10 +219,30 @@ def verificar(sitio: Path) -> list:
         errores.append(f"el sitio ocupa {total} bytes (máximo {TAMANO_MAX})")
     pesos = {"index.html": (sitio / "index.html").stat().st_size if (sitio / "index.html").is_file() else 0,
              "fuentes (woff2)": sum(p.stat().st_size for p in sitio.rglob("*.woff2")),
-             "og.png": (sitio / "og.png").stat().st_size if (sitio / "og.png").is_file() else 0}
-    for clave, maximo in PRESUPUESTO.items():
-        if pesos[clave] > maximo:
-            errores.append(f"{clave} pesa {pesos[clave]} bytes (presupuesto {maximo})")
+             "og.png": (sitio / "og.png").stat().st_size if (sitio / "og.png").is_file() else 0, "estilos (css)": 0}
+
+    # Hoja de estilos: una sola, con el hash de su contenido en el nombre (caché segura) y AA en los dos esquemas.
+    hojas = sorted(sitio.glob("estilos.*.css"))
+    hoja_css = hojas[0].name if len(hojas) == 1 else None
+    if len(hojas) != 1:
+        errores.append(f"debe haber exactamente una hoja estilos.<hash>.css (hay {len(hojas)})")
+    else:
+        css = hojas[0].read_text(encoding="utf-8")
+        if hoja_css != f"estilos.{hashlib.sha256(css.encode('utf-8')).hexdigest()[:10]}.css":
+            errores.append(f"{hoja_css}: el nombre no coincide con el hash de su contenido")
+        claro, oscuro = tokens(css)
+        if oscuro is None:
+            errores.append(f"{hoja_css}: falta el esquema oscuro (@media screen and (prefers-color-scheme:dark) {{:root{{…}}}})")
+        if "color-scheme:light dark" not in css:
+            errores.append(f"{hoja_css}: falta color-scheme:light dark en :root")
+        for esquema, var in (("claro", claro), ("oscuro", oscuro or {})):
+            for t, f, minimo in PARES_CONTRASTE:
+                ct, cf = var.get(t, t), var.get(f, f)
+                if not (ct.startswith("#") and cf.startswith("#")):
+                    errores.append(f"contraste ({esquema}): no se resuelve {t} / {f}")
+                elif contraste(ct, cf) < minimo:
+                    errores.append(f"contraste ({esquema}) {t} {ct} sobre {f} {cf}: {contraste(ct, cf):.2f}:1 (mínimo {minimo}:1)")
+        pesos["estilos (css)"] = hojas[0].stat().st_size
 
     lectores = {}
     for p in ficheros:
@@ -245,15 +296,18 @@ def verificar(sitio: Path) -> list:
                     errores.append(f"{rel}: los <nav> deben existir y llevar aria-label")
                 if rel.name in PAGINAS_LEGALES and lector.aria_current != 1:
                     errores.append(f"{rel}: debe marcar su enlace del pie con aria-current=\"page\" (tiene {lector.aria_current})")
-                if rel.name == "index.html":
-                    css = "".join(re.findall(r"<style>(.*?)</style>", crudo, re.S))
-                    var = dict(re.findall(r"--([a-z0-9]+):(#[0-9a-fA-F]{3,6})\b", css))
-                    for t, f, minimo in PARES_CONTRASTE:
-                        ct, cf = var.get(t, t), var.get(f, f)
-                        if not (ct.startswith("#") and cf.startswith("#")):
-                            errores.append(f"contraste: no se resuelve {t} / {f}")
-                        elif contraste(ct, cf) < minimo:
-                            errores.append(f"contraste {t} {ct} sobre {f} {cf}: {contraste(ct, cf):.2f}:1 (mínimo {minimo}:1)")
+                if lector.estilos != [hoja_css]:
+                    errores.append(f"{rel}: debe enlazar solo la hoja {hoja_css} (enlaza {lector.estilos})")
+                if lector.style_attr or "<style" in crudo:
+                    errores.append(f"{rel}: estilos en línea (atributo style o <style>): la CSP solo admite la hoja propia")
+                if re.search(r"unsafe-inline", csp) or not re.search(r"style-src 'self'(;|$)", csp):
+                    errores.append(f"{rel}: la CSP debe tener style-src 'self' y ningún 'unsafe-inline'")
+                if lector.meta_name.get("color-scheme") != "light dark":
+                    errores.append(f"{rel}: falta <meta name=\"color-scheme\" content=\"light dark\">")
+                if sorted(lector.theme_color) != ["(prefers-color-scheme: dark)", "(prefers-color-scheme: light)"]:
+                    errores.append(f"{rel}: faltan los dos theme-color (claro y oscuro): {lector.theme_color}")
+                if not {"favicon.svg", "favicon-32.png", "favicon-16.png"} <= {r.rsplit("/", 1)[-1] for r in lector.recursos}:
+                    errores.append(f"{rel}: faltan los iconos (favicon.svg y PNG de 32 y 16)")
                 if lector.h1 != 1:
                     errores.append(f"{rel}: tiene {lector.h1} <h1>, debe tener exactamente uno")
                 for m in re.finditer(r"\[PENDIENTE:[^\]]*\]", texto):
@@ -293,6 +347,9 @@ def verificar(sitio: Path) -> list:
             elif ancla and destino_rel in lectores and ancla not in lectores[destino_rel].ids:
                 errores.append(f"{origen}: el enlace {href} apunta a #{ancla}, que no existe en {destino_rel}")
 
+    for clave, maximo in PRESUPUESTO.items():
+        if pesos[clave] > maximo:
+            errores.append(f"{clave} pesa {pesos[clave]} bytes (presupuesto {maximo})")
     print(f"Revisados {len(ficheros)} ficheros, {total} bytes en {sitio}")
     print("Pesos: " + ", ".join(f"{k} {v} B (máx. {PRESUPUESTO[k]})" for k, v in pesos.items()))
     for a in avisos:

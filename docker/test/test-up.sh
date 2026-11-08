@@ -118,6 +118,16 @@ comprobar /flujo.svg      404 ''
 comprobar /aviso-legal.html 200 'Aviso legal'                   text/html
 comprobar /privacidad.html  200 'Política de privacidad'        text/html
 comprobar /cookies.html     200 'Esta web no usa cookies'       text/html
+# WEB-017: hoja de estilos con hash (la de la portada), iconos PNG/ICO, og por página legal y manifest
+CSS="$(grep -o 'estilos\.[0-9a-f]*\.css' "$SITIO/index.html" | head -1)"
+comprobar "/$CSS"            200 'prefers-color-scheme:dark'    text/css
+comprobar /una/carpeta/inexistente 404 "href=\"/$CSS\""     text/html
+comprobar /favicon-32.png   200 ''                              image/png
+comprobar /favicon-16.png   200 ''                              image/png
+comprobar /favicon.ico      200 ''                              image/
+comprobar /og-privacidad.png 200 ''                             image/png
+comprobar /site.webmanifest 200 'icono-512.png'                 application/manifest+json
+comprobar /aviso-legal.html 200 'og-aviso-legal.png'            text/html
 
 if [ "$FALLOS" -gt 0 ]; then
   echo "FALLA: $FALLOS prueba(s). Recuerda: docker/test/test-down.sh"; exit 1
