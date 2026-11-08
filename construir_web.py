@@ -43,12 +43,12 @@ ACTUALIZADO = f"{HOY.day} de {MESES[HOY.month - 1]} de {HOY.year}"
 FUENTE_NORMAL = "source-serif-4-latin-400-normal.woff2"
 FUENTE_CURSIVA = "source-serif-4-latin-400-italic.woff2"
 
-# ── El equipo: Jordi y los agentes (iconos lineales) ─────────────────────────
+# ── El equipo: el CTO y los agentes (iconos lineales) ─────────────────────────
 EQUIPO = [
-    dict(nombre="Jordi Gonzalez Roig", corto="Jordi", rol="CTO", icono="persona",
-         frase="Escucha tu negocio, decide y responde de cada entrega."),
+    dict(nombre="Jordi Gonzalez Roig", corto="CTO", rol="CTO", icono="persona",
+         frase="Escucha tu negocio, interviene en lo crítico y responde de cada entrega."),
     dict(nombre="Coordinación", corto="Coordinación", rol="agente de IA", icono="lista",
-         frase="Gestiona las prioridades y te informa de cada avance con claridad."),
+         frase="Decide y aprueba cada cambio, ordena las prioridades y te informa de cada avance."),
     dict(nombre="Desarrollo", corto="Desarrollo", rol="agente de IA", icono="codigo",
          frase="Implementa cada mejora y la prueba a fondo antes de entregarla."),
     dict(nombre="Operación", corto="Operación", rol="agente de IA", icono="escudo",
@@ -98,7 +98,7 @@ def icono(nombre):
 
 
 def retrato(c):
-    return f'<span class="retrato{" jefe" if c["corto"] == "Jordi" else ""}">{icono(c["icono"])}</span>'
+    return f'<span class="retrato{" jefe" if c["corto"] == "CTO" else ""}">{icono(c["icono"])}</span>'
 
 
 # ── Ilustraciones propias (SVG geométrico, misma paleta en todas) ───────────
@@ -185,7 +185,7 @@ SERVICIOS = [
 
 # P31: cuatro líneas al final de «Método», sin título propio (antes, la sección «Compromisos»).
 COMPROMISOS = [
-    ("persona", "Una persona responsable"),
+    ("persona", "Un CTO responsable"),
     ("candado", "Tus datos, solo tuyos"),
     ("copia", "Copia antes de cada cambio"),
     ("charla", "Te contamos todo, también lo que falla"),
@@ -197,7 +197,7 @@ FAQ = [
     ("Ya tengo una web o un programa. ¿Hay que sustituirlo?",
      "No necesariamente. Primero analizamos lo que tienes; si es aprovechable, lo mejoramos. Solo proponemos empezar de cero cuando está justificado."),
     ("¿Quién hace el trabajo: personas o inteligencia artificial?",
-     "Las dos. Los agentes de IA desarrollan, prueban y publican. Jordi revisa, decide y habla contigo."),
+     "Las dos. Los agentes de IA desarrollan, prueban y publican. Coordinación decide y aprueba cada cambio, y el CTO responde de ellos ante ti."),
     ("¿Cuál es el coste?",
      "Depende de lo que necesites. Después de hablar, te enviamos una propuesta detallada antes de empezar."),
     ("¿Y si algo falla después de un cambio?",
@@ -483,7 +483,7 @@ def _nodo(x):
 pasos = "".join(f'<li>{_nodo(x)}<span><b class="paso-t">{t}</b><span class="paso-d">{d}</span></span></li>' for x, t, d in FLUJO_PASOS)
 carril = "".join(f'<li><span class="chip">{icono(i)}<span>{t}</span></span></li>' for i, t in CARRIL)
 FLUJO = f"""<figure class="flujo revela" aria-labelledby="titulo-dentro">
-   <div class="flujo-fila"><p class="flujo-aprueba">{icono("persona")}<span>Jordi revisa y aprueba las decisiones importantes</span></p></div>
+   <div class="flujo-fila"><p class="flujo-aprueba">{icono("persona")}<span>El CTO interviene en lo crítico</span></p></div>
    <ol class="pasos">{pasos}</ol>
    <div class="flujo-fila"><p class="flujo-apoyo">{icono("balanza")}{icono("paleta")}<span>Si hace falta, intervienen también Cumplimiento y Diseño.</span></p></div>
    <div class="flujo-fila"><p class="conector">Sobre la infraestructura de cada cliente</p></div>
@@ -508,14 +508,14 @@ INDEX = f"""<section class="hero oscuro" aria-labelledby="titulo-hero">
   <div class="hero-texto">
    <span class="sobre">La automatización ya ha llegado a la pequeña&nbsp;empresa</span>
    <h1 id="titulo-hero">Software a la medida de tu&nbsp;negocio.</h1>
-   <p class="apoyo">Webs y herramientas de gestión hechas para tu empresa. Una persona responde de cada cambio.</p>
+   <p class="apoyo">Webs y herramientas de gestión hechas para tu empresa. El CTO responde de cada cambio.</p>
    <div class="acciones"><a class="btn claro" href="#contacto">Cuéntanos tu proyecto <span aria-hidden="true">→</span></a>
     <a class="enlace-sec" href="#caso">Ver el caso</a></div>
   </div>
   <div class="hero-visual">
    <div class="escena">
-    <ul class="hero-equipo" aria-label="El equipo: Jordi, responsable, y los agentes de IA de Coordinación, Desarrollo, Operación, Cumplimiento y Diseño">{hero_equipo}</ul>
-    <p class="hero-equipo-pie" aria-hidden="true">Jordi, responsable, y cinco agentes de IA</p>
+    <ul class="hero-equipo" aria-label="El equipo: el CTO y los agentes de IA de Coordinación, Desarrollo, Operación, Cumplimiento y Diseño">{hero_equipo}</ul>
+    <p class="hero-equipo-pie" aria-hidden="true">El CTO y cinco agentes de IA</p>
    </div>
   </div>
  </div>
@@ -566,7 +566,7 @@ INDEX = f"""<section class="hero oscuro" aria-labelledby="titulo-hero">
 <section class="bloque alterno" id="equipo" aria-labelledby="titulo-equipo">
  <div class="contenedor">
   <div class="titular"><span class="sobre">Equipo</span><h2 id="titulo-equipo">Un responsable humano, apoyado por agentes de IA.</h2>
-   <p>Jordi Gonzalez Roig, CTO, dirige cada proyecto y decide. Cinco agentes de IA hacen el trabajo. Siempre se presentan como lo que son.</p></div>
+   <p>Jordi Gonzalez Roig, CTO, responde de cada proyecto. Cinco agentes de IA hacen el trabajo; Coordinación decide y aprueba cada cambio. Siempre se presentan como lo que son.</p></div>
   <ul class="equipo">{equipo}</ul>
  </div>
 </section>
@@ -588,7 +588,7 @@ INDEX = f"""<section class="hero oscuro" aria-labelledby="titulo-hero">
    <a class="btn claro" href="{MAILTO}">Escríbenos <span aria-hidden="true">→</span></a>
    <p class="correo-fila"><a class="correo" href="{MAILTO}">{MAIL}</a><button class="copiar" type="button" data-copiar="{MAIL}" hidden>Copiar dirección</button></p>
    <p class="aviso-copia" id="aviso-copia" aria-live="polite"></p>
-   <p class="firma">{icono("persona")}<span>Jordi atiende personalmente cada mensaje.</span></p>
+   <p class="firma">{icono("persona")}<span>El CTO atiende personalmente cada mensaje.</span></p>
    <p class="privacidad-linea">Esta web no usa <a href="cookies.html">cookies ni analítica</a>. Tus datos, igual de protegidos.</p>
   </div>
  </div>
@@ -639,7 +639,7 @@ AVISO = legal("Aviso legal", f"""
 <h2>Responsabilidad</h2>
 <p>Cuidamos que la información de la web sea correcta y esté al día, pero no podemos garantizar que no haya errores ni que el sitio esté siempre disponible. El titular no responde de los daños causados por un uso indebido de la web.</p>
 <h2>Inteligencia artificial</h2>
-<p>Parte de nuestro trabajo lo hacen agentes de inteligencia artificial que supervisa Jordi. Cuando un agente se comunica contigo, se identifica como tal. Lo explicamos en la <a href="privacidad.html">política de privacidad</a>.</p>
+<p>Parte de nuestro trabajo lo hacen agentes de inteligencia artificial que supervisa el CTO. Cuando un agente se comunica contigo, se identifica como tal. Lo explicamos en la <a href="privacidad.html">política de privacidad</a>.</p>
 <h2>Protección de datos y cookies</h2>
 <p>El tratamiento de tus datos se explica en la <a href="privacidad.html">política de privacidad</a>. Esta web no usa cookies: lo detallamos en la <a href="cookies.html">política de cookies</a>.</p>
 <h2>Legislación aplicable y jurisdicción</h2>
@@ -659,7 +659,7 @@ PRIVACIDAD = legal("Política de privacidad", f"""
 <h2>Para qué los usamos</h2>
 <p>Para contestarte, atender tu consulta y, si nos lo pides, prepararte una propuesta. No los usamos para enviarte publicidad, no elaboramos perfiles y no tomamos decisiones automatizadas sobre ti.</p>
 <h2>Quién lee tus mensajes</h2>
-<p>Los correos que nos envías a esta dirección <strong>los lee y los contesta Jordi</strong>, una persona. Nuestros agentes de inteligencia artificial <strong>no procesan este buzón</strong>. Esos agentes trabajan solo en los proyectos de nuestros clientes, con las condiciones que pactamos con cada uno.</p>
+<p>Los correos que nos envías a esta dirección <strong>los lee y los contesta el CTO</strong>, una persona. Nuestros agentes de inteligencia artificial <strong>no procesan este buzón</strong>. Esos agentes trabajan solo en los proyectos de nuestros clientes, con las condiciones que pactamos con cada uno.</p>
 <h2>Base legal</h2>
 <ul>
  <li><strong>Tu consentimiento</strong> (art. 6.1.a RGPD), que nos das al escribirnos. Puedes retirarlo cuando quieras.</li>

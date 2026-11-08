@@ -392,7 +392,10 @@ def comprobar_caso(sitio: Path) -> list:
         errores.append(f"index.html: secciones inesperadas: {secciones}")
     # Fundador con su nombre completo en Equipo y en el JSON-LD (WEB-020d)
     if '<span class="rol">CTO</span>' not in crudo or "<h3>Jordi Gonzalez Roig</h3>" not in crudo:
-        errores.append("index.html: la tarjeta de Jordi debe decir «Jordi Gonzalez Roig» y «CTO»")
+        errores.append("index.html: la tarjeta del CTO debe decir «Jordi Gonzalez Roig» y «CTO»")
+    # El nombre corto «Jordi» no aparece en la portada: solo «Jordi Gonzalez Roig» (WEB-022)
+    if re.search(r"Jordi(?! Gonzalez Roig)", re.sub(r"jordi\.gonzalez\.roig@gmail\.com", "", crudo)):
+        errores.append("index.html: queda «Jordi» suelto; debe decir «el CTO» (WEB-022)")
     if '"founder": {"@type": "Person", "name": "Jordi Gonzalez Roig", "jobTitle": "CTO"' not in crudo:
         errores.append("index.html: el JSON-LD de la organización debe llevar founder «Jordi Gonzalez Roig»")
     # Ningún enlace ni id a las secciones retiradas, en ninguna página ni en el sitemap
