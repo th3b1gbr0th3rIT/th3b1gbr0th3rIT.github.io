@@ -220,41 +220,22 @@ EMPEZAR = [
 CASO_CON_NOMBRE = True
 CASO_TEXTOS = {
     "A": dict(
-        titulo="Un pedido. Un cambio en&nbsp;producción.",
+        titulo="Un correo. El cambio, en&nbsp;producción.",
         entrada=('<a href="https://dbmrealinvest.com/" rel="noopener noreferrer">DBM Real Invest</a> es una inmobiliaria. '
-                 'Creamos y mantenemos su web y su CRM. Cuando necesitan algo, nos lo piden. Nosotros nos ocupamos del resto.'),
-        informa="Informamos al CTO de DBM Real Invest.",
-        ticket_cab="Hoja de cambios · DBM Real Invest",
+                 'Creamos y mantenemos su web y su CRM. Cuando necesitan algo, nos escriben un correo. '
+                 'Los agentes lo desarrollan, lo prueban y lo publican de forma automática. Ellos solo ven el resultado.'),
         cierre="El mismo método para cada cliente. También para esta web."),
     "B": dict(
-        titulo="Un pedido. Un cambio en&nbsp;producción.",
-        entrada=('Una inmobiliaria. Creamos y mantenemos su web y su CRM. Cuando necesitan algo, nos lo piden. '
-                 'Nosotros nos ocupamos del resto.'),
-        informa="Informamos al cliente.",
-        ticket_cab="Hoja de cambios · Inmobiliaria",
+        titulo="Un correo. El cambio, en&nbsp;producción.",
+        entrada=('Una inmobiliaria. Creamos y mantenemos su web y su CRM. Cuando necesitan algo, nos escriben un correo. '
+                 'Los agentes lo desarrollan, lo prueban y lo publican de forma automática. Ellos solo ven el resultado.'),
         cierre="El mismo método para cada cliente. También para esta web."),
 }
 CASO = CASO_TEXTOS["A" if CASO_CON_NOMBRE else "B"]
 CASO_NOTA = "Si vemos un riesgo antes de publicar, paramos y lo consultamos con el cliente."
-CASO_TICKET_TITULO_HTML = "Buscar una calle se escriba como se&nbsp;escriba"
-# Calles públicas de ejemplo (DW-020-J2): sin datos de clientes ni de propietarios.
-CASO_TICKET_DATOS = [
-    ("Lo que pidió", "Que el CRM encuentre una calle se escriba como se escriba."),
-    ("Lo que hicimos", "«C/», «Calle» y «Carrer» dan el mismo resultado, igual que «Avda.» y «Avinguda». "
-                       "Da igual si hay acentos o mayúsculas. Cada comercial sigue viendo solo lo suyo."),
-    ("Cómo lo comprobamos", "En producción, «Carrer de Sepúlveda», «C/ Sepúlveda» y «calle sepulveda» devuelven los mismos resultados."),
-]
-CASO_TICKET_ESTADOS = [
-    ("Pedido por el cliente", "Con sus palabras."),
-    ("Registrado", "En la hoja de cambios."),
-    ("Probado", "En un entorno aislado."),
-    ("Copia de seguridad y publicación", "Con vuelta atrás preparada."),
-    ("Comprobado e informado", f"Validado en producción. {CASO['informa']}"),
-]
-# Mini tarjeta del hero: resumen del caso real (el mismo ticket que más abajo), todo «hecho».
-MINI_ESTADOS = [("Pedido", "Pedido", ""), ("En desarrollo", "Desarrollo", ""), ("En revisión", "Revisión", ""),
-                ("Publicado", "Publicado", ""), ("Validado", "Validado", "")]
-MINI_ACTUAL = len(MINI_ESTADOS)  # ningún estado en curso: el cambio está validado
+# Ejemplo en una sola cita (WEB-023). Calles públicas: sin datos de clientes ni de propietarios.
+CASO_EJEMPLO = ("Pidieron que el CRM encontrara una calle se escriba como se escriba. "
+                "Hoy, «C/&nbsp;Sepúlveda», «Carrer de&nbsp;Sepúlveda» y «calle&nbsp;sepulveda» dan el mismo resultado.")
 ICONO_SERVICIO = {"inmobiliarias": "casa", "webs": "nube", "gestion": "contenedor", "reservas": "calendario",
                   "automatizacion": "pipeline", "cuidado": "pulso"}  # icono de cada tarjeta de servicio
 
@@ -498,10 +479,6 @@ equipo = "".join(f'<li class="revela">{retrato(c)}<h3>{c["nombre"]}</h3><span cl
 empezar = "".join(f'<li class="revela"><span class="num" aria-hidden="true">{n}</span>{icono(i)}<h3>{t}</h3><p>{d}</p></li>'
                   for n, (i, t, d) in enumerate(EMPEZAR, 1))
 faq = "".join(f'<details><summary>{q}</summary><p>{a}</p></details>' for q, a in FAQ)
-estados = "".join(
-    f'<li class="hecho"><span class="punto" aria-hidden="true"></span>'
-    f'<b>{e}<span class="sr">: hecho</span></b><span class="txt">{d}</span></li>' for e, d in CASO_TICKET_ESTADOS)
-datos = "".join(f"<dt>{k}</dt><dd>{v}</dd>" for k, v in CASO_TICKET_DATOS)
 
 INDEX = f"""<section class="hero oscuro" aria-labelledby="titulo-hero">
  <div class="contenedor reticula">
@@ -538,15 +515,8 @@ INDEX = f"""<section class="hero oscuro" aria-labelledby="titulo-hero">
     <p class="caso-nota">{icono("persona")}<span>{CASO_NOTA}</span></p>
    </div>
    <div class="caso-lado">
-    <article class="ticket revela" aria-labelledby="titulo-ticket">
-     <div class="ticket-cab"><span>{CASO["ticket_cab"]}</span><span class="etiqueta">Caso real</span></div>
-     <div class="ticket-cuerpo">
-      <h3 id="titulo-ticket">{CASO_TICKET_TITULO_HTML}</h3>
-      <dl class="ticket-datos">{datos}</dl>
-      <ol class="estados">{estados}</ol>
-     </div>
-     <div class="ticket-pie"><span><b>Validado</b> en producción</span></div>
-    </article>
+    <figure class="caso-ejemplo revela"><span class="etiqueta">Un caso real</span>
+     <blockquote><p>{CASO_EJEMPLO}</p></blockquote></figure>
    </div>
   </div>
   <div class="cierre revela"><p>{CASO["cierre"]}</p>

@@ -108,6 +108,7 @@ comprobar /               200 'id="caso"'                     text/html
 comprobar /               200 'Jordi Gonzalez Roig'        text/html
 comprobar /               200 '<span class="rol">CTO</span>' text/html
 comprobar /               200 'DBM Real Invest'               text/html
+comprobar /               200 'class="caso-ejemplo'          text/html
 comprobar /404.html       200 'no existe o ha cambiado'       text/html
 comprobar /no-existe      404 'no existe o ha cambiado'       text/html
 comprobar /favicon.svg    200 '<svg'                          image/svg+xml

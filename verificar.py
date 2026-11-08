@@ -32,8 +32,6 @@ PARES_CONTRASTE = [
     ("acento-suave", "superficie-alt", 4.5), ("acento-suave", "fondo-pie", 4.5), ("acento-suave", "fondo-alt", 4.5),
     ("etq-texto", "etq-fondo", 4.5), ("btn-texto", "btn-fondo", 4.5), ("btn-texto", "btn-hover", 4.5),
     ("apoyo", "etq-fondo", 4.5),
-    # Estados «hecho» (mini tarjeta del hero y ticket del caso): texto y marca de verificación (WEB-019)
-    ("hecho-texto", "hecho-fondo", 4.5), ("hecho-marca", "hecho-fondo", 3.0),
     # Foco (anillo exterior) y trazos decorativos
     ("foco", "fondo", 3.0), ("foco", "fondo-alt", 3.0), ("foco", "superficie", 3.0), ("ambar", "fondo", 3.0), ("ambar", "superficie", 3.0),
     # Secciones oscuras (hero, contacto, tarjeta de llamada): oscuras en los dos esquemas
@@ -361,29 +359,35 @@ def verificar(sitio: Path) -> list:
 
 
 def comprobar_caso(sitio: Path) -> list:
-    """WEB-020: el caso se cuenta una vez (ticket de cinco estados «hecho» y tarjeta del hero) y la página tiene seis secciones."""
+    """WEB-020: el caso es una cita de ejemplo (WEB-023) y la página tiene seis secciones."""
     errores = []
     index = sitio / "index.html"
     if not index.is_file():
         return errores
     crudo = index.read_text(encoding="utf-8")
-    m = re.search(r'<article class="ticket[^"]*".*?</article>', crudo, re.S)
+    m = re.search(r'<figure class="caso-ejemplo[^"]*">.*?</figure>', crudo, re.S)
     if not m:
-        return ["index.html: falta el ticket del caso"]
-    ticket = m.group(0)
-    if len(re.findall(r'<li class="hecho">', ticket)) != 5 or '<li class="actual"' in ticket or "<li>" in ticket:
-        errores.append("index.html: el ticket del caso debe tener cinco estados y todos «hecho»")
-    if not re.search(r'<div class="ticket-pie">.*?<b>Validado</b>', ticket, re.S):
-        errores.append("index.html: el ticket del caso debe cerrar con «Validado»")
-    if "Pedido por el cliente" not in ticket:
-        errores.append("index.html: el caso debe empezar por «Pedido por el cliente» (DW-020-J2)")
+        return ["index.html: falta el ejemplo del caso (cita «caso-ejemplo»)"]
+    if m.group(0).count("<blockquote>") != 1 or "Sepúlveda" not in m.group(0):
+        errores.append("index.html: el ejemplo del caso debe ser una sola cita con la calle Sepúlveda (WEB-023)")
+    caso = re.search(r'<section[^>]*id="caso".*?</section>', crudo, re.S).group(0)
+    if "correo. " not in caso.replace("&nbsp;", " ") or "nos escriben un correo" not in caso:
+        errores.append("index.html: el caso debe contar que el cliente escribe un correo (WEB-023)")
+    for resto in ('class="ticket', 'class="estados', "Pedido por el cliente", "Lo que pidió", "Cómo lo comprobamos"):
+        if resto in crudo:
+            errores.append(f"index.html: queda un resto de la tarjeta del caso: {resto} (WEB-023)")
     # Sin restos del caso antiguo (seis tarjetas, dibujo, lista de mejoras)
     for resto in ('class="caso-flujo"', 'class="caso-dibujo"', "Otras mejoras entregadas", "deploy ✓", "backup ✓"):
         if resto in crudo:
             errores.append(f"index.html: queda un resto del caso antiguo: {resto}")
     # La mini tarjeta del caso se quitó del hero (WEB-022): el caso vive solo en su sección
-    if 'class="mini' in crudo or "Hoja de cambios · DBM" in crudo.split('id="caso"')[0]:
+    if 'class="mini' in crudo or "Hoja de cambios" in crudo.split('id="caso"')[0]:
         errores.append("index.html: el hero no debe llevar la mini tarjeta del caso (WEB-022)")
+    # El cliente no rellena hojas: en el texto visible no aparece «hoja de cambios» (WEB-023)
+    visible = re.sub(r"<(script|style)\b.*?</\1>", " ", crudo, flags=re.S)
+    visible = re.sub(r"<[^>]+>", " ", visible)
+    if re.search(r"hojas?\s+de\s+cambios?", re.sub(r"\s+", " ", visible), re.I):
+        errores.append("index.html: el texto visible no debe mencionar «hoja de cambios» (WEB-023)")
     if 'class="pipeline"' in crudo:
         errores.append("index.html: el chip del proceso del hero se quitó (DW-020-J3)")
     # Estructura de ocho bloques: sin «Por qué ahora», «Compromisos» ni «Cómo empezar» como secciones (DW-020-J1, P31, P32)
