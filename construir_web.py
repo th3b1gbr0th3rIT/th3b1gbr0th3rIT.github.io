@@ -91,6 +91,8 @@ def icono(nombre):
         "contenedor": '<path d="M12 3 4 7.5v9L12 21l8-4.5v-9z"/><path d="M4 7.5 12 12l8-4.5M12 12v9"/>',
         "pipeline": '<circle cx="5" cy="12" r="2.2"/><circle cx="12" cy="12" r="2.2"/><circle cx="19" cy="12" r="2.2"/><path d="M7.2 12h2.6M14.2 12h2.6"/>',
         "pulso": '<path d="M3 12h4l2-5 4 10 2-5h6"/>',
+        "casa": '<path d="M3 11 12 4l9 7"/><path d="M5.5 9.5V20h13V9.5"/><path d="M10 20v-5.5h4V20"/>',
+        "calendario": '<rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M8.5 3v4M15.5 3v4"/><path d="m9.5 14.5 2 2 3.5-3.5"/>',
     }[nombre]
     return f'<svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false">{d}</svg>'
 
@@ -327,10 +329,10 @@ MINI_ESTADOS = [
 ]
 MINI_ACTUAL = 2  # índice del estado en curso (En revisión)
 ETIQUETAS_SERVICIO = {  # icono y etiqueta técnica de cada tarjeta de servicio
-    "inmobiliarias": ("contenedor", "Inmobiliarias"),
+    "inmobiliarias": ("casa", "web · crm · buscador"),
     "webs": ("nube", "web · accesible · multiidioma"),
     "gestion": ("contenedor", "app · permisos · datos propios"),
-    "reservas": ("nube", "en línea · agenda · avisos"),
+    "reservas": ("calendario", "en línea · agenda · avisos"),
     "automatizacion": ("pipeline", "correo → proceso → aviso"),
     "cuidado": ("pulso", "backup ✓ · deploy ✓ · monitor"),
 }

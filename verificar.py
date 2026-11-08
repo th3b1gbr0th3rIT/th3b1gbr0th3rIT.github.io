@@ -32,6 +32,8 @@ PARES_CONTRASTE = [
     ("acento-suave", "superficie-alt", 4.5), ("acento-suave", "fondo-pie", 4.5), ("acento-suave", "fondo-alt", 4.5),
     ("etq-texto", "etq-fondo", 4.5), ("btn-texto", "btn-fondo", 4.5), ("btn-texto", "btn-hover", 4.5),
     ("apoyo", "etq-fondo", 4.5),
+    # Estados «hecho» (mini tarjeta del hero y ticket del caso): texto y marca de verificación (WEB-019)
+    ("hecho-texto", "hecho-fondo", 4.5), ("hecho-marca", "hecho-fondo", 3.0),
     # Foco (anillo exterior) y trazos decorativos
     ("foco", "fondo", 3.0), ("foco", "fondo-alt", 3.0), ("foco", "superficie", 3.0), ("ambar", "fondo", 3.0), ("ambar", "superficie", 3.0),
     # Secciones oscuras (hero, contacto, tarjeta de llamada): oscuras en los dos esquemas

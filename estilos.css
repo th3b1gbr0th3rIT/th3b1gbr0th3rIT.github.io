@@ -18,6 +18,7 @@ unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+
 --etq-fondo:#fef3c7;--etq-texto:#7c2d12;--etq-borde:#f5d08a;
 --btn-fondo:#111;--btn-texto:#fff;--btn-hover:#1c1917;--foco:#111;
 --cab-fondo:rgb(255 255 255 / .8);--sombra:17 17 17;--jefe-borde:#111;
+--hecho-fondo:#111;--hecho-borde:#111;--hecho-texto:#fff;--hecho-marca:#f59e0b;
 --oscuro-fondo:#111;--oscuro-texto:#d6d3d1;--oscuro-claro:#e7e5e4;--oscuro-linea:#3a3530;--oscuro-borde:#78716c;
 --i-c:#fdf6ec;--i-n:#111;--i-g1:#e7e1d6;--i-g2:#a8a29e;--i-b:#fff;--i-o:#efe4d2;
 --mono:ui-monospace,"SFMono-Regular",Menlo,Consolas,"DejaVu Sans Mono",monospace;
@@ -35,6 +36,7 @@ unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+
 --etq-fondo:#3b2a10;--etq-texto:#fcd34d;--etq-borde:#7c5a1c;
 --btn-fondo:#fdf6ec;--btn-texto:#111;--btn-hover:#fff;--foco:#fdf6ec;
 --cab-fondo:rgb(17 17 17 / .78);--sombra:0 0 0;--jefe-borde:#7c5a1c;
+--hecho-fondo:#fdf6ec;--hecho-borde:#fdf6ec;--hecho-texto:#111;--hecho-marca:#b45309;
 --oscuro-fondo:#0a0908;
 --i-c:#24201c;--i-n:#e7e1d6;--i-g1:#3d362f;--i-g2:#78716c;--i-b:#1c1917;--i-o:#332c25}
 }
@@ -135,8 +137,8 @@ box-shadow:0 0 0 6px rgb(245 158 11 / .06),0 40px 80px -40px rgb(0 0 0 / .7),0 0
 .mini-titulo,.ticket h3{text-wrap:balance}
 .mini-pasos{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:3px}
 .mini-pasos li{font:600 .74rem/1 var(--sans);padding:6px 7px;white-space:nowrap;border-radius:99px;border:1px solid var(--linea);color:var(--apoyo)}
-.mini-pasos li.hecho{background:var(--negro);border-color:var(--negro);color:var(--blanco)}
-.mini-pasos li.hecho::before{content:"✓ ";color:var(--ambar2)}
+.mini-pasos li.hecho{background:var(--hecho-fondo);border-color:var(--hecho-borde);color:var(--hecho-texto)}
+.mini-pasos li.hecho::before{content:"✓ ";color:var(--hecho-marca)}
 .mini-pasos li.actual{background:var(--etq-fondo);border-color:var(--acento);color:var(--etq-texto)}
 .mini-pie{margin-top:12px;font-size:.88rem;color:var(--apoyo)}
 .mini-pie a{color:var(--tinta);text-decoration-color:var(--ambar);text-underline-offset:3px}
@@ -249,7 +251,13 @@ border-radius:14px;font:italic 1.05rem/1.3 var(--serif);color:var(--acento-suave
 .caso-dib{display:block;width:100%;height:auto;font-family:inherit}
 .caso-dib-v{display:none;max-width:340px;margin:0 auto}
 .caso-dib .fondo{fill:var(--superficie-alt)}.caso-dib .t{fill:var(--tinta)}.caso-dib .t2{fill:var(--acento)}.caso-dib .flecha{stroke:var(--acento)}
-@media (max-width:899px){.caso-dib-h{display:none}.caso-dib-v{display:block}.caso-dibujo{margin-bottom:28px}}
+@media (max-width:899px){.caso-dib-h{display:none}.caso-dib-v{display:block}.caso-dibujo{margin-bottom:28px}
+ /* Móvil: primero antetítulo, titular y entrada; después el dibujo del flujo y el resto del caso */
+ .caso .contenedor{display:flex;flex-direction:column}
+ .caso .reticula,.caso-izq{display:contents}
+ .caso-izq .titular{order:-2}
+ .caso-dibujo{order:-1;margin-top:8px}
+ .caso-lado{margin-top:40px}}
 .caso-izq{grid-column:1/span 6}
 .caso-izq .titular{margin-bottom:20px}
 .caso-izq .titular p a{color:var(--tinta);text-decoration-color:var(--ambar);text-underline-offset:3px;font-weight:600}
@@ -272,7 +280,7 @@ fill:none;stroke:var(--acento);stroke-width:1.8;stroke-linecap:round;stroke-line
 .entregado .sobre{margin-bottom:12px}
 .entregado .vinetas{margin:0;padding:0;border-top:0}
 .ticket-cab{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 24px;border-bottom:1px solid var(--linea);
-font:700 .78rem/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--apoyo)}
+font:700 .78rem/1.3 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--apoyo)}
 .ticket-cuerpo{padding:22px 24px 6px}
 .ticket h3{font-size:1.45rem;margin-bottom:8px}
 .ticket .que{color:var(--apoyo);font-size:.98rem}
@@ -283,10 +291,11 @@ font:700 .78rem/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;colo
 .estados .punto{position:absolute;left:0;top:2px;width:20px;height:20px;border-radius:50%;border:2px solid var(--punto);background:var(--superficie)}
 .estados b{display:block;font-size:.98rem}
 .estados .txt{display:block;color:var(--apoyo);font-size:.92rem}
-.estados li.hecho .punto{background:var(--negro);border-color:var(--negro)}
-.estados li.hecho .punto::after{content:"";position:absolute;left:5px;top:2px;width:5px;height:9px;border:solid var(--ambar2);border-width:0 2px 2px 0;transform:rotate(45deg)}
+.estados li.hecho .punto{background:var(--hecho-fondo);border-color:var(--hecho-borde)}
+.estados li.hecho .punto::after{content:"";position:absolute;left:5px;top:2px;width:5px;height:9px;border-style:solid;border-color:var(--hecho-marca);border-width:0 2px 2px 0;transform:rotate(45deg)}
 .estados li.actual .punto{border-color:var(--acento);background:var(--etq-fondo)}
 .estados li.actual .punto::after{content:"";position:absolute;left:4px;top:4px;width:8px;height:8px;border-radius:50%;background:var(--acento)}
+.ticket-cab .etiqueta{white-space:nowrap}
 .ticket-pie{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px 12px;padding:14px 24px;border-top:1px solid var(--linea);background:var(--fondo-pie);font-size:.9rem;color:var(--apoyo)}
 .ticket-pie b{color:var(--tinta)}
 .ticket-pie .mono{color:var(--apoyo)}
@@ -351,6 +360,7 @@ details p{padding:0 0 22px;color:var(--apoyo);max-width:42em}
 
 /* Pie */
 .pie{background:var(--fondo-pie);color:var(--texto);font-size:.95rem;padding:calc(var(--ritmo)*9) 0 calc(var(--ritmo)*4)}
+@media screen and (prefers-color-scheme:dark){.pie{border-top:1px solid var(--linea)}}  /* separa el pie del contacto, ambos casi negros */
 .pie .reticula{row-gap:40px}
 .pie .col-marca{grid-column:1/span 4}
 .pie .col-marca p{margin-top:16px;font:italic 1.05rem var(--serif);color:var(--acento-suave)}
