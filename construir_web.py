@@ -60,7 +60,7 @@ EQUIPO = [
 # Monograma «IT» (favicon y apple-touch-icon): sustituye al antiguo icono de marca.
 MONOGRAMA = ('<svg class="icono-marca" viewBox="0 0 110 110" aria-hidden="true" focusable="false">'
              '<rect width="110" height="110" rx="24" fill="#111111"/>'
-             f'<path transform="translate(-415.40 31.12) scale(0.06)" d="{logotipo.ACENTO_TRAZOS}" fill="#f59e0b"/></svg>')
+             f'<path transform="{logotipo.MONO_TRANSFORM}" d="{logotipo.ACENTO_TRAZOS}" fill="#f59e0b"/></svg>')
 LOGOTIPO = logotipo.svg()
 
 
@@ -330,15 +330,17 @@ unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+
 --gris1:#f4f1ec;--gris2:#e7e1d6;--gris3:#a8a29e;--texto:#44403c;--apoyo:#57534e;--linea:#e7e1d6;--borde-calido:#ecdcc4;
 --serif:"Source Serif 4",Georgia,"DejaVu Serif","Times New Roman",serif;
 --sans:system-ui,-apple-system,"Segoe UI",Roboto,"DejaVu Sans",Helvetica,Arial,sans-serif;
---ancho:1200px;--gutter:24px;--ritmo:8px;--cab:72px}
+--ancho:1200px;--gutter:24px;--ritmo:8px;--cab:72px;
+--t-h1:clamp(2.6rem,5.4vw,4.5rem);--t-h2:clamp(2rem,4.2vw,3.25rem);--t-h3:1.35rem;
+--s-h1:-.028em;--s-h2:-.022em;--s-h3:-.012em;--s-sobre:.14em}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth;scroll-padding-top:calc(var(--cab) + 16px);background:var(--gris1)}
-body{margin:0;background:var(--blanco);color:var(--negro);font:17px/1.65 var(--sans);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body{margin:0;background:var(--blanco);color:var(--negro);font:17px/1.6 var(--sans);font-kerning:normal;font-synthesis:none;-webkit-font-smoothing:antialiased;overflow-x:hidden}
 img,svg{max-width:100%}
 a{color:inherit}
-h1,h2,h3{font-family:var(--serif);font-weight:400;line-height:1.12;margin:0;letter-spacing:-.01em;text-wrap:balance;font-variant-numeric:lining-nums}
-h2{font-size:clamp(2rem,4vw,3rem)}
-h3{font-size:1.35rem}
+h1,h2,h3{font-family:var(--serif);font-weight:400;line-height:1.1;margin:0;letter-spacing:var(--s-h2);text-wrap:balance;font-variant-numeric:lining-nums}
+h2{font-size:var(--t-h2)}
+h3{font-size:var(--t-h3);letter-spacing:var(--s-h3)}
 p{margin:0;text-wrap:pretty}
 .mono{font-family:var(--mono);font-size:.85em;letter-spacing:0}
 em{font-style:italic}
@@ -355,7 +357,7 @@ em{font-style:italic}
 .reticula{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:var(--gutter)}
 .bloque{padding:calc(var(--ritmo)*13) 0}
 .alterno{background:var(--crema)}
-.sobre{display:block;font:700 .78rem/1.2 var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--tostado);margin-bottom:calc(var(--ritmo)*2)}
+.sobre{display:block;font:600 .76rem/1.2 var(--sans);letter-spacing:var(--s-sobre);text-transform:uppercase;color:var(--tostado);margin-bottom:calc(var(--ritmo)*2)}
 .titular{max-width:900px;margin-bottom:calc(var(--ritmo)*6)}
 .titular p{margin-top:calc(var(--ritmo)*2.5);font-size:1.15rem;color:var(--apoyo);max-width:60ch}
 .titular .mas{margin-top:calc(var(--ritmo)*3)}
@@ -376,7 +378,7 @@ font-weight:700;text-decoration:none;border:2px solid var(--negro);transition:ba
 .cab.scroll{border-color:var(--linea);box-shadow:0 8px 24px -20px rgba(17,17,17,.4)}
 .cab .contenedor{display:flex;align-items:center;justify-content:space-between;gap:24px;height:var(--cab)}
 .menu ul{display:flex;align-items:center;gap:32px;list-style:none;margin:0;padding:0}
-.menu a{text-decoration:none;font-weight:600;font-size:.95rem;color:var(--texto)}
+.menu a{text-decoration:none;font-weight:500;font-size:.95rem;letter-spacing:-.005em;color:var(--texto)}
 .menu a:hover{color:var(--negro);text-decoration:underline;text-decoration-color:var(--ambar);text-underline-offset:6px;text-decoration-thickness:2px}
 .menu .solo-movil{display:none}
 .cab .btn{padding:10px 20px;font-size:.92rem}
@@ -397,7 +399,7 @@ font:600 .92rem var(--sans);color:var(--negro);cursor:pointer}
 .hero::before{content:"";position:absolute;inset:0;pointer-events:none;background-image:radial-gradient(circle,rgba(253,246,236,.09) 1px,transparent 1.6px);background-size:24px 24px;
 -webkit-mask-image:linear-gradient(90deg,transparent 0,transparent 30%,#000 75%);mask-image:linear-gradient(90deg,transparent 0,transparent 30%,#000 75%)}
 .hero .contenedor{position:relative;z-index:1}
-.hero h1{font-size:clamp(2.5rem,4.8vw,4rem);line-height:1.06;letter-spacing:-.02em;color:var(--blanco);max-width:12em;text-wrap:balance}
+.hero h1{font-size:var(--t-h1);line-height:1.04;letter-spacing:var(--s-h1);color:var(--blanco);max-width:12em;text-wrap:balance}
 .hero .apoyo{margin-top:calc(var(--ritmo)*3);font-size:clamp(1.1rem,1.6vw,1.3rem);color:#d6d3d1;max-width:30em}
 .acciones{display:flex;flex-wrap:wrap;align-items:center;gap:16px 28px;margin-top:calc(var(--ritmo)*5)}
 .hero-visual{grid-column:7/span 6}
@@ -1144,7 +1146,7 @@ AVISO = legal("Aviso legal", f"""
 <h2>Condiciones de uso</h2>
 <p>Te comprometes a usar la web y sus contenidos de forma lícita, sin dañar su funcionamiento ni los derechos de terceros.</p>
 <h2>Propiedad intelectual e industrial</h2>
-<p>Los textos, diseños, ilustraciones, logotipos y el código de esta web pertenecen a su titular o se usan con autorización o con licencia. Las tipografías se usan bajo su licencia libre (SIL Open Font License): la tipografía Source Serif 4, de Adobe, se distribuye con el texto de esa licencia en <a href="fuentes/OFL.txt">fuentes/OFL.txt</a>. No se permite reproducir, distribuir, comunicar públicamente ni transformar los contenidos sin permiso previo y por escrito, salvo para uso personal y privado. «th3b1gbr0th3r IT» es un nombre comercial.</p>
+<p>Los textos, diseños, ilustraciones, logotipos y el código de esta web pertenecen a su titular o se usan con autorización o con licencia. Las tipografías se usan bajo su licencia libre (SIL Open Font License): la tipografía Source Serif 4, de Adobe, se distribuye con el texto de esa licencia en <a href="fuentes/OFL.txt">fuentes/OFL.txt</a>. El logotipo está trazado a partir de la tipografía Inter (Rasmus Andersson, también SIL Open Font License) y no incorpora archivos de fuente. No se permite reproducir, distribuir, comunicar públicamente ni transformar los contenidos sin permiso previo y por escrito, salvo para uso personal y privado. «th3b1gbr0th3r IT» es un nombre comercial.</p>
 <h2>Enlaces</h2>
 <p>Si la web enlaza a sitios de terceros, no somos responsables de su contenido. Retiraremos un enlace en cuanto sepamos que lleva a contenido ilícito.</p>
 <h2>Responsabilidad</h2>
