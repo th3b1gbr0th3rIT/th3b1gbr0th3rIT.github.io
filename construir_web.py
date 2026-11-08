@@ -2,7 +2,7 @@
 """Genera la web pública estática de th3b1gbr0th3r IT en sitio/ (GitHub Pages).
 
 Estilo corporativo sobrio (WEB-006): un mensaje por bloque, servicios en tarjetas, diagrama del flujo en
-HTML+CSS, caso de éxito real de DBM Real Invest (WEB-012, con permiso de JuanJo) y pie legal completo con sus páginas.
+HTML+CSS, caso de éxito real de DBM Real Invest (WEB-012, con permiso del cliente) y pie legal completo con sus páginas.
 Sin cifras ni precios; el único cliente nombrado es DBM (CASO_CON_NOMBRE). Sin recursos externos ni cookies: la única tipografía
 (Source Serif 4, OFL) se sirve desde la propia web, en fuentes/.
 Uso: python3 construir_web.py [--capturas] [--imagenes]
@@ -186,14 +186,14 @@ FAQ = [
      "Depende del alcance del proyecto. Tras una primera conversación, sin compromiso, te enviamos una propuesta detallada."),
 ]
 
-# WEB-012: caso de éxito real. CASO_CON_NOMBRE=True (variante A) nombra a DBM Real Invest, con permiso de JuanJo
+# WEB-012: caso de éxito real. CASO_CON_NOMBRE=True (variante A) nombra a DBM Real Invest, con permiso del cliente
 # (Jordi, 2026-11-08). Con False se vuelve a la variante B, anónima (reserva si DBM retirase el permiso).
 CASO_CON_NOMBRE = True
 CASO_TEXTOS = {
     "A": dict(
         titulo="DBM Real Invest pide sus cambios por correo y los ve en&nbsp;producción.",
         entrada=('Desarrollamos y mantenemos la web pública y el CRM de <a href="https://dbmrealinvest.com/" rel="noopener noreferrer">DBM Real Invest</a>, '
-                 'una inmobiliaria. JuanJo, su CTO, no abre tickets ni aprende herramientas nuevas: escribe un correo y eso pone en marcha '
+                 'una inmobiliaria. Su CTO no abre tickets ni aprende herramientas nuevas: escribe un correo y eso pone en marcha '
                  'todo el proceso, hasta que el cambio está publicado y comprobado.'),
         cliente="DBM Real Invest · inmobiliaria · web pública + CRM · en producción",
         ticket_cab="Hoja de cambios · DBM Real Invest",
@@ -210,14 +210,64 @@ CASO = CASO_TEXTOS["A" if CASO_CON_NOMBRE else "B"]
 # (icono, título, texto variante B, texto variante A o None si es el mismo)
 CASO_FLUJO = [
     ("correo", "Pide el cambio por correo", "El cliente escribe a su buzón dedicado, con sus palabras. Sin formularios ni tickets.",
-     "JuanJo escribe a su buzón dedicado, con sus palabras. Sin formularios ni tickets."),
+     "El CTO de DBM escribe a su buzón dedicado, con sus palabras. Sin formularios ni tickets."),
     ("hoja", "Queda registrado", "Coordinación lo anota en la hoja de cambios, lo prioriza y confirma la recepción.", None),
     ("codigo", "Se desarrolla y se prueba", "Desarrollo lo implementa en un entorno aislado y pasa las pruebas automáticas.", None),
     ("copia", "Copia de seguridad", "Antes de tocar nada en producción se hace una copia completa, con vuelta atrás preparada.", None),
     ("pipeline", "Despliegue automatizado", "Operación lo publica con el flujo de integración y despliegue propio del cliente, y comprueba que todo responde.", None),
     ("charla-ok", "Informe al cliente", "Un correo explica qué ha cambiado y cómo comprobarlo.",
-     "JuanJo recibe un correo con lo entregado y cómo comprobarlo."),
+     "El CTO de DBM recibe un correo con lo entregado y cómo comprobarlo."),
 ]
+
+# WEB-013: dibujo del flujo del caso DBM (SVG en línea, sin recursos externos, sin animación).
+CASO_DIBUJO_PASOS = [
+    ("correo", "Correo del CTO", "de DBM Real Invest"),
+    ("hoja", "Hoja de", "cambios"),
+    ("codigo", "Desarrollo", "y pruebas"),
+    ("copia", "Copia de", "seguridad"),
+    ("pipeline", "Despliegue", ""),
+    ("charla-ok", "Validación", "e informe"),
+]
+
+
+def _trazos(nombre):
+    return re.search(r'focusable="false">(.*)</svg>$', icono(nombre)).group(1)
+
+
+def dibujo_caso():
+    n = len(CASO_DIBUJO_PASOS)
+    nodo = lambda x, y, i, ic: (
+        f'<circle cx="{x}" cy="{y}" r="34" fill="#111" stroke="#f59e0b" stroke-width="2"/>'
+        f'<g transform="translate({x-19} {y-19}) scale(1.58)" fill="none" stroke="#f59e0b" stroke-width="1.6" '
+        f'stroke-linecap="round" stroke-linejoin="round">{_trazos(ic)}</g>'
+        f'<circle cx="{x+27}" cy="{y-27}" r="11" fill="#f59e0b"/>'
+        f'<text x="{x+27}" y="{y-22.5}" text-anchor="middle" font-size="13" font-weight="700" fill="#111">{i+1}</text>')
+    h = ['<svg class="caso-dib caso-dib-h" viewBox="0 0 1080 190" role="img" aria-label="Flujo de trabajo del caso DBM Real Invest en seis pasos: '
+         'correo del CTO de DBM, hoja de cambios, desarrollo y pruebas, copia de seguridad, despliegue, validación e informe.">',
+         '<rect width="1080" height="190" rx="14" fill="#fdf6ec"/>']
+    for i, (ic, a, b) in enumerate(CASO_DIBUJO_PASOS):
+        x = 90 + 180 * i
+        if i < n - 1:
+            h.append(f'<path d="M{x+40} 78H{x+140}" stroke="#b45309" stroke-width="2.5" stroke-dasharray="6 5" fill="none"/>'
+                     f'<path d="M{x+134} 71l9 7-9 7" stroke="#b45309" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>')
+        h.append(nodo(x, 78, i, ic))
+        h.append(f'<text x="{x}" y="145" text-anchor="middle" font-size="16" font-weight="600" fill="#111">{a}</text>'
+                 + (f'<text x="{x}" y="165" text-anchor="middle" font-size="15" fill="#b45309">{b}</text>' if b else ''))
+    h.append('</svg>')
+    v = ['<svg class="caso-dib caso-dib-v" viewBox="0 0 320 612" role="img" aria-label="Flujo de trabajo del caso DBM Real Invest en seis pasos, de arriba abajo: '
+         'correo del CTO de DBM, hoja de cambios, desarrollo y pruebas, copia de seguridad, despliegue, validación e informe.">',
+         '<rect width="320" height="612" rx="14" fill="#fdf6ec"/>']
+    for i, (ic, a, b) in enumerate(CASO_DIBUJO_PASOS):
+        y = 50 + 102 * i
+        if i < n - 1:
+            v.append(f'<path d="M52 {y+39}V{y+63}" stroke="#b45309" stroke-width="2.5" stroke-dasharray="6 5" fill="none"/>'
+                     f'<path d="M45 {y+55}l7 9 7-9" stroke="#b45309" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>')
+        v.append(nodo(52, y, i, ic))
+        v.append(f'<text x="108" y="{y-2 if b else y+5}" font-size="17" font-weight="600" fill="#111">{a}</text>'
+                 + (f'<text x="108" y="{y+19}" font-size="15" fill="#b45309">{b}</text>' if b else ''))
+    v.append('</svg>')
+    return '<figure class="caso-dibujo">' + "".join(h) + "".join(v) + '</figure>'
+
 CASO_NOTA = "Si detectamos un riesgo antes de publicar, paramos y lo consultamos con el cliente."
 CASO_TICKET_TITULO_HTML = "Buscar por dirección como lo escribe el&nbsp;equipo"
 CASO_TICKET_QUE = ("«C/», «Calle» y «Carrer» dan el mismo resultado, sin importar acentos ni mayúsculas; "
@@ -452,6 +502,10 @@ border-radius:14px;font:italic 1.05rem/1.3 var(--serif);color:#92400e;position:r
 /* Caso de éxito */
 .caso .reticula{row-gap:40px;align-items:start}
 .caso .titular{grid-column:1/span 6;margin-bottom:0}
+.caso-dibujo{margin:0 0 40px}
+.caso-dib{display:block;width:100%;height:auto;font-family:inherit}
+.caso-dib-v{display:none;max-width:340px;margin:0 auto}
+@media (max-width:899px){.caso-dib-h{display:none}.caso-dib-v{display:block}.caso-dibujo{margin-bottom:28px}}
 .caso-izq{grid-column:1/span 6}
 .caso-izq .titular{margin-bottom:20px}
 .caso-izq .titular p a{color:var(--negro);text-decoration-color:var(--ambar);text-underline-offset:3px;font-weight:600}
@@ -968,6 +1022,7 @@ INDEX = f"""<section class="hero oscuro" aria-labelledby="titulo-hero">
 
 <section class="bloque alterno caso" id="caso" aria-labelledby="titulo-caso">
  <div class="contenedor">
+  {dibujo_caso()}
   <div class="reticula">
    <div class="caso-izq">
     <div class="titular"><span class="sobre">Caso de éxito</span><h2 id="titulo-caso">{CASO["titulo"]}</h2>

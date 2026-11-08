@@ -42,13 +42,14 @@ PROHIBIDO = {
     "licencia": re.compile(r"\blicencias?\b", re.I),
     "GHCR": re.compile(r"\bghcr\b", re.I),
     "ssh": re.compile(r"\bssh\b", re.I),
+    "JuanJo": re.compile(r"\bjuanjo\b", re.I),  # el CTO de DBM no se nombra (Jordi, 2026-11-08, WEB-013)
     "manada": re.compile(r"\bmanada\b", re.I),  # retirada de toda la marca (cto, 2026-11-08)
     # Web sin gatos (Jordi, 2026-11-08, WEB-011): «gato», «gata», «gatos», «gatito»… también dentro de nombres
     # como «gato-404» o «hero-gatos». Palabra completa para no saltar con «navigator» del JS.
     "gato": re.compile(r"\bgat(?:[oa]s?|it[oa]s?)\b", re.I),
 }
 # Excepciones por página: el aviso legal cita la licencia libre de la tipografía (texto de cto, 2026-11-08) y la
-# portada nombra a DBM Real Invest como caso de éxito, con permiso de JuanJo (Jordi, 2026-11-08, WEB-012).
+# portada nombra a DBM Real Invest como caso de éxito, con permiso del cliente (Jordi, 2026-11-08, WEB-012).
 # Ningún otro fichero (404, legales) puede nombrar a DBM.
 PERMITIDO_EN = {"aviso-legal.html": {"licencia"}, "index.html": {"DBM", "dbmrealinvest"}}
 # Lista blanca de enlaces de navegación externos (solo <a href> exacto y con rel="noopener noreferrer", sin Referer).
