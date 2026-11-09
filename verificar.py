@@ -368,8 +368,9 @@ def comprobar_caso(sitio: Path) -> list:
     m = re.search(r'<figure class="caso-ejemplo[^"]*">.*?</figure>', crudo, re.S)
     if not m:
         return ["index.html: falta el ejemplo del caso (cita «caso-ejemplo»)"]
-    if m.group(0).count("<blockquote>") != 1 or "Sepúlveda" not in m.group(0):
-        errores.append("index.html: el ejemplo del caso debe ser una sola cita con la calle Sepúlveda (WEB-023)")
+    if m.group(0).count("<blockquote>") != 1 or "orden alfabético" not in m.group(0):
+        errores.append("index.html: el ejemplo del caso debe ser una sola cita con la petición real "
+                       "de la demo (propietarios por orden alfabético; antes WEB-023, Sepúlveda)")
     caso = re.search(r'<section[^>]*id="caso".*?</section>', crudo, re.S).group(0)
     if "correo. " not in caso.replace("&nbsp;", " ") or "nos escriben un correo" not in caso:
         errores.append("index.html: el caso debe contar que el cliente escribe un correo (WEB-023)")

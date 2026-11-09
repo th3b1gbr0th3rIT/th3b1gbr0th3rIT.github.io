@@ -232,21 +232,22 @@ CASO_TEXTOS = {
         cierre="El mismo método para cada cliente. También para esta web."),
 }
 CASO = CASO_TEXTOS["A" if CASO_CON_NOMBRE else "B"]
-CASO_NOTA = "Si vemos un riesgo antes de publicar, paramos y lo consultamos con el cliente."
-# Ejemplo en una sola cita (WEB-023). Calles públicas: sin datos de clientes ni de propietarios.
-CASO_EJEMPLO = ("Pidieron que el CRM encontrara una calle se escriba como se escriba. "
-                'Ahora, <span class="nw">«C/ Sepúlveda»</span>, <span class="nw">«Carrer de Sepúlveda»</span> '
-                'y <span class="nw">«calle sepulveda»</span> devuelven el mismo resultado.')
+CASO_NOTA = "Si vemos un riesgo, paramos y decide el CTO. Y si el resultado no te convence, lo deshacemos."
+# Ejemplo en una sola cita: petición real del 2026-11-09, sin datos de clientes ni de propietarios.
+# Tiempos sacados del registro de la petición (correo 13:05 → «estamos en ello» 13:05 → publicado 13:18).
+CASO_EJEMPLO = ("Pidieron que, al dar de alta una propiedad, la lista de propietarios saliera por orden alfabético. "
+                'A los 30 segundos recibieron el <span class="nw">«estamos en ello»</span>. '
+                "En 13 minutos el cambio estaba publicado, a la espera de su visto bueno.")
 ICONO_SERVICIO = {"inmobiliarias": "casa", "webs": "nube", "gestion": "contenedor", "reservas": "calendario",
                   "automatizacion": "pipeline", "cuidado": "pulso"}  # icono de cada tarjeta de servicio
 
 # Diagrama del flujo (HTML+CSS): pasos y carril propio de cada empresa.
 FLUJO_PASOS = [
     ("correo", "Solicitud", "Por correo, al buzón dedicado de tu empresa"),
-    ("lista", "Coordinación", "Registra la petición, la prioriza y confirma su recepción"),
+    ("lista", "Coordinación", "Registra la petición, la prioriza y te confirma que estamos en ello"),
     ("codigo", "Desarrollo", "Desarrolla y prueba en un entorno aislado"),
-    ("escudo", "Operación", "Hace la copia de seguridad y publica el cambio"),
-    ("charla-ok", "Informe", "Qué ha cambiado y cómo comprobarlo"),
+    ("escudo", "Operación", "Copia de seguridad, publicación y vuelta atrás si algo falla"),
+    ("charla-ok", "Informe", "Qué ha cambiado y cómo comprobarlo. Tú das el visto bueno"),
 ]
 CARRIL = [("repo", "Su repositorio"), ("pruebas", "Pruebas automáticas"), ("copia", "Copia de seguridad"),
           ("publicar", "Publicación"), ("servidor", "Su servidor")]
