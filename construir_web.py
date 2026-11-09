@@ -207,6 +207,8 @@ FAQ = [
      "No. Tus datos son siempre tuyos. Si cambias de proveedor, te entregamos los datos y la documentación en un formato estándar."),
     ("¿Cuánto se tarda en ver algo?",
      "Empezamos por lo más importante, en una entrega pequeña, para que veas resultados pronto. El plazo exacto va en la propuesta."),
+    ("¿Cuándo atendéis las peticiones?",
+     "De lunes a viernes, de 8 a 17 h. Lo que nos envíes fuera de ese horario se atiende a primera hora del siguiente día laborable."),
 ]
 # WEB-018: «Cómo empezar», tres pasos antes del contacto (icono, título, texto).
 EMPEZAR = [
@@ -232,21 +234,27 @@ CASO_TEXTOS = {
         cierre="El mismo método para cada cliente. También para esta web."),
 }
 CASO = CASO_TEXTOS["A" if CASO_CON_NOMBRE else "B"]
-CASO_NOTA = "Si vemos un riesgo antes de publicar, paramos y lo consultamos con el cliente."
-# Ejemplo en una sola cita (WEB-023). Calles públicas: sin datos de clientes ni de propietarios.
-CASO_EJEMPLO = ("Pidieron que el CRM encontrara una calle se escriba como se escriba. "
-                'Ahora, <span class="nw">«C/ Sepúlveda»</span>, <span class="nw">«Carrer de Sepúlveda»</span> '
-                'y <span class="nw">«calle sepulveda»</span> devuelven el mismo resultado.')
+CASO_NOTA = "Si vemos un riesgo, paramos y decide el CTO. Y si el resultado no te convence, lo deshacemos."
+# Ejemplo del caso: petición real del 2026-11-09 como ficha compacta (no cita grande; pendiente de revisión de mkt).
+# Sin datos de clientes ni de propietarios. Tiempos del registro: correo 13:05:03 → «estamos en ello» 13:05:34
+# → publicado 13:18:21 → visto bueno del cliente 13:55.
+CASO_EJEMPLO_PETICION = "Ordenar alfabéticamente la lista de propietarios al dar de alta una propiedad."
+CASO_EJEMPLO_HITOS = [
+    ("correo", "Llega el correo", "13:05"),
+    ("charla", "«Estamos en ello»", "30 s"),
+    ("escudo", "Copia, pruebas y publicación", "13 min"),
+    ("charla-ok", "Visto bueno del cliente", "cerrado"),
+]
 ICONO_SERVICIO = {"inmobiliarias": "casa", "webs": "nube", "gestion": "contenedor", "reservas": "calendario",
                   "automatizacion": "pipeline", "cuidado": "pulso"}  # icono de cada tarjeta de servicio
 
 # Diagrama del flujo (HTML+CSS): pasos y carril propio de cada empresa.
 FLUJO_PASOS = [
     ("correo", "Solicitud", "Por correo, al buzón dedicado de tu empresa"),
-    ("lista", "Coordinación", "Registra la petición, la prioriza y confirma su recepción"),
+    ("lista", "Coordinación", "Registra la petición, la prioriza y te confirma que estamos en ello"),
     ("codigo", "Desarrollo", "Desarrolla y prueba en un entorno aislado"),
-    ("escudo", "Operación", "Hace la copia de seguridad y publica el cambio"),
-    ("charla-ok", "Informe", "Qué ha cambiado y cómo comprobarlo"),
+    ("escudo", "Operación", "Copia de seguridad, publicación y vuelta atrás si algo falla"),
+    ("charla-ok", "Informe", "Qué ha cambiado y cómo comprobarlo. Tú das el visto bueno"),
 ]
 CARRIL = [("repo", "Su repositorio"), ("pruebas", "Pruebas automáticas"), ("copia", "Copia de seguridad"),
           ("publicar", "Publicación"), ("servidor", "Su servidor")]
@@ -475,6 +483,7 @@ FLUJO = f"""<figure class="flujo revela" aria-labelledby="titulo-dentro">
    <p class="flujo-nota">{icono("candado")}<span>Cada cliente tiene su propio entorno. Nada se comparte.</span></p>
   </figure>"""
 
+caso_hitos = "".join(f'<li>{icono(i)}<span>{t}</span><b>{v}</b></li>' for i, t, v in CASO_EJEMPLO_HITOS)
 compromisos = "".join(f'<li class="revela">{icono(i)}<span>{t}</span></li>' for i, t in COMPROMISOS)
 equipo = "".join(f'<li class="revela">{retrato(c)}<h3>{c["nombre"]}</h3><span class="rol">{c["rol"]}</span><p>{c["frase"]}</p></li>' for c in EQUIPO)
 empezar = "".join(f'<li class="revela"><span class="num" aria-hidden="true">{n}</span>{icono(i)}<h3>{t}</h3><p>{d}</p></li>'
@@ -517,7 +526,8 @@ INDEX = f"""<section class="hero oscuro" aria-labelledby="titulo-hero">
    </div>
    <div class="caso-lado">
     <figure class="caso-ejemplo revela">
-     <blockquote><p>{CASO_EJEMPLO}</p></blockquote></figure>
+     <figcaption><span class="sobre">Petición real</span>{CASO_EJEMPLO_PETICION}</figcaption>
+     <ol class="caso-hitos">{caso_hitos}</ol></figure>
    </div>
   </div>
   <div class="cierre revela"><p>{CASO["cierre"]}</p>
@@ -817,6 +827,8 @@ def capturas():
         "/_captura/cta.html": sin_csp(html).replace("</head>", "<style>main>section:nth-of-type(-n+4){display:none}"
                                                       ".js .cta-movil{visibility:visible!important;transform:none!important}</style></head>"),
         # Solo el diagrama del flujo (imagen para redes, capturas/flujo.png).
+        "/_captura/caso.html": sin_csp(html).replace("</head>", "<style>.cab,.pie,.cta-movil,main>section:not(#caso){display:none!important}"
+                                                       "#caso{padding:40px 0}.revela{opacity:1!important;transform:none!important}</style></head>"),
         "/_captura/flujo.html": sin_csp(html).replace("</head>", "<style>.cab,.pie,.cta-movil,main>section:not(#por-dentro){display:none!important}"
                                                         "#por-dentro{padding:40px 0}#por-dentro .titular{margin-bottom:28px}</style></head>"),
     }
@@ -824,6 +836,7 @@ def capturas():
                 ("movil-390", "390,20000", "/", True), ("movil-360", "360,21000", "/", True),
                 ("movil-menu", "390,760", "/_captura/menu.html", False), ("movil-cta", "390,844", "/_captura/cta.html", False),
                 ("flujo", "1240,1300", "/_captura/flujo.html", True),
+                ("caso", "1240,700", "/_captura/caso.html", True), ("caso-movil", "390,1100", "/_captura/caso.html", True),
                 ("legal-privacidad-movil", "390,5200", "/privacidad.html", True),
                 ("404", "1440,900", "/una/ruta/que/no-existe", False), ("404-movil", "360,780", "/otra/que/tampoco", False)]
     trabajos += [(f"legal-{n.removesuffix('.html')}", "1440,3200", f"/{n}", True) for n in PAGINAS_LEGALES]

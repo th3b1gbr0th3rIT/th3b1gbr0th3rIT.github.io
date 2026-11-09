@@ -237,10 +237,15 @@ border-radius:14px;font:italic 1.05rem/1.3 var(--serif);color:var(--acento-suave
 .caso-nota{display:flex;align-items:center;gap:12px;margin-top:28px;font-size:.95rem;color:var(--apoyo)}
 .caso-nota .ico{width:32px;height:32px;padding:6px}
 .caso-lado{grid-column:8/span 5;align-self:center}
-.caso-ejemplo{margin:0;padding:24px 32px 28px;background:var(--superficie);border:1px solid var(--linea);border-left:4px solid var(--ambar);border-radius:12px}
-.caso-ejemplo blockquote{margin:0;padding:0}
+.caso-ejemplo figcaption{font-size:.98rem;line-height:1.45;color:var(--tinta);margin:0 0 14px}
+.caso-ejemplo figcaption .sobre{display:block;margin-bottom:4px}
+.caso-hitos{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.caso-hitos li{display:flex;align-items:center;gap:10px;font-size:.92rem;color:var(--apoyo)}
+.caso-hitos .ico{flex:none;width:28px;height:28px;padding:5px}
+.caso-hitos span{flex:1}
+.caso-hitos b{font-weight:600;color:var(--tinta);font-variant-numeric:tabular-nums}
+.caso-ejemplo{margin:0;padding:20px 22px;background:var(--superficie);border:1px solid var(--linea);border-radius:12px}
 .nw{white-space:nowrap}
-.caso-ejemplo p{font:400 clamp(1.25rem,1.9vw,1.6rem)/1.45 var(--serif);color:var(--tinta);text-wrap:pretty}
 .puntos{grid-column:1/span 6;list-style:none;margin:0;padding:0;display:grid;gap:24px}
 .puntos li{display:flex;gap:18px}
 .ico{flex:none;width:44px;height:44px;padding:10px;border-radius:50%;background:var(--superficie);border:1px solid var(--borde-calido);
